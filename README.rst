@@ -12,9 +12,7 @@ Freenode.
 
 Installation:
 
-```
-$ ./autogen.sh
-$ ./configure
-$ make
-# make install
-```
+    $ ./autogen.sh
+    $ ./configure
+    $ make
+    # make install
