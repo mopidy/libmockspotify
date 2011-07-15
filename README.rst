@@ -10,7 +10,10 @@ the Node.js and Ruby bindings for libspotify.
 Coordination of the development efforts happens on GitHub and #spotify on
 Freenode.
 
-Installation:
+Installation
+------------
+
+::
 
     $ ./autogen.sh
     $ ./configure
