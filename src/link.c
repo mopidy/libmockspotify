@@ -16,3 +16,16 @@ sp_link_create_from_string(const char *link)
   snprintf(lnk->data, 1024 /* max size of data in sp_link */, "%s", link);
   return lnk;
 }
+
+int
+sp_link_as_string(sp_link *link, char *buffer, int buffer_size)
+{
+  strncpy(buffer, link->data, buffer_size);
+
+  if (buffer_size > 0)
+  {
+    buffer[buffer_size - 1] = '\0';
+  }
+
+  return strlen(link->data);
+}
