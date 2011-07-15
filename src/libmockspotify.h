@@ -8,6 +8,7 @@
 #define LIBMOCKSPOTIFY_API_H
 
 #include <libspotify/api.h>
+#include "util.h"
 
 /*** Mock structures ***/
 
