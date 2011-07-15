@@ -8,6 +8,7 @@
 #define LIBMOCKSPOTIFY_API_H
 
 #include <libspotify/api.h>
+#include "util.h"
 
 /*** Mock structures ***/
 
@@ -52,6 +53,10 @@ struct sp_user {
     char *full_name;
     char *picture;
     sp_relation_type relation;
+};
+
+struct sp_link {
+    char data[1024];
 };
 
 /*** Mock object creation ***/
