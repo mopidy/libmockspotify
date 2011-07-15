@@ -5,4 +5,5 @@ AM_CFLAGS = -Wall
 
 libmockspotify_la_SOURCES = album.c 		\
 			    artist.c		\
-			    track.c
+			    track.c		\
+			    user.c

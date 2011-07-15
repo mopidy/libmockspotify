@@ -40,6 +40,15 @@ struct sp_track {
     int starred;
 };
 
+struct sp_user {
+    bool loaded;
+    char *canonical_name;
+    char *display_name;
+    char *full_name;
+    char *picture;
+    sp_relation_type relation;
+};
+
 /*** Mock object creation ***/
 
 sp_album *
@@ -53,5 +62,9 @@ sp_track *
 mocksp_track_create(char *name, int num_artists, sp_artist ** artists,
                     sp_album * album, int duration, int popularity,
                     int disc, int index, sp_error error, int loaded);
+
+sp_user *
+mocksp_user_create(char *canonical_name, char *display_name, char *full_name,
+                   char *picture, sp_relation_type relation, bool loaded);
 
 #endif /* LIBMOCKSPOTIFY_API_H */
