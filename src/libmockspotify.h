@@ -21,6 +21,11 @@ struct sp_album {
     bool available;
 };
 
+struct sp_albumbrowse {
+    sp_album *album;
+    int loaded;
+};
+
 struct sp_artist {
     char name[1024];
     int loaded;
@@ -54,6 +59,9 @@ struct sp_user {
 sp_album *
 mocksp_album_create(char *name, sp_artist *artist, int year, byte *cover,
                     int type, int loaded, int available);
+
+sp_albumbrowse *
+mocksp_albumbrowse_create(sp_album *album, bool loaded);
 
 sp_artist *
 mocksp_artist_create(const char *name, int loaded);
