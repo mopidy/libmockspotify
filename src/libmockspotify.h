@@ -55,6 +55,10 @@ struct sp_user {
     sp_relation_type relation;
 };
 
+struct sp_link {
+    char data[1024];
+};
+
 /*** Mock object creation ***/
 
 sp_album *
