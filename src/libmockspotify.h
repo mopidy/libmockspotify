@@ -31,6 +31,11 @@ struct sp_artist {
     int loaded;
 };
 
+struct sp_image {
+    /* TODO */
+    int error;
+};
+
 struct sp_track {
     char name[1024];
     int num_artists;
