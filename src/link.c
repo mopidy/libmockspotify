@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "libmockspotify.h"
 
 /*** Spotify API ***/
