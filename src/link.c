@@ -4,6 +4,16 @@
 #include "libmockspotify.h"
 
 /*** Spotify API ***/
+void
+sp_link_add_ref(sp_link * link)
+{
+}
+
+void
+sp_link_release(sp_link * link)
+{
+}
+
 sp_link *
 sp_link_create_from_string(const char *link)
 {
