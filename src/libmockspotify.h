@@ -91,7 +91,7 @@ sp_artist *
 mocksp_artist_create(const char *name, int loaded);
 
 sp_artistbrowse *
-mock_artistbrowse_create(sp_artist * artist, bool loaded);
+mocksp_artistbrowse_create(sp_artist *artist, bool loaded);
 
 sp_track *
 mocksp_track_create(char *name, int num_artists, sp_artist ** artists,
