@@ -4,7 +4,7 @@
 /*** MockSpotify API ***/
 
 sp_artistbrowse *
-mock_artistbrowse_create(sp_artist * artist, bool loaded)
+mocksp_artistbrowse_create(sp_artist * artist, bool loaded)
 {
     sp_artistbrowse *ab;
 
@@ -32,7 +32,7 @@ sp_artistbrowse_create(sp_session * s, sp_artist * a,
 {
     sp_artistbrowse *ab;
 
-    ab = mock_artistbrowse_create(a, 1);
+    ab = mocksp_artistbrowse_create(a, 1);
     if (cb)
         cb(ab, userdata);
     return ab;
