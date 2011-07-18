@@ -41,6 +41,20 @@ struct sp_image {
     int error;
 };
 
+struct sp_search {
+    int loaded;
+    int total_tracks;
+    int num_tracks;
+    int num_artists;
+    int num_albums;
+    sp_track *track[20];
+    sp_album *album[20];
+    sp_artist *artist[20];
+    char *query;
+    char *did_you_mean;
+    int error;
+};
+
 struct sp_track {
     char name[1024];
     int num_artists;
