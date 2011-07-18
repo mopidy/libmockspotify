@@ -41,6 +41,14 @@ struct sp_image {
     int error;
 };
 
+struct sp_playlist {
+    char name[1024];
+    sp_track *track[32];
+    int num_tracks;
+    sp_playlist_callbacks *callbacks;
+    void *userdata;
+};
+
 struct sp_search {
     int loaded;
     int total_tracks;
@@ -78,6 +86,40 @@ struct sp_user {
     sp_relation_type relation;
 };
 
+/*** Mock events ***/
+
+typedef enum event_type {
+    // SESSION EVENTS
+    MOCK_LOGGED_IN = 0,
+    MOCK_LOGGED_OUT = 1,
+    MOCK_METADATA_UPDATED = 2,
+    MOCK_CONNECTION_ERROR = 3,
+
+    // PLAYLIST EVENTS
+    MOCK_PLAYLIST_TRACKS_ADDED = 20,
+    MOCK_PLAYLIST_TRACKS_MOVED = 21,
+    MOCK_PLAYLIST_TRACKS_REMOVED = 22,
+    MOCK_PLAYLIST_RENAMED = 23,
+    MOCK_PLAYLIST_STATE_CHANGED = 24,
+    MOCK_PLAYLIST_UPDATE_IN_PROGRESS = 25,
+    MOCK_PLAYLIST_METADATA_UPDATED = 26,
+    MOCK_PLAYLIST_TRACK_CREATED_CHANGED = 27,
+    MOCK_PLAYLIST_TRACK_MESSAGE_CHANGED = 28,
+    MOCK_PLAYLIST_TRACK_SEEN_CHANGED = 29,
+    MOCK_PLAYLIST_DESCRIPTION_CHANGED = 30,
+    MOCK_PLAYLIST_SUBSCRIBERS_CHANGED = 31,
+    MOCK_PLAYLIST_IMAGE_CHANGED = 32,
+
+    // CONTAINER EVENTS
+    MOCK_CONTAINER_LOADED = 40,
+    MOCK_CONTAINER_PLAYLIST_ADDED = 41,
+    MOCK_CONTAINER_PLAYLIST_MOVED = 42,
+    MOCK_CONTAINER_PLAYLIST_REMOVED = 43
+} event_type;
+
+void
+mocksp_playlist_event(event_type event, sp_playlist *p);
+
 /*** Mock object creation ***/
 
 sp_album *
@@ -92,6 +134,9 @@ mocksp_artist_create(const char *name, int loaded);
 
 sp_artistbrowse *
 mocksp_artistbrowse_create(sp_artist *artist, bool loaded);
+
+sp_playlist *
+mocksp_playlist_create(char *name);
 
 sp_track *
 mocksp_track_create(char *name, int num_artists, sp_artist ** artists,
