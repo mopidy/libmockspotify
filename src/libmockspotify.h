@@ -31,6 +31,11 @@ struct sp_artist {
     int loaded;
 };
 
+struct sp_artistbrowse {
+    sp_artist *artist;
+    int loaded;
+};
+
 struct sp_image {
     /* TODO */
     int error;
@@ -70,6 +75,9 @@ mocksp_albumbrowse_create(sp_album *album, bool loaded);
 
 sp_artist *
 mocksp_artist_create(const char *name, int loaded);
+
+sp_artistbrowse *
+mock_artistbrowse_create(sp_artist * artist, bool loaded);
 
 sp_track *
 mocksp_track_create(char *name, int num_artists, sp_artist ** artists,
