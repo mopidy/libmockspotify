@@ -9,6 +9,7 @@ libmockspotify_la_SOURCES = album.c 		\
 			    artistbrowse.c	\
 			    error.c		\
 			    image.c		\
+			    playlist.c		\
 			    search.c		\
 			    track.c		\
 			    user.c
