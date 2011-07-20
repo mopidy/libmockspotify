@@ -43,8 +43,9 @@ You can then use this to bind this library using Ruby FFI:
       attach_function …, etc
     end
 
-Installation
-------------
+Manual compilation
+------------------
+If you ever want to do it, here you go:
 
 ::
 
