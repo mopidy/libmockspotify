@@ -93,10 +93,10 @@ struct sp_track {
 
 struct sp_user {
     bool loaded;
-    char *canonical_name;
-    char *display_name;
-    char *full_name;
-    char *picture;
+    char canonical_name[1024];
+    char display_name[1024];
+    char full_name[1024];
+    char picture[1024];
     sp_relation_type relation;
 };
 

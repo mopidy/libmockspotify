@@ -3,8 +3,6 @@ require 'rbconfig'
 
 module Spotify
   module Mock
-    VERSION = '0.1.0'
-
     # @return [String] path to the libmockspotify C extension binary.
     def self.path
       File.expand_path('../../src/libmockspotify.', __FILE__) << RbConfig::CONFIG['DLEXT']

@@ -66,8 +66,5 @@ sp_session_logout(sp_session *session)
 sp_user *
 sp_session_user(sp_session *session)
 {
-  char *username = ALLOC_N(char, 1024);
-  strncpy(username, session->username, 1024);
-  sp_user *user = mocksp_user_create(username, NULL, NULL, NULL, SP_RELATION_TYPE_NONE, 1);
-  return user;
+  return mocksp_user_create(session->username, "", "", "", SP_RELATION_TYPE_NONE, 1);
 }
