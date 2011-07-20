@@ -2,7 +2,7 @@
 require File.expand_path('../lib/mockspotify', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.name     = "libmockspotify"
+  gem.name     = "mockspotify"
   gem.summary  = %Q{A mock of libspotify for use in development of language bindings}
   gem.homepage = "https://github.com/Burgestrand/libmockspotify"
   gem.authors  = ["Kim Burgestrand"]
