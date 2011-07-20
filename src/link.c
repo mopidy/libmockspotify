@@ -1,3 +1,4 @@
+#include <string.h>
 #include "libmockspotify.h"
 
 /*** Spotify API ***/
@@ -35,7 +36,7 @@ sp_link_as_string(sp_link *link, char *buffer, int buffer_size)
     buffer[buffer_size - 1] = '\0';
   }
 
-  return strlen(link->data);
+  return (int) strlen(link->data);
 }
 
 sp_linktype

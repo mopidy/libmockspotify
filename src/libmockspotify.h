@@ -48,8 +48,11 @@ struct sp_artistbrowse {
 };
 
 struct sp_image {
-    /* TODO */
-    int error;
+    byte image_id[20];
+    sp_imageformat format;
+    size_t data_size;
+    byte *data;
+    sp_error error;
 };
 
 struct sp_playlist {
