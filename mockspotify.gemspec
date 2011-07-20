@@ -13,6 +13,8 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib", "src"]
   gem.extensions    << 'src/extconf.rb'
 
-  gem.version     = MockSpotify::VERSION
+  gem.add_dependency 'spotify'
+
+  gem.version     = Spotify::Mock::VERSION
   gem.platform    = Gem::Platform::RUBY
 end
