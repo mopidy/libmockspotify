@@ -30,7 +30,7 @@ sp_link *
 sp_link_create_from_user(sp_user *user)
 {
   char *link = ALLOC_N(char, 1024);
-  snprintf(link, "spotify:user:%s", user->canonical_name);
+  sprintf(link, "spotify:user:%s", user->canonical_name);
   return sp_link_create_from_string(link);
 }
 

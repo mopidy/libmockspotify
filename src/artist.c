@@ -7,10 +7,7 @@
 sp_artist *
 mocksp_artist_create(const char *name, int loaded)
 {
-    sp_artist *a;
-
-    a = malloc(sizeof(sp_artist));
-    memset(a, 0, sizeof(sp_artist));
+    sp_artist *a = ALLOC(sp_artist);
     strcpy(a->name, name);
     a->loaded = loaded;
     return a;

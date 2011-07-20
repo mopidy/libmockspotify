@@ -5,14 +5,12 @@
 /*** MockSpotify API ***/
 
 sp_track *
-mocksp_track_create(char *name, int num_artists, sp_artist **artists,
+mocksp_track_create(const char *name, int num_artists, sp_artist **artists,
                     sp_album *album, int duration, int popularity,
-                    int disc, int index, sp_error error, int loaded)
+                    int disc, int index, sp_error error, bool loaded)
 {
-    sp_track *t;
+    sp_track *t = ALLOC(sp_track);
 
-    t = malloc(sizeof(sp_track));
-    memset(t, 0, sizeof(sp_track));
     strcpy(t->name, name);
     t->loaded = loaded;
     t->disc = disc;
@@ -22,6 +20,7 @@ mocksp_track_create(char *name, int num_artists, sp_artist **artists,
     t->popularity = popularity;
     t->album = album;
     t->starred = 0;
+
     return t;
 }
 
