@@ -23,3 +23,5 @@ src/*.lo
 src/Makefile
 src/Makefile.in
 stamp-h1
+*.bundle
+pkg/
