@@ -15,6 +15,13 @@
 
 /*** Mock structures ***/
 
+struct sp_session {
+  char username[1024];
+  sp_session_config config;
+  void *userdata;
+  sp_connectionstate connectionstate;
+};
+
 struct sp_album {
     char name[1024];
     sp_artist *artist;

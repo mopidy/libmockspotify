@@ -3,9 +3,10 @@
 #include "util.h"
 
 void*
-xmalloc(size_t size)
+xmalloc(size_t size, int count)
 {
-  void *ptr = malloc(size);
-  memset(ptr, 0, size);
+  size_t realsize = size * count;
+  void *ptr = malloc(realsize);
+  memset(ptr, 0, realsize);
   return ptr;
 }

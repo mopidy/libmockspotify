@@ -8,9 +8,8 @@ sp_user *
 mocksp_user_create(char *canonical_name, char *display_name, char *full_name,
                    char *picture, sp_relation_type relation, bool loaded)
 {
-    sp_user *user;
+    sp_user *user = ALLOC(sp_user);
 
-    user = malloc(sizeof(sp_user));
     user->canonical_name = canonical_name;
     user->display_name = display_name;
     user->full_name = full_name;
