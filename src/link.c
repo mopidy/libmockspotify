@@ -70,8 +70,5 @@ sp_link_type(sp_link *link)
 sp_user *
 sp_link_as_user(sp_link *link)
 {
-  char *username = ALLOC_N(char, 1024);
-  strncpy(username, link->data, 1024);
-  sp_user *user = mocksp_user_create(username, NULL, NULL, NULL, SP_RELATION_TYPE_UNKNOWN, 1);
-  return user;
+  return mocksp_user_create(link->data, "", "", "", SP_RELATION_TYPE_UNKNOWN, 1);
 }
