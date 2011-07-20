@@ -51,6 +51,7 @@ sp_link_type(sp_link *link)
   LINK_CASE_FOR(track,  TRACK);
   LINK_CASE_FOR(album,  ALBUM);
   LINK_CASE_FOR(artist, ARTIST);
+  LINK_CASE_FOR(image,  IMAGE);
 
   // Order of these three is significant
   LINK_CASE_FOR(playlist, PLAYLIST);
