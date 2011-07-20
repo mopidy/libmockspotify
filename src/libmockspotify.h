@@ -7,6 +7,9 @@
 #ifndef LIBMOCKSPOTIFY_API_H
 #define LIBMOCKSPOTIFY_API_H
 
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 #include <libspotify/api.h>
 #include "util.h"
 
