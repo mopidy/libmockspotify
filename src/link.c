@@ -26,6 +26,14 @@ sp_link_create_from_string(const char *link)
   return lnk;
 }
 
+sp_link *
+sp_link_create_from_user(sp_user *user)
+{
+  char *link = ALLOC_N(char, 1024);
+  snprintf(link, "spotify:user:%s", user->canonical_name);
+  return sp_link_create_from_string(link);
+}
+
 int
 sp_link_as_string(sp_link *link, char *buffer, int buffer_size)
 {
