@@ -20,7 +20,7 @@ sp_search_create(sp_session *session, const char *query, int track_offset,
                  int artist_offset, int artist_count,
                  search_complete_cb *callback, void *userdata)
 {
-    sp_search *search = malloc(sizeof(sp_search));
+    sp_search *search = ALLOC(sp_search);
 
     if (!strncmp(query, "!loaded", 7))
         search->loaded = 0;
@@ -30,10 +30,11 @@ sp_search_create(sp_session *session, const char *query, int track_offset,
     search->num_albums = 3;
     search->num_artists = 2;
     search->total_tracks = 24;
-    search->query = malloc(strlen(query) + 1);
+    search->query = ALLOC_N(char, strlen(query) + 1);
     strcpy(search->query, query);
     search->error = 3;
-    search->did_you_mean = "did_you_mean";
+    search->did_you_mean = ALLOC_N(char, strlen("did_you_mean") + 1);
+    sprintf(search->did_you_mean, "did_you_mean");
     search->artist[0] = mocksp_artist_create("foo", 1);
     search->artist[1] = mocksp_artist_create("bar", 1);
     search->album[0] = mocksp_album_create("baz", search->artist[0], 2001,
