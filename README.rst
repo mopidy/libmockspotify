@@ -18,14 +18,20 @@ to retrieve the path to the compiled binary.
 
 Installing it as a gem:
 
+::
+
     gem install mockspotify
 
 Using its’ API (one method):
+
+::
 
     require 'mockspotify'
     MockSpotify.lib_path # => path/to/gem/src/libmockspotify.extension
 
 You can then use this to bind this library using Ruby FFI:
+
+::
 
     require 'ffi'
     require 'mockspotify'
