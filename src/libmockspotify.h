@@ -11,6 +11,17 @@
 
 /*** Mock structures ***/
 
+typedef struct {
+    void *userdata;
+    char username[1024];
+    char password[1024];
+    sp_session_config config;
+    sp_playlist *starred;
+    int bitrate;
+} mocking_data;
+
+extern mocking_data g_data;
+
 struct sp_album {
     char name[1024];
     sp_artist *artist;
