@@ -28,4 +28,11 @@ describe Spotify::Mock do
       Spotify.artist_is_loaded(@artist).must_equal true
     end
   end
+
+  describe "hextoa" do
+    it "should convert a hexidecimal string properly" do
+      Spotify.attach_function :hextoa, [:string, :int], :string
+      Spotify.hextoa("3A3A", 4).must_equal "::"
+    end
+  end
 end

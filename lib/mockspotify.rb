@@ -1,5 +1,6 @@
 require 'ffi'
 require 'rbconfig'
+require 'mockspotify/version'
 
 module Spotify
   module Mock
