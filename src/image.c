@@ -21,7 +21,7 @@ sp_image_create_from_link(sp_session *session, sp_link *l)
 {
   byte *real_id  = l->data + strlen("spotify:image:");
   byte *image_id = ALLOC_N(byte, 20);
-  memcpy(image_id, real_id, 20);
+  memcpy(image_id, real_id, 20); // TODO: convert "deadbeef" to array of: [0xDE, 0xAD, 0xBE, 0xEF]
   return mocksp_image_create(image_id, SP_IMAGE_FORMAT_JPEG, 0, NULL, SP_ERROR_OK);
 }
 
