@@ -34,6 +34,11 @@ sp_link_create_from_user(sp_user *user)
   return sp_link_create_from_string(link);
 }
 
+sp_link *
+sp_link_create_from_image(sp_image *image)
+{
+}
+
 int
 sp_link_as_string(sp_link *link, char *buffer, int buffer_size)
 {
