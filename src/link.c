@@ -29,14 +29,18 @@ sp_link_create_from_string(const char *link)
 sp_link *
 sp_link_create_from_user(sp_user *user)
 {
-  char *link = ALLOC_N(char, 1024);
-  sprintf(link, "spotify:user:%s", user->canonical_name);
-  return sp_link_create_from_string(link);
+  sp_link *link = ALLOC(sp_link);
+  sprintf(link->data, "spotify:user:%s", user->canonical_name);
+  return link;
 }
 
 sp_link *
 sp_link_create_from_image(sp_image *image)
 {
+  sp_link *link = ALLOC(sp_link);
+  sprintf(link->data, "spotify:image:");
+  atohex(link->data + strlen("spotify:image:"), image->image_id, 40);
+  return link;
 }
 
 int

@@ -1,6 +1,4 @@
-#include <stdlib.h>
-#include <string.h>
-#include "util.h"
+#include "libmockspotify.h"
 
 void*
 xmalloc(size_t size)
@@ -19,6 +17,13 @@ htoi(char n)
   else return 0;
 }
 
+char
+itoh(int n)
+{
+  char hex[] = { "0123456789abcdef" };
+  return hex[n];
+}
+
 char*
 hextoa(const char *str, int size)
 {
@@ -33,4 +38,16 @@ hextoa(const char *str, int size)
   }
 
   return result;
+}
+
+void
+atohex(char *dst, const char *src, int size)
+{
+  int i;
+  int p;
+  for (i = p = 0; i < size; i += 2, p = i/2)
+  {
+    dst[i]   = itoh((src[p] >> 4) & 0x0F);
+    dst[i+1] = itoh(src[p] & 0xF);
+  }
 }

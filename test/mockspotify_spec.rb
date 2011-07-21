@@ -35,4 +35,15 @@ describe Spotify::Mock do
       Spotify.hextoa("3A3A", 4).must_equal "::"
     end
   end
+
+  describe "atohex" do
+    it "should convert a byte string to a hexadecimal string" do
+      Spotify.attach_function :atohex, [:buffer_out, :buffer_in, :int], :void
+
+      FFI::Buffer.alloc_out(8) do |b|
+        Spotify.atohex(b, "\x3A\x3A\x0F\xF1", b.size)
+        b.get_string(0, b.size).must_equal "3a3a0ff1"
+      end
+    end
+  end
 end
