@@ -4,6 +4,17 @@
 
 /*** MockSpotify API ***/
 
+sp_playlist *
+mocksp_playlist_create(char *name)
+{
+    sp_playlist *p;
+
+    p = malloc(sizeof(sp_playlist));
+    memset(p, 0, sizeof(sp_playlist));
+    strcpy(p->name, name);
+    return p;
+}
+
 void
 mocksp_playlist_event(event_type event, sp_playlist *p)
 {
