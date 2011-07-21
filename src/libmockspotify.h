@@ -49,6 +49,13 @@ struct sp_playlist {
     void *userdata;
 };
 
+struct sp_playlistcontainer {
+    sp_playlist *playlist[32];
+    int num_playlists;
+    sp_playlistcontainer_callbacks *callbacks;
+    void *userdata;
+};
+
 struct sp_search {
     int loaded;
     int total_tracks;
@@ -120,6 +127,9 @@ typedef enum event_type {
 void
 mocksp_playlist_event(event_type event, sp_playlist *p);
 
+void
+mocksp_playlistcontainer_event(event_type event, sp_playlistcontainer *c);
+
 /*** Mock object creation ***/
 
 sp_album *
@@ -137,6 +147,9 @@ mocksp_artistbrowse_create(sp_artist *artist, bool loaded);
 
 sp_playlist *
 mocksp_playlist_create(char *name);
+
+sp_playlistcontainer *
+mocksp_playlistcontainer_create(void);
 
 sp_track *
 mocksp_track_create(char *name, int num_artists, sp_artist ** artists,
