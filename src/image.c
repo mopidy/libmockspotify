@@ -2,7 +2,7 @@
 
 /*** MockSpotify API ***/
 sp_image*
-mocksp_image_create(const byte image_id[20], sp_imageformat format, size_t data_size, byte *data, sp_error error)
+mocksp_image_create(const byte image_id[20], sp_imageformat format, size_t data_size, const byte *data, sp_error error)
 {
   sp_image *image = ALLOC(sp_image);
   memcpy(image->image_id, image_id, 20);
