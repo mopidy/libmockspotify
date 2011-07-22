@@ -25,3 +25,4 @@ src/Makefile.in
 stamp-h1
 *.bundle
 pkg/
+Gemfile.lock
