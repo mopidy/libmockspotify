@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <libspotify/api.h>
+#include "libspotify/api.h"
 #include "util.h"
 
 /*** Mock structures ***/
