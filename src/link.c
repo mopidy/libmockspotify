@@ -81,3 +81,29 @@ sp_link_as_user(sp_link *link)
 {
   return mocksp_user_create(link->data, "", "", "", SP_RELATION_TYPE_UNKNOWN, 1);
 }
+
+sp_track *
+sp_link_as_track(sp_link *link)
+{
+  return mocksp_track_create("Bogus", 0, NULL, NULL, 100, 42, 1, 7, SP_ERROR_OK, 1);
+}
+
+sp_track *
+sp_link_as_track_and_offset(sp_link *link, int *offset)
+{
+  /* parse the offset */
+  int mins = 0, secs = 0;
+  char *optr = NULL;
+
+  if (optr = strchr(link->data, '#'))
+  {
+    sscanf(optr, "#%u:%u", &mins, &secs);
+    *offset = (mins * 60 + secs) * 1000;
+  }
+  else
+  {
+    *offset = 0;
+  }
+
+  return sp_link_as_track(link);
+}
