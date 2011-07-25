@@ -30,6 +30,20 @@ mocksp_track_create(const char *name, int num_artists, sp_artist **artists,
 
 /*** Spotify API ***/
 
+sp_track *
+sp_localtrack_create(const char *artist, const char *title, const char *album, int length)
+{
+  sp_artist *partist = mocksp_artist_create(artist, 1);
+  sp_album  *palbum  = NULL;
+
+  if (strlen(album) > 0)
+  {
+    palbum  = mocksp_album_create(album, partist, 2011, NULL, SP_ALBUMTYPE_UNKNOWN, 1, 1);
+  }
+
+  return mocksp_track_create(title, 1, &partist, palbum, length, 0, 0, 0, 0, 1);
+}
+
 bool
 sp_track_is_available(sp_session *session, sp_track *t)
 {
