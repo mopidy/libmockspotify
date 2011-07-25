@@ -13,7 +13,7 @@ mocksp_album_create(const char *name, sp_artist *artist, int year, const byte *c
     strcpy(a->name, name);
     a->artist = artist;
     a->year = year;
-    memcpy(a->cover, cover, 20);
+    if (cover) memcpy(a->cover, cover, 20);
     a->type = type;
     a->loaded = loaded;
     a->available = available;
