@@ -82,6 +82,18 @@ sp_link_as_user(sp_link *link)
   return mocksp_user_create(link->data, "", "", "", SP_RELATION_TYPE_UNKNOWN, 1);
 }
 
+sp_artist *
+sp_link_as_artist(sp_link *link)
+{
+  return mocksp_artist_create("Jem", 1);
+}
+
+sp_album *
+sp_link_as_album(sp_link *link)
+{
+  return mocksp_album_create("Think Different", mocksp_artist_create("Jem", 1), 2004, NULL, SP_ALBUMTYPE_SINGLE, 1, 1); /* TODO */
+}
+
 sp_track *
 sp_link_as_track(sp_link *link)
 {
