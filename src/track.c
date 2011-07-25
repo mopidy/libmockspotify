@@ -21,6 +21,10 @@ mocksp_track_create(const char *name, int num_artists, sp_artist **artists,
     t->album = album;
     t->starred = 0;
 
+    t->artists = ALLOC_N(sp_artist*, num_artists);
+    MEMCPY_N(t->artists, artists, sp_artist*, num_artists);
+    t->num_artists = num_artists;
+
     return t;
 }
 
@@ -47,18 +51,16 @@ sp_track_name(sp_track *track)
 int
 sp_track_num_artists(sp_track *t)
 {
-    return 3;
+    return t->num_artists;
 }
 
 sp_artist *
 sp_track_artist(sp_track *t, int index)
 {
-    static sp_artist *a[3];
+    if (index >= sp_track_num_artists(t))
+      return NULL;
 
-    a[0] = mocksp_artist_create("a1", 1);
-    a[1] = mocksp_artist_create("a2", 1);
-    a[2] = mocksp_artist_create("a3", 1);
-    return a[index];
+    return t->artists[index];
 }
 
 int

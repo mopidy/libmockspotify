@@ -80,7 +80,7 @@ struct sp_search {
 struct sp_track {
     char name[1024];
     int num_artists;
-    sp_artist *artists[16];
+    sp_artist **artists;
     sp_album *album;
     int duration;
     int popularity;
