@@ -52,6 +52,10 @@ struct sp_image {
     int error;
 };
 
+struct sp_link {
+    char data[1024];
+};
+
 struct sp_playlist {
     char name[1024];
     sp_track *track[32];
