@@ -51,3 +51,10 @@ atohex(char *dst, const char *src, int size)
     dst[i+1] = itoh(src[p] & 0xF);
   }
 }
+
+void
+my_strncpy(char *destination, const char *source, size_t size)
+{
+  strncpy(destination, source, size - 2);
+  destination[size - 1] = '\0';
+}
