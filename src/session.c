@@ -52,9 +52,13 @@ sp_session_userdata(sp_session *session)
 }
 
 void
-sp_session_login(sp_session *session, const char *username, const char *password)
+sp_session_login(sp_session *session, const char *username, const char *password, bool remember_me)
 {
     session->connectionstate = SP_CONNECTION_STATE_LOGGED_IN;
+    if (remember_me)
+    {
+      my_strncpy(session->username, username, 1024);
+    }
 }
 
 void
