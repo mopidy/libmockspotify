@@ -2,6 +2,11 @@
 
 /*** Spotify API ***/
 
+const char * sp_build_id(void)
+{
+  return "9.1.32.g8edbd53c Release (Core: 0.5.3.425.g18537e22)";
+}
+
 sp_error
 sp_session_create(const sp_session_config * config, sp_session ** sess)
 {
