@@ -126,12 +126,14 @@ sp_track_is_starred(sp_session *s, sp_track *t)
 }
 
 void
-sp_track_set_starred(sp_session *s, const sp_track **ts, int n, bool starred)
+sp_track_set_starred(sp_session *s, sp_track *const*tracks, int num_tracks, bool starred)
 {
     int i;
 
-    for (i = 0; i < n; i++)
-        ((sp_track *) ts[i])->starred = starred;
+    for (i = 0; i < num_tracks; i++)
+    {
+      tracks[i]->starred = starred;
+    }
 }
 
 void
