@@ -5,14 +5,12 @@
 /*** MockSpotify API ***/
 
 sp_track *
-mocksp_track_create(char *name, int num_artists, sp_artist **artists,
+mocksp_track_create(const char *name, int num_artists, sp_artist **artists,
                     sp_album *album, int duration, int popularity,
-                    int disc, int index, sp_error error, int loaded)
+                    int disc, int index, sp_error error, bool loaded)
 {
-    sp_track *t;
+    sp_track *t = ALLOC(sp_track);
 
-    t = malloc(sizeof(sp_track));
-    memset(t, 0, sizeof(sp_track));
     strcpy(t->name, name);
     t->loaded = loaded;
     t->disc = disc;
@@ -22,10 +20,29 @@ mocksp_track_create(char *name, int num_artists, sp_artist **artists,
     t->popularity = popularity;
     t->album = album;
     t->starred = 0;
+
+    t->artists = ALLOC_N(sp_artist*, num_artists);
+    MEMCPY_N(t->artists, artists, sp_artist*, num_artists);
+    t->num_artists = num_artists;
+
     return t;
 }
 
 /*** Spotify API ***/
+
+sp_track *
+sp_localtrack_create(const char *artist, const char *title, const char *album, int length)
+{
+  sp_artist *partist = mocksp_artist_create(artist, 1);
+  sp_album  *palbum  = NULL;
+
+  if (strlen(album) > 0)
+  {
+    palbum  = mocksp_album_create(album, partist, 2011, NULL, SP_ALBUMTYPE_UNKNOWN, 1, 1);
+  }
+
+  return mocksp_track_create(title, 1, &partist, palbum, length, 0, 0, 0, 0, 1);
+}
 
 bool
 sp_track_is_available(sp_session *session, sp_track *t)
@@ -48,18 +65,16 @@ sp_track_name(sp_track *track)
 int
 sp_track_num_artists(sp_track *t)
 {
-    return 3;
+    return t->num_artists;
 }
 
 sp_artist *
 sp_track_artist(sp_track *t, int index)
 {
-    static sp_artist *a[3];
+    if (index >= sp_track_num_artists(t))
+      return NULL;
 
-    a[0] = mocksp_artist_create("a1", 1);
-    a[1] = mocksp_artist_create("a2", 1);
-    a[2] = mocksp_artist_create("a3", 1);
-    return a[index];
+    return t->artists[index];
 }
 
 int
@@ -111,12 +126,14 @@ sp_track_is_starred(sp_session *s, sp_track *t)
 }
 
 void
-sp_track_set_starred(sp_session *s, const sp_track **ts, int n, bool starred)
+sp_track_set_starred(sp_session *s, sp_track *const*tracks, int num_tracks, bool starred)
 {
     int i;
 
-    for (i = 0; i < n; i++)
-        ((sp_track *) ts[i])->starred = starred;
+    for (i = 0; i < num_tracks; i++)
+    {
+      tracks[i]->starred = starred;
+    }
 }
 
 void

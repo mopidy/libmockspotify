@@ -5,16 +5,15 @@
 /*** MockSpotify API ***/
 
 sp_user *
-mocksp_user_create(char *canonical_name, char *display_name, char *full_name,
-                   char *picture, sp_relation_type relation, bool loaded)
+mocksp_user_create(const char *canonical_name, const char *display_name, const char *full_name,
+                   const char *picture, sp_relation_type relation, bool loaded)
 {
-    sp_user *user;
+    sp_user *user = ALLOC(sp_user);
 
-    user = malloc(sizeof(sp_user));
-    user->canonical_name = canonical_name;
-    user->display_name = display_name;
-    user->full_name = full_name;
-    user->picture = picture;
+    strcpy(user->canonical_name, canonical_name);
+    strcpy(user->display_name, display_name);
+    strcpy(user->full_name, full_name);
+    strcpy(user->picture, picture);
     user->relation = relation;
     user->loaded = loaded;
 

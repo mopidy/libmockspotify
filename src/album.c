@@ -5,17 +5,15 @@
 /*** MockSpotify API ***/
 
 sp_album *
-mocksp_album_create(char *name, sp_artist *artist, int year, byte * cover,
-                    int type, int loaded, int available)
+mocksp_album_create(const char *name, sp_artist *artist, int year, const byte *cover,
+                    sp_albumtype type, bool loaded, bool available)
 {
-    sp_album *a;
+    sp_album *a = ALLOC(sp_album);
 
-    a = malloc(sizeof(sp_album));
-    memset(a, 0, sizeof(sp_album));
     strcpy(a->name, name);
     a->artist = artist;
     a->year = year;
-    memcpy(a->cover, cover, 20);
+    if (cover) memcpy(a->cover, cover, 20);
     a->type = type;
     a->loaded = loaded;
     a->available = available;

@@ -5,12 +5,11 @@
 /*** MockSpotify API ***/
 
 sp_playlist *
-mocksp_playlist_create(char *name)
+mocksp_playlist_create(const char *name)
 {
     sp_playlist *p;
 
-    p = malloc(sizeof(sp_playlist));
-    memset(p, 0, sizeof(sp_playlist));
+    p = ALLOC(sp_playlist);
     strcpy(p->name, name);
     return p;
 }

@@ -29,6 +29,23 @@ sp_link_create_from_string(const char *link)
   return lnk;
 }
 
+sp_link *
+sp_link_create_from_user(sp_user *user)
+{
+  sp_link *link = ALLOC(sp_link);
+  sprintf(link->data, "spotify:user:%s", user->canonical_name);
+  return link;
+}
+
+sp_link *
+sp_link_create_from_image(sp_image *image)
+{
+  sp_link *link = ALLOC(sp_link);
+  sprintf(link->data, "spotify:image:");
+  atohex(link->data + strlen("spotify:image:"), image->image_id, 40);
+  return link;
+}
+
 int
 sp_link_as_string(sp_link *link, char *buffer, int buffer_size)
 {
@@ -39,7 +56,7 @@ sp_link_as_string(sp_link *link, char *buffer, int buffer_size)
     buffer[buffer_size - 1] = '\0';
   }
 
-  return strlen(link->data);
+  return (int) strlen(link->data);
 }
 
 sp_linktype
@@ -52,6 +69,7 @@ sp_link_type(sp_link *link)
   LINK_CASE_FOR(track,  TRACK);
   LINK_CASE_FOR(album,  ALBUM);
   LINK_CASE_FOR(artist, ARTIST);
+  LINK_CASE_FOR(image,  IMAGE);
 
   // Order of these three is significant
   LINK_CASE_FOR(playlist, PLAYLIST);
@@ -61,17 +79,10 @@ sp_link_type(sp_link *link)
   return SP_LINKTYPE_INVALID;
 }
 
-sp_track *
-sp_link_as_track(sp_link *link)
+sp_user *
+sp_link_as_user(sp_link *link)
 {
-    if (strncmp(link->data, "spotify:track:", strlen("spotify:track:")))
-        return NULL;
-    sp_track *t = malloc(sizeof(sp_track));
-
-    memset(t, 0, sizeof(sp_track));
-    return mocksp_track_create(link->data + strlen("spotify:track:"), 0, NULL, NULL, 0,
-                       0, 0, 0, 0, 1);
-    return t;
+  return mocksp_user_create(link->data, "", "", "", SP_RELATION_TYPE_UNKNOWN, 1);
 }
 
 sp_artist *
@@ -140,4 +151,30 @@ sp_link_create_from_search(sp_search *s)
     memset(l, 0, sizeof(sp_link));
     sprintf(l->data, "spotify:search:%s", s->query);
     return l;
+}
+
+sp_track *
+sp_link_as_track(sp_link *link)
+{
+  return mocksp_track_create("Bogus", 0, NULL, NULL, 100, 42, 1, 7, SP_ERROR_OK, 1);
+}
+
+sp_track *
+sp_link_as_track_and_offset(sp_link *link, int *offset)
+{
+  /* parse the offset */
+  int mins = 0, secs = 0;
+  char *optr = NULL;
+
+  if (optr = strchr(link->data, '#'))
+  {
+    sscanf(optr, "#%u:%u", &mins, &secs);
+    *offset = (mins * 60 + secs) * 1000;
+  }
+  else
+  {
+    *offset = 0;
+  }
+
+  return sp_link_as_track(link);
 }

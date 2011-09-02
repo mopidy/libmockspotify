@@ -7,20 +7,20 @@
 #ifndef LIBMOCKSPOTIFY_API_H
 #define LIBMOCKSPOTIFY_API_H
 
-#include <libspotify/api.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include "libspotify/api.h"
+#include "util.h"
 
 /*** Mock structures ***/
 
-typedef struct {
-    void *userdata;
-    char username[1024];
-    char password[1024];
-    sp_session_config config;
-    sp_playlist *starred;
-    int bitrate;
-} mocking_data;
-
-extern mocking_data g_data;
+struct sp_session {
+  char username[1024];
+  sp_session_config config;
+  void *userdata;
+  sp_connectionstate connectionstate;
+};
 
 struct sp_album {
     char name[1024];
@@ -28,7 +28,7 @@ struct sp_album {
     int year;
     byte cover[20];
     int type;
-    int loaded;
+    bool loaded;
     bool available;
 };
 
@@ -48,12 +48,11 @@ struct sp_artistbrowse {
 };
 
 struct sp_image {
-    /* TODO */
-    int error;
-};
-
-struct sp_link {
-    char data[1024];
+    byte image_id[20];
+    sp_imageformat format;
+    size_t data_size;
+    byte *data;
+    sp_error error;
 };
 
 struct sp_playlist {
@@ -88,7 +87,7 @@ struct sp_search {
 struct sp_track {
     char name[1024];
     int num_artists;
-    sp_artist *artists[16];
+    sp_artist **artists;
     sp_album *album;
     int duration;
     int popularity;
@@ -101,11 +100,15 @@ struct sp_track {
 
 struct sp_user {
     bool loaded;
-    char *canonical_name;
-    char *display_name;
-    char *full_name;
-    char *picture;
+    char canonical_name[1024];
+    char display_name[1024];
+    char full_name[1024];
+    char picture[1024];
     sp_relation_type relation;
+};
+
+struct sp_link {
+    char data[1024];
 };
 
 /*** Mock events ***/
@@ -148,8 +151,8 @@ mocksp_playlistcontainer_event(event_type event, sp_playlistcontainer *c);
 /*** Mock object creation ***/
 
 sp_album *
-mocksp_album_create(char *name, sp_artist *artist, int year, byte *cover,
-                    int type, int loaded, int available);
+mocksp_album_create(const char *name, sp_artist *artist, int year, const byte *cover,
+                    sp_albumtype type, bool loaded, bool available);
 
 sp_albumbrowse *
 mocksp_albumbrowse_create(sp_album *album, bool loaded);
@@ -161,18 +164,18 @@ sp_artistbrowse *
 mocksp_artistbrowse_create(sp_artist *artist, bool loaded);
 
 sp_playlist *
-mocksp_playlist_create(char *name);
+mocksp_playlist_create(const char *name);
 
 sp_playlistcontainer *
 mocksp_playlistcontainer_create(void);
 
 sp_track *
-mocksp_track_create(char *name, int num_artists, sp_artist ** artists,
+mocksp_track_create(const char *name, int num_artists, sp_artist ** artists,
                     sp_album * album, int duration, int popularity,
-                    int disc, int index, sp_error error, int loaded);
+                    int disc, int index, sp_error error, bool loaded);
 
 sp_user *
-mocksp_user_create(char *canonical_name, char *display_name, char *full_name,
-                   char *picture, sp_relation_type relation, bool loaded);
+mocksp_user_create(const char *canonical_name, const char *display_name, const char *full_name,
+                   const char *picture, sp_relation_type relation, bool loaded);
 
 #endif /* LIBMOCKSPOTIFY_API_H */
