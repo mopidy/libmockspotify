@@ -3,6 +3,9 @@
 
 /*** Utility functions ***/
 
+#define true 1
+#define false 0
+
 #define ALLOC(type) ALLOC_N(type, 1)
 #define ALLOC_N(type, n) ((type*) xmalloc(sizeof(type) * (n)))
 #define MEMCPY(dst, src, type) MEMCPY_N(dst, src, type, 1)
