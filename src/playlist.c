@@ -10,10 +10,10 @@ mocksp_playlist_create(const char *name)
 
 DEFINE_REFCOUNTERS_FOR(playlist);
 
-DEFINE_READER(bool, playlist, is_loaded);
-DEFINE_READER(const char *, playlist, name);
-DEFINE_READER(int, playlist, num_tracks);
-DEFINE_READER(bool, playlist, is_collaborative);
+DEFINE_READER(playlist, is_loaded, bool);
+DEFINE_READER(playlist, name, const char *);
+DEFINE_READER(playlist, num_tracks, int);
+DEFINE_READER(playlist, is_collaborative, bool);
 
 sp_error
 sp_playlist_rename(sp_playlist *playlist, const char *new_name)

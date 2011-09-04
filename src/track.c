@@ -29,19 +29,19 @@ mocksp_track_create(const char *name, int num_artists, sp_artist **artists, sp_a
 }
 
 DEFINE_REFCOUNTERS_FOR(track);
-DEFINE_READER(const char *, track, name);
-DEFINE_READER(sp_album *, track, album);
-DEFINE_READER(int, track, duration);
-DEFINE_READER(int, track, popularity);
-DEFINE_READER(int, track, disc);
-DEFINE_READER(int, track, index);
-DEFINE_READER(sp_error, track, error);
-DEFINE_READER(bool, track, is_loaded);
-DEFINE_SESSION_READER(bool, track, is_available);
-DEFINE_SESSION_READER(bool, track, is_local);
-DEFINE_SESSION_READER(bool, track, is_autolinked);
-DEFINE_SESSION_READER(bool, track, is_starred);
-DEFINE_READER(int, track, num_artists);
+DEFINE_READER(track, name, const char *);
+DEFINE_READER(track, album, sp_album *);
+DEFINE_READER(track, duration, int);
+DEFINE_READER(track, popularity, int);
+DEFINE_READER(track, disc, int);
+DEFINE_READER(track, index, int);
+DEFINE_READER(track, error, sp_error);
+DEFINE_READER(track, is_loaded, bool);
+DEFINE_SESSION_READER(track, is_available, bool);
+DEFINE_SESSION_READER(track, is_local, bool);
+DEFINE_SESSION_READER(track, is_autolinked, bool);
+DEFINE_SESSION_READER(track, is_starred, bool);
+DEFINE_READER(track, num_artists, int);
 
 sp_track *
 sp_localtrack_create(const char *artist, const char *title, const char *album, int length)

@@ -26,4 +26,4 @@ mocksp_artistbrowse_create(sp_artist *artist, bool is_loaded)
 }
 
 DEFINE_REFCOUNTERS_FOR(artistbrowse);
-DEFINE_READER(bool, artistbrowse, is_loaded);
+DEFINE_READER(artistbrowse, is_loaded, bool);

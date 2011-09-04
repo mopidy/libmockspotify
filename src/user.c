@@ -18,9 +18,9 @@ mocksp_user_create(const char *canonical_name, const char *display_name, const c
 
 DEFINE_REFCOUNTERS_FOR(user);
 
-DEFINE_READER(const char *, user, canonical_name);
-DEFINE_READER(const char *, user, display_name);
-DEFINE_READER(const char *, user, full_name);
-DEFINE_READER(const char *, user, picture);
-DEFINE_READER(bool, user, is_loaded);
-DEFINE_SESSION_READER(sp_relation_type, user, relation_type);
+DEFINE_READER(user, canonical_name, const char *);
+DEFINE_READER(user, display_name, const char *);
+DEFINE_READER(user, full_name, const char *);
+DEFINE_READER(user, picture, const char *);
+DEFINE_READER(user, is_loaded, bool);
+DEFINE_SESSION_READER(user, relation_type, sp_relation_type);

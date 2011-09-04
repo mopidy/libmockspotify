@@ -23,10 +23,10 @@ mocksp_album_create(const char *name, sp_artist *artist, int year, const byte *c
 
 DEFINE_REFCOUNTERS_FOR(album);
 
-DEFINE_READER(bool, album, is_loaded);
-DEFINE_READER(bool, album, is_available);
-DEFINE_READER(sp_artist *, album, artist);
-DEFINE_READER(const byte *, album, cover);
-DEFINE_READER(const char *, album, name);
-DEFINE_READER(int, album, year);
-DEFINE_READER(sp_albumtype, album, type);
+DEFINE_READER(album, is_loaded, bool);
+DEFINE_READER(album, is_available, bool);
+DEFINE_READER(album, artist, sp_artist *);
+DEFINE_READER(album, cover, const byte *);
+DEFINE_READER(album, name, const char *);
+DEFINE_READER(album, year, int);
+DEFINE_READER(album, type, sp_albumtype);

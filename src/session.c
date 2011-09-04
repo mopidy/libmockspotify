@@ -1,7 +1,7 @@
 #include "libmockspotify.h"
 
-DEFINE_READER(sp_connectionstate, session, connectionstate);
-DEFINE_READER(void *, session, userdata);
+DEFINE_READER(session, connectionstate, sp_connectionstate);
+DEFINE_READER(session, userdata, void *);
 
 const char * sp_build_id(void)
 {

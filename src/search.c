@@ -10,11 +10,11 @@ sp_search_create(sp_session *session, const char *query, int track_offset,
 
 DEFINE_REFCOUNTERS_FOR(search);
 
-DEFINE_READER(const char *, search, query);
-DEFINE_READER(const char *, search, did_you_mean);
-DEFINE_READER(sp_error, search, error);
-DEFINE_READER(bool, search, is_loaded);
-DEFINE_READER(int, search, num_artists);
-DEFINE_READER(int, search, num_albums);
-DEFINE_READER(int, search, num_tracks);
-DEFINE_READER(int, search, total_tracks);
+DEFINE_READER(search, query, const char *);
+DEFINE_READER(search, did_you_mean, const char *);
+DEFINE_READER(search, error, sp_error);
+DEFINE_READER(search, is_loaded, bool);
+DEFINE_READER(search, num_artists, int);
+DEFINE_READER(search, num_albums, int);
+DEFINE_READER(search, num_tracks, int);
+DEFINE_READER(search, total_tracks, int);

@@ -16,9 +16,9 @@ mocksp_image_create(const byte image_id[20], sp_imageformat format, size_t data_
 
 DEFINE_REFCOUNTERS_FOR(image);
 
-DEFINE_READER(sp_error, image, error);
-DEFINE_READER(sp_imageformat, image, format);
-DEFINE_READER(const byte *, image, image_id);
+DEFINE_READER(image, error, sp_error);
+DEFINE_READER(image, format, sp_imageformat);
+DEFINE_READER(image, image_id, const byte *);
 
 const void *
 sp_image_data(sp_image *image, size_t *size)

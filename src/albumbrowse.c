@@ -26,8 +26,8 @@ mocksp_albumbrowse_create(sp_album *album, bool is_loaded)
 }
 
 DEFINE_REFCOUNTERS_FOR(albumbrowse);
-DEFINE_READER(sp_album *, albumbrowse, album);
-DEFINE_READER(bool, albumbrowse, is_loaded);
+DEFINE_READER(albumbrowse, album, sp_album *);
+DEFINE_READER(albumbrowse, is_loaded, bool);
 
 sp_albumbrowse *
 sp_albumbrowse_create(sp_session *session, sp_album *album,

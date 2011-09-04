@@ -8,4 +8,4 @@ mocksp_playlistcontainer_create(void)
 
 DEFINE_REFCOUNTERS_FOR(playlistcontainer);
 
-DEFINE_READER(int, playlistcontainer, num_playlists);
+DEFINE_READER(playlistcontainer, num_playlists, int);

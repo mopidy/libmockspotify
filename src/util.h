@@ -21,13 +21,13 @@ char *strclone(const char *string);
   void sp_##type##_add_ref(sp_##type *x) {} \
   void sp_##type##_release(sp_##type *x) {}
 
-#define DEFINE_READER(return_type, kind, field) \
+#define DEFINE_READER(kind, field, return_type) \
   return_type sp_##kind##_##field(sp_##kind *x) \
   {                                             \
     return x->field;                            \
   }
 
-#define DEFINE_SESSION_READER(return_type, kind, field) \
+#define DEFINE_SESSION_READER(kind, field, return_type) \
   return_type sp_##kind##_##field(sp_session *x, sp_##kind *y) \
   {                                                     \
     return y->field;                                    \

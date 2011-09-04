@@ -10,5 +10,5 @@ mocksp_artist_create(const char *name, bool is_loaded)
 }
 
 DEFINE_REFCOUNTERS_FOR(artist);
-DEFINE_READER(const char *, artist, name);
-DEFINE_READER(bool, artist, is_loaded);
+DEFINE_READER(artist, name, const char *);
+DEFINE_READER(artist, is_loaded, bool);
