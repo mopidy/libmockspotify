@@ -33,4 +33,11 @@ char *strclone(const char *string);
     return y->field;                                    \
   }
 
+#define DEFINE_ARRAY_READER(kind, field, return_type) \
+  return_type sp_##kind##_##field(sp_##kind *x, int index) \
+  {                                                        \
+    if (index >= x->num_##field##s) return NULL;         \
+    return x->field##s[index];                           \
+  }
+
 #endif /* UTIL_H */

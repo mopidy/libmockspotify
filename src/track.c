@@ -21,7 +21,7 @@ mocksp_track_create(const char *name, int num_artists, sp_artist **artists, sp_a
   track->is_autolinked = is_autolinked;
   track->is_starred    = is_starred;
 
-  track->artists       = ALLOC_N(sp_artist *, num_artists);
+  track->artists     = ALLOC_N(sp_artist *, num_artists);
   track->num_artists = num_artists;
   MEMCPY_N(track->artists, artists, sp_artist*, num_artists);
 
@@ -42,6 +42,7 @@ DEFINE_SESSION_READER(track, is_local, bool);
 DEFINE_SESSION_READER(track, is_autolinked, bool);
 DEFINE_SESSION_READER(track, is_starred, bool);
 DEFINE_READER(track, num_artists, int);
+DEFINE_ARRAY_READER(track, artist, sp_artist *);
 
 sp_track *
 sp_localtrack_create(const char *artist, const char *title, const char *album, int length)
