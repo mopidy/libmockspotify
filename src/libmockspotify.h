@@ -150,4 +150,7 @@ mocksp_track_create(const char *, int, sp_artist **, sp_album *, int, int, int, 
 sp_user *
 mocksp_user_create(const char *, const char *, const char *, const char *, sp_relation_type, bool); 
 
+sp_image*
+mocksp_image_create(const byte[20], sp_imageformat, size_t, const byte *, sp_error);
+
 #endif /* LIBMOCKSPOTIFY_API_H */
