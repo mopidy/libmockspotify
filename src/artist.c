@@ -1,38 +1,14 @@
-#include <stdlib.h>
-#include <string.h>
 #include "libmockspotify.h"
 
-/*** MockSpotify API ***/
-
 sp_artist *
-mocksp_artist_create(const char *name, int loaded)
+mocksp_artist_create(const char *name, bool is_loaded)
 {
-    sp_artist *a = ALLOC(sp_artist);
-    strcpy(a->name, name);
-    a->loaded = loaded;
-    return a;
+  sp_artist *artist = ALLOC(sp_artist);
+  artist->name      = strclone(name);
+  artist->is_loaded = is_loaded;
+  return artist;
 }
 
-/*** Spotify API ***/
-
-void
-sp_artist_add_ref(sp_artist *a)
-{
-}
-
-const char *
-sp_artist_name(sp_artist *a)
-{
-    return a->name;
-}
-
-bool
-sp_artist_is_loaded(sp_artist *a)
-{
-    return a->loaded;
-}
-
-void
-sp_artist_release(sp_artist *a)
-{
-}
+DEFINE_REFCOUNTERS_FOR(artist);
+DEFINE_READER(const char *, artist, name);
+DEFINE_READER(bool, artist, is_loaded);

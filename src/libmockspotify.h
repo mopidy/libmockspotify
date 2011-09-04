@@ -3,7 +3,6 @@
  *
  */
 
-
 #ifndef LIBMOCKSPOTIFY_API_H
 #define LIBMOCKSPOTIFY_API_H
 
@@ -13,169 +12,142 @@
 #include "libspotify/api.h"
 #include "util.h"
 
-/*** Mock structures ***/
-
-struct sp_session {
-  char username[1024];
+struct sp_session
+{
+  char *username;
   sp_session_config config;
   void *userdata;
   sp_connectionstate connectionstate;
 };
 
-struct sp_album {
-    char name[1024];
-    sp_artist *artist;
-    int year;
-    byte cover[20];
-    int type;
-    bool loaded;
-    bool available;
+struct sp_album
+{
+  char *name;
+  sp_artist *artist;
+  int year;
+  byte cover[20];
+  int type;
+  bool is_loaded;
+  bool is_available;
 };
 
-struct sp_albumbrowse {
-    sp_album *album;
-    int loaded;
+struct sp_albumbrowse
+{
+  sp_album *album;
+  int is_loaded;
 };
 
-struct sp_artist {
-    char name[1024];
-    int loaded;
+struct sp_artist
+{
+  char *name;
+  int is_loaded;
 };
 
-struct sp_artistbrowse {
-    sp_artist *artist;
-    int loaded;
+struct sp_artistbrowse
+{
+  sp_artist *artist;
+  int is_loaded;
 };
 
-struct sp_image {
-    byte image_id[20];
-    sp_imageformat format;
-    size_t data_size;
-    byte *data;
-    sp_error error;
+struct sp_image
+{
+  byte image_id[20];
+  sp_imageformat format;
+  size_t data_size;
+  byte *data;
+  sp_error error;
 };
 
-struct sp_playlist {
-    char name[1024];
-    sp_track *track[32];
-    int num_tracks;
-    sp_playlist_callbacks *callbacks;
-    void *userdata;
+struct sp_playlist
+{
+  char *name;
+  sp_track *track[32];
+  int num_tracks;
+  sp_playlist_callbacks *callbacks;
+  void *userdata;
+  bool is_loaded;
+  bool is_collaborative;
 };
 
-struct sp_playlistcontainer {
-    sp_playlist *playlist[32];
-    int num_playlists;
-    sp_playlistcontainer_callbacks *callbacks;
-    void *userdata;
+struct sp_playlistcontainer
+{
+  sp_playlist *playlist[32];
+  int num_playlists;
+  sp_playlistcontainer_callbacks *callbacks;
+  void *userdata;
 };
 
-struct sp_search {
-    int loaded;
-    int total_tracks;
-    int num_tracks;
-    int num_artists;
-    int num_albums;
-    sp_track *track[20];
-    sp_album *album[20];
-    sp_artist *artist[20];
-    char *query;
-    char *did_you_mean;
-    int error;
+struct sp_search
+{
+  int total_tracks;
+  int num_tracks;
+  int num_artists;
+  int num_albums;
+  sp_track *track[20];
+  sp_album *album[20];
+  sp_artist *artist[20];
+  char *query;
+  char *did_you_mean;
+  int error;
+  bool is_loaded;
 };
 
-struct sp_track {
-    char name[1024];
-    int num_artists;
-    sp_artist **artists;
-    sp_album *album;
-    int duration;
-    int popularity;
-    int disc;
-    int index;
-    sp_error error;
-    int loaded;
-    int starred;
+struct sp_track
+{
+  char *name;
+  int num_artists;
+  sp_artist **artists;
+  sp_album *album;
+  int duration;
+  int popularity;
+  int disc;
+  int index;
+  sp_error error;
+
+  bool is_loaded;
+  bool is_starred;
+  bool is_local;
+  bool is_autolinked;
+  bool is_available;
 };
 
-struct sp_user {
-    bool loaded;
-    char canonical_name[1024];
-    char display_name[1024];
-    char full_name[1024];
-    char picture[1024];
-    sp_relation_type relation;
+struct sp_user
+{
+  char *canonical_name;
+  char *display_name;
+  char *full_name;
+  char *picture;
+  sp_relation_type relation_type;
+  bool is_loaded;
 };
 
-struct sp_link {
-    char data[1024];
+struct sp_link
+{
+  char *data;
 };
-
-/*** Mock events ***/
-
-typedef enum event_type {
-    // SESSION EVENTS
-    MOCK_LOGGED_IN = 0,
-    MOCK_LOGGED_OUT = 1,
-    MOCK_METADATA_UPDATED = 2,
-    MOCK_CONNECTION_ERROR = 3,
-
-    // PLAYLIST EVENTS
-    MOCK_PLAYLIST_TRACKS_ADDED = 20,
-    MOCK_PLAYLIST_TRACKS_MOVED = 21,
-    MOCK_PLAYLIST_TRACKS_REMOVED = 22,
-    MOCK_PLAYLIST_RENAMED = 23,
-    MOCK_PLAYLIST_STATE_CHANGED = 24,
-    MOCK_PLAYLIST_UPDATE_IN_PROGRESS = 25,
-    MOCK_PLAYLIST_METADATA_UPDATED = 26,
-    MOCK_PLAYLIST_TRACK_CREATED_CHANGED = 27,
-    MOCK_PLAYLIST_TRACK_MESSAGE_CHANGED = 28,
-    MOCK_PLAYLIST_TRACK_SEEN_CHANGED = 29,
-    MOCK_PLAYLIST_DESCRIPTION_CHANGED = 30,
-    MOCK_PLAYLIST_SUBSCRIBERS_CHANGED = 31,
-    MOCK_PLAYLIST_IMAGE_CHANGED = 32,
-
-    // CONTAINER EVENTS
-    MOCK_CONTAINER_LOADED = 40,
-    MOCK_CONTAINER_PLAYLIST_ADDED = 41,
-    MOCK_CONTAINER_PLAYLIST_MOVED = 42,
-    MOCK_CONTAINER_PLAYLIST_REMOVED = 43
-} event_type;
-
-void
-mocksp_playlist_event(event_type event, sp_playlist *p);
-
-void
-mocksp_playlistcontainer_event(event_type event, sp_playlistcontainer *c);
-
-/*** Mock object creation ***/
 
 sp_album *
-mocksp_album_create(const char *name, sp_artist *artist, int year, const byte *cover,
-                    sp_albumtype type, bool loaded, bool available);
+mocksp_album_create(const char *, sp_artist *, int, const byte *, sp_albumtype, bool, bool);
 
 sp_albumbrowse *
-mocksp_albumbrowse_create(sp_album *album, bool loaded);
+mocksp_albumbrowse_create(sp_album *, bool);
 
 sp_artist *
-mocksp_artist_create(const char *name, int loaded);
+mocksp_artist_create(const char *, bool);
 
 sp_artistbrowse *
-mocksp_artistbrowse_create(sp_artist *artist, bool loaded);
+mocksp_artistbrowse_create(sp_artist *, bool);
 
 sp_playlist *
-mocksp_playlist_create(const char *name);
+mocksp_playlist_create(const char *);
 
 sp_playlistcontainer *
 mocksp_playlistcontainer_create(void);
 
 sp_track *
-mocksp_track_create(const char *name, int num_artists, sp_artist ** artists,
-                    sp_album * album, int duration, int popularity,
-                    int disc, int index, sp_error error, bool loaded);
+mocksp_track_create(const char *, int, sp_artist **, sp_album *, int, int, int, int, sp_error, bool, bool, bool, bool, bool);
 
 sp_user *
-mocksp_user_create(const char *canonical_name, const char *display_name, const char *full_name,
-                   const char *picture, sp_relation_type relation, bool loaded);
+mocksp_user_create(const char *, const char *, const char *, const char *, sp_relation_type, bool); 
 
 #endif /* LIBMOCKSPOTIFY_API_H */

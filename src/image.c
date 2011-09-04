@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "libmockspotify.h"
 
-/*** MockSpotify API ***/
 sp_image*
 mocksp_image_create(const byte image_id[20], sp_imageformat format, size_t data_size, const byte *data, sp_error error)
 {
@@ -15,62 +14,39 @@ mocksp_image_create(const byte image_id[20], sp_imageformat format, size_t data_
   return image;
 }
 
-/*** Spotify API ***/
+DEFINE_REFCOUNTERS_FOR(image);
 
-sp_image*
-sp_image_create_from_link(sp_session *session, sp_link *l)
-{
-  byte *real_id = l->data + strlen("spotify:image:");
-  return mocksp_image_create(hextoa(real_id, 40), SP_IMAGE_FORMAT_JPEG, 0, NULL, SP_ERROR_OK);
-}
+DEFINE_READER(sp_error, image, error);
+DEFINE_READER(sp_imageformat, image, format);
+DEFINE_READER(const byte *, image, image_id);
 
-void
-sp_image_add_ref(sp_image *image)
+const void *
+sp_image_data(sp_image *image, size_t *size)
 {
-}
-
-void
-sp_image_release(sp_image *image)
-{
+  *size = image->data_size;
+  return image->data;
 }
 
 bool
 sp_image_is_loaded(sp_image *i)
 {
-    return sp_image_error(i) == SP_ERROR_OK;
+  return sp_image_error(i) == SP_ERROR_OK;
 }
 
-sp_imageformat
-sp_image_format(sp_image *i)
+sp_image*
+sp_image_create_from_link(sp_session *session, sp_link *l)
 {
-    return i->format;
+  byte *real_id = l->data + strlen("spotify:image:");
+  return sp_image_create(session, hextoa(real_id, 40));
 }
 
-sp_error
-sp_image_error(sp_image *i)
-{
-    return i->error;
-}
-
-const void *
-sp_image_data(sp_image *i, size_t *t)
-{
-    *t = i->data_size;
-    return i->data;
-}
 
 sp_image *
 sp_image_create(sp_session *session, const byte image_id[20])
 {
-    sp_image *image = ALLOC(sp_image);
-    memcpy(image->image_id, image_id, 20);
-    return image;
-}
-
-const byte*
-sp_image_image_id(sp_image *i)
-{
-  return i->image_id;
+  sp_image *image = ALLOC(sp_image);
+  memcpy(image->image_id, image_id, 20);
+  return image;
 }
 
 void

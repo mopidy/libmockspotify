@@ -1,39 +1,52 @@
-#include <stdlib.h>
-#include <string.h>
 #include "libmockspotify.h"
 
-/*** MockSpotify API ***/
-
 sp_track *
-mocksp_track_create(const char *name, int num_artists, sp_artist **artists,
-                    sp_album *album, int duration, int popularity,
-                    int disc, int index, sp_error error, bool loaded)
+mocksp_track_create(const char *name, int num_artists, sp_artist **artists, sp_album *album,
+                    int duration, int popularity, int disc, int index, sp_error error,
+                    bool is_loaded, bool is_available, bool is_local, bool is_autolinked,
+                    bool is_starred)
 {
-    sp_track *t = ALLOC(sp_track);
+  sp_track *track = ALLOC(sp_track);
 
-    strcpy(t->name, name);
-    t->loaded = loaded;
-    t->disc = disc;
-    t->index = index;
-    t->error = error;
-    t->duration = duration;
-    t->popularity = popularity;
-    t->album = album;
-    t->starred = 0;
+  track->name          = strclone(name);
+  track->album         = album;
+  track->duration      = duration;
+  track->popularity    = popularity;
+  track->disc          = disc;
+  track->index         = index;
+  track->error         = error;
+  track->is_loaded     = is_loaded;
+  track->is_available  = is_available;
+  track->is_local      = is_local;
+  track->is_autolinked = is_autolinked;
+  track->is_starred    = is_starred;
 
-    t->artists = ALLOC_N(sp_artist*, num_artists);
-    MEMCPY_N(t->artists, artists, sp_artist*, num_artists);
-    t->num_artists = num_artists;
+  track->artists       = ALLOC_N(sp_artist *, num_artists);
+  track->num_artists = num_artists;
+  MEMCPY_N(track->artists, artists, sp_artist*, num_artists);
 
-    return t;
+  return track;
 }
 
-/*** Spotify API ***/
+DEFINE_REFCOUNTERS_FOR(track);
+DEFINE_READER(const char *, track, name);
+DEFINE_READER(sp_album *, track, album);
+DEFINE_READER(int, track, duration);
+DEFINE_READER(int, track, popularity);
+DEFINE_READER(int, track, disc);
+DEFINE_READER(int, track, index);
+DEFINE_READER(sp_error, track, error);
+DEFINE_READER(bool, track, is_loaded);
+DEFINE_SESSION_READER(bool, track, is_available);
+DEFINE_SESSION_READER(bool, track, is_local);
+DEFINE_SESSION_READER(bool, track, is_autolinked);
+DEFINE_SESSION_READER(bool, track, is_starred);
+DEFINE_READER(int, track, num_artists);
 
 sp_track *
 sp_localtrack_create(const char *artist, const char *title, const char *album, int length)
 {
-  sp_artist *partist = mocksp_artist_create(artist, 1);
+  sp_artist *partist = mocksp_artist_create(artist, true);
   sp_album  *palbum  = NULL;
 
   if (strlen(album) > 0)
@@ -41,107 +54,18 @@ sp_localtrack_create(const char *artist, const char *title, const char *album, i
     palbum  = mocksp_album_create(album, partist, 2011, NULL, SP_ALBUMTYPE_UNKNOWN, 1, 1);
   }
 
-  return mocksp_track_create(title, 1, &partist, palbum, length, 0, 0, 0, 0, 1);
+  return mocksp_track_create(title, 1, &partist, palbum, length, 0, 0, 0, SP_ERROR_OK, true, true, true, false, false);
 }
 
-bool
-sp_track_is_available(sp_session *session, sp_track *t)
-{
-    return 1;
-}
 
-bool
-sp_track_is_loaded(sp_track *t)
-{
-    return t->loaded;
-}
-
-const char *
-sp_track_name(sp_track *track)
-{
-    return track->name;
-}
-
-int
-sp_track_num_artists(sp_track *t)
-{
-    return t->num_artists;
-}
-
-sp_artist *
-sp_track_artist(sp_track *t, int index)
-{
-    if (index >= sp_track_num_artists(t))
-      return NULL;
-
-    return t->artists[index];
-}
-
-int
-sp_track_disc(sp_track *t)
-{
-    return t->disc;
-}
-
-int
-sp_track_index(sp_track *t)
-{
-    return t->index;
-}
-
-int
-sp_track_popularity(sp_track *t)
-{
-    return t->popularity;
-}
-
-int
-sp_track_duration(sp_track *t)
-{
-    return t->duration;
-}
-
-sp_error
-sp_track_error(sp_track *t)
-{
-    return t->error;
-}
-
-sp_album *
-sp_track_album(sp_track *t)
-{
-    return t->album;
-}
-
-bool
-sp_track_is_local(sp_session *s, sp_track *t)
-{
-    return 0;
-}
-
-bool
-sp_track_is_starred(sp_session *s, sp_track *t)
-{
-    return t->starred;
-}
 
 void
-sp_track_set_starred(sp_session *s, sp_track *const*tracks, int num_tracks, bool starred)
+sp_track_set_starred(sp_session *session, sp_track *const *tracks, int num_tracks, bool starred)
 {
-    int i;
+  int i;
 
-    for (i = 0; i < num_tracks; i++)
-    {
-      tracks[i]->starred = starred;
-    }
-}
-
-void
-sp_track_add_ref(sp_track *track)
-{
-}
-
-void
-sp_track_release(sp_track *track)
-{
+  for (i = 0; i < num_tracks; i++)
+  {
+    tracks[i]->is_starred = starred;
+  }
 }
