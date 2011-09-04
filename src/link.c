@@ -120,30 +120,16 @@ sp_link_as_string(sp_link *link, char *buffer, int buffer_size)
   return (int) strlen(link->data);
 }
 
-sp_user *
-sp_link_as_user(sp_link *link)
-{
-  return NULL; /* TODO */
-}
+#define SP_LINK_AS(type) \
+  sp_##type * sp_link_as_##type(sp_link *link)      \
+  {                                                 \
+    return (sp_##type *) registry_find(link->data); \
+  }
 
-sp_artist *
-sp_link_as_artist(sp_link *link)
-{
-  return NULL; /* TODO */
-}
-
-sp_album *
-sp_link_as_album(sp_link *link)
-{
-  return NULL; /* TODO */
-}
-
-
-sp_track *
-sp_link_as_track(sp_link *link)
-{
-  return NULL; /* TODO */
-}
+SP_LINK_AS(user);
+SP_LINK_AS(artist);
+SP_LINK_AS(album);
+SP_LINK_AS(track);
 
 sp_track *
 sp_link_as_track_and_offset(sp_link *link, int *offset)

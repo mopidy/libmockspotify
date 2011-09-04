@@ -126,6 +126,12 @@ struct sp_link
   char *data;
 };
 
+void *
+registry_find(const char *url);
+
+void
+registry_add(const char *url, void *ptr);
+
 sp_album *
 mocksp_album_create(const char *, sp_artist *, int, const byte *, sp_albumtype, bool, bool);
 
