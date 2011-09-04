@@ -52,9 +52,15 @@ atohex(char *dst, const char *src, int size)
   }
 }
 
-void
-my_strncpy(char *destination, const char *source, size_t size)
+char *
+strclone(const char *string)
 {
-  strncpy(destination, source, size - 2);
-  destination[size - 1] = '\0';
+  if (string == NULL)
+  {
+    return (char *) ""; /* Oh shit… */
+  }
+
+  char *dst = ALLOC_N(char, strlen(string) + 1);
+  strcpy(dst, string);
+  return dst;
 }
