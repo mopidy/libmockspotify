@@ -156,6 +156,7 @@ sp_link_as_track_and_offset(sp_link *link, int *offset)
   {
     sscanf(optr, "#%u:%u", &mins, &secs);
     *offset = (mins * 60 + secs) * 1000;
+    *optr   = '\0';
   }
   else
   {
