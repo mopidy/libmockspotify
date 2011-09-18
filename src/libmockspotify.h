@@ -18,6 +18,7 @@ struct sp_session
   sp_session_config config;
   void *userdata;
   sp_connectionstate connectionstate;
+  size_t cache_size;
 };
 
 struct sp_album

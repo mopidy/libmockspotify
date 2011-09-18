@@ -34,6 +34,9 @@ sp_session_create(const sp_session_config *config, sp_session * *sess)
   memcpy((char *) session->config.application_key, config->application_key, config->application_key_size);
   MEMCPY((sp_session_callbacks *) session->config.callbacks, config->callbacks, sp_session_callbacks);
 
+  // sp_session defaults
+  session->cache_size = 0;
+
   // TODO: v0.0.8 (and earlier) directly call `notify_main_thread` callback here, before returning
   if (config->callbacks->notify_main_thread)
     config->callbacks->notify_main_thread(NULL);
@@ -72,4 +75,10 @@ sp_user *
 sp_session_user(sp_session *session)
 {
   return mocksp_user_create(NULL, NULL, NULL, NULL, SP_RELATION_TYPE_NONE, true);
+}
+
+void
+sp_session_set_cache_size(sp_session *session, size_t size)
+{
+  session->cache_size = size;
 }
