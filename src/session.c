@@ -113,6 +113,12 @@ sp_session_user(sp_session *session)
   return mocksp_user_create(NULL, NULL, NULL, NULL, SP_RELATION_TYPE_NONE, true);
 }
 
+int
+sp_session_user_country(sp_session *session)
+{
+  return ('S' << 8 | 'E');
+}
+
 void
 sp_session_set_cache_size(sp_session *session, size_t size)
 {
