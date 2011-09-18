@@ -65,6 +65,42 @@ sp_session_login(sp_session *session, const char *username, const char *password
   }
 }
 
+sp_error
+sp_session_relogin(sp_session *session)
+{
+  if ( ! session->username)
+  {
+    return SP_ERROR_NO_CREDENTIALS;
+  }
+
+  session->connectionstate = SP_CONNECTION_STATE_LOGGED_IN;
+  return SP_ERROR_OK;
+}
+
+int
+sp_session_remembered_user(sp_session *session, char *buffer, size_t buffer_size)
+{
+  if ( ! session->username)
+  {
+    return -1;
+  }
+
+  strncpy(buffer, session->username, buffer_size);
+
+  if (buffer_size > 0)
+  {
+    buffer[buffer_size - 1] = '\0';
+  }
+
+  return (int) strlen(session->username);
+}
+
+void
+sp_session_forget_me(sp_session *session)
+{
+  session->username = NULL;
+}
+
 void
 sp_session_logout(sp_session *session)
 {
