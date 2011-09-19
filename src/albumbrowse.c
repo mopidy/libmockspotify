@@ -42,6 +42,12 @@ DEFINE_READER(albumbrowse, num_tracks, int);
 DEFINE_ARRAY_READER(albumbrowse, track, sp_track *);
 DEFINE_READER(albumbrowse, review, const char *);
 
+bool
+sp_albumbrowse_is_loaded(sp_albumbrowse *albumbrowse)
+{
+  return albumbrowse->error == SP_ERROR_OK;
+}
+
 sp_albumbrowse *
 sp_albumbrowse_create(sp_session *session, sp_album *album,
                       albumbrowse_complete_cb cb, void *userdata)
