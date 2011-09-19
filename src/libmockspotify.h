@@ -34,8 +34,20 @@ struct sp_album
 
 struct sp_albumbrowse
 {
+  sp_error error;
   sp_album *album;
-  int is_loaded;
+  sp_artist *artist;
+
+  int num_copyrights;
+  char **copyrights;
+
+  int num_tracks;
+  sp_track **tracks;
+
+  char *review;
+
+  albumbrowse_complete_cb *callback;
+  void *userdata;
 };
 
 struct sp_artist
@@ -137,7 +149,7 @@ sp_album *
 mocksp_album_create(const char *, sp_artist *, int, const byte *, sp_albumtype, bool, bool);
 
 sp_albumbrowse *
-mocksp_albumbrowse_create(sp_album *, bool);
+mocksp_albumbrowse_create(sp_error, sp_album *, sp_artist *, int, const char **, int, sp_track **, const char *, albumbrowse_complete_cb *cb, void *userdata);
 
 sp_artist *
 mocksp_artist_create(const char *, bool);
