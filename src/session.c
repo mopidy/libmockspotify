@@ -32,13 +32,17 @@ sp_session_create(const sp_session_config *config, sp_session * *sess)
 
   session->config.application_key   = ALLOC_N(byte, config->application_key_size);
   memcpy((char *) session->config.application_key, config->application_key, config->application_key_size);
-  MEMCPY((sp_session_callbacks *) session->config.callbacks, config->callbacks, sp_session_callbacks);
+
+  if (config->callbacks)
+  {
+    MEMCPY((sp_session_callbacks *) session->config.callbacks, config->callbacks, sp_session_callbacks);
+  }
 
   // sp_session defaults
   session->cache_size = 0;
 
   // TODO: v0.0.8 (and earlier) directly call `notify_main_thread` callback here, before returning
-  if (config->callbacks->notify_main_thread)
+  if (config->callbacks && config->callbacks->notify_main_thread)
     config->callbacks->notify_main_thread(NULL);
 
   return SP_ERROR_OK;
