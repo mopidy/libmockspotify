@@ -1,7 +1,31 @@
 #include "libmockspotify.h"
 
+sp_session *
+mocksp_session_create(const sp_session_config *config, int num_friends, sp_user **friends)
+{
+  sp_session_config *cloned_config = ALLOC(sp_session_config);
+
+  if (config)
+  {
+    config = MEMCPY(cloned_config, config, sp_session_config);
+  }
+
+  cloned_config->application_key = "appkey_good";
+
+  sp_session *session = ALLOC(sp_session);
+  sp_session_create(cloned_config, &session);
+
+  session->friends     = ALLOC_N(sp_user *, num_friends);
+  session->num_friends = num_friends;
+  MEMCPY_N(session->friends, friends, sp_user *, num_friends);
+
+  return session;
+}
+
 DEFINE_READER(session, connectionstate, sp_connectionstate);
 DEFINE_READER(session, userdata, void *);
+DEFINE_READER(session, num_friends, int);
+DEFINE_ARRAY_READER(session, friend, sp_user *);
 
 const char * sp_build_id(void)
 {

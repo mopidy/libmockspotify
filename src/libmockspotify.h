@@ -19,6 +19,9 @@ struct sp_session
   void *userdata;
   sp_connectionstate connectionstate;
   size_t cache_size;
+
+  int num_friends;
+  sp_user **friends;
 };
 
 struct sp_album
@@ -156,6 +159,9 @@ registry_find(const char *url);
 
 void
 registry_add(const char *url, void *ptr);
+
+sp_session *
+mocksp_session_create(const sp_session_config *, int, sp_user **);
 
 sp_album *
 mocksp_album_create(const char *, sp_artist *, int, const byte *, sp_albumtype, bool, bool);
