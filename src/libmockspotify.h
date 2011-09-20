@@ -58,8 +58,20 @@ struct sp_artist
 
 struct sp_artistbrowse
 {
+  sp_error error;
   sp_artist *artist;
-  int is_loaded;
+  int num_portraits;
+  byte **portraits;
+  int num_tracks;
+  sp_track **tracks;
+  int num_albums;
+  sp_album **albums;
+  int num_similar_artists;
+  sp_artist **similar_artists;
+  char *biography;
+
+  artistbrowse_complete_cb *callback;
+  void *userdata;
 };
 
 struct sp_image
@@ -155,7 +167,7 @@ sp_artist *
 mocksp_artist_create(const char *, bool);
 
 sp_artistbrowse *
-mocksp_artistbrowse_create(sp_artist *, bool);
+mocksp_artistbrowse_create(sp_error, sp_artist *, int, const byte **, int, sp_track **, int, sp_album **, int, sp_artist **, const char *, artistbrowse_complete_cb *, void *);
 
 sp_playlist *
 mocksp_playlist_create(const char *);
