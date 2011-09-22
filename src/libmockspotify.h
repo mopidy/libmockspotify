@@ -154,6 +154,23 @@ struct sp_link
   char *data;
 };
 
+struct sp_toplistbrowse
+{
+  sp_error error;
+
+  int num_artists;
+  sp_artist **artists;
+
+  int num_albums;
+  sp_album **albums;
+
+  int num_tracks;
+  sp_track **tracks;
+
+  toplistbrowse_complete_cb *callback;
+  void *userdata;
+};
+
 void *
 registry_find(const char *url);
 
@@ -189,5 +206,9 @@ mocksp_user_create(const char *, const char *, const char *, const char *, sp_re
 
 sp_image*
 mocksp_image_create(const byte[20], sp_imageformat, size_t, const byte *, sp_error);
+
+
+sp_toplistbrowse *
+mocksp_toplistbrowse_create(sp_error, int, sp_artist **, int, sp_album **, int, sp_track **, toplistbrowse_complete_cb *, void *);
 
 #endif /* LIBMOCKSPOTIFY_API_H */
