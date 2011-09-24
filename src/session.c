@@ -1,7 +1,10 @@
 #include "libmockspotify.h"
 
 sp_session *
-mocksp_session_create(const sp_session_config *config, int num_friends, sp_user **friends)
+mocksp_session_create(const sp_session_config *config, sp_connectionstate connectionstate,
+                      int num_friends, sp_user **friends,
+                      int offline_time_left, sp_offline_sync_status *sync_status,
+                      int offline_num_playlists, int offline_tracks_to_sync)
 {
   sp_session_config *cloned_config = ALLOC(sp_session_config);
 
@@ -18,6 +21,14 @@ mocksp_session_create(const sp_session_config *config, int num_friends, sp_user 
   session->friends     = ALLOC_N(sp_user *, num_friends);
   session->num_friends = num_friends;
   MEMCPY_N(session->friends, friends, sp_user *, num_friends);
+
+  session->connectionstate = connectionstate;
+
+  session->offline_time_left = offline_time_left;
+  session->offline_sync_status = ALLOC(sp_offline_sync_status);
+  MEMCPY(session->offline_sync_status, sync_status, sp_offline_sync_status);
+  session->offline_num_playlists = offline_num_playlists;
+  session->offline_tracks_to_sync = offline_tracks_to_sync;
 
   return session;
 }
@@ -170,3 +181,19 @@ sp_session_set_connection_rules(sp_session *session, sp_connection_rules connect
 {
   session->connection_rules = connection_rules;
 }
+
+void
+sp_session_preferred_offline_bitrate(sp_session *session, sp_bitrate bitrate, bool allow_resync)
+{
+}
+
+bool
+sp_offline_sync_get_status(sp_session *session, sp_offline_sync_status *status)
+{
+  MEMCPY(status, session->offline_sync_status, sp_offline_sync_status);
+  return true;
+}
+
+int sp_offline_time_left(sp_session *x) { return x->offline_time_left; }
+int sp_offline_num_playlists(sp_session *x) { return x->offline_num_playlists; }
+int sp_offline_tracks_to_sync(sp_session *x) { return x->offline_tracks_to_sync; }

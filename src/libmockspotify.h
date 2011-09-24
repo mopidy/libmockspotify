@@ -36,6 +36,11 @@ struct sp_session
   sp_bitrate preferred_bitrate;
   sp_connection_type connection_type;
   sp_connection_rules connection_rules;
+
+  int offline_time_left;
+  sp_offline_sync_status *offline_sync_status;
+  int offline_num_playlists;
+  int offline_tracks_to_sync;
 };
 
 struct sp_album
@@ -200,7 +205,7 @@ void
 registry_add(const char *url, void *ptr);
 
 sp_session *
-mocksp_session_create(const sp_session_config *, int, sp_user **);
+mocksp_session_create(const sp_session_config *, sp_connectionstate, int, sp_user **, int, sp_offline_sync_status *, int, int);
 
 sp_album *
 mocksp_album_create(const char *, sp_artist *, int, const byte *, sp_albumtype, bool, bool);
