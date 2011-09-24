@@ -152,3 +152,9 @@ sp_session_set_cache_size(sp_session *session, size_t size)
 {
   session->cache_size = size;
 }
+
+void
+sp_session_preferred_bitrate(sp_session *session, sp_bitrate bitrate)
+{
+  session->preferred_bitrate = bitrate;
+}

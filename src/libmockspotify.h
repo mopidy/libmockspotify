@@ -12,6 +12,15 @@
 #include "libspotify/api.h"
 #include "util.h"
 
+/* custom type */
+struct sp_player
+{
+  sp_track *track;
+  int position;
+  bool playing;
+};
+typedef struct sp_player sp_player;
+
 struct sp_session
 {
   char *username;
@@ -22,6 +31,9 @@ struct sp_session
 
   int num_friends;
   sp_user **friends;
+
+  sp_player player;
+  sp_bitrate preferred_bitrate;
 };
 
 struct sp_album
