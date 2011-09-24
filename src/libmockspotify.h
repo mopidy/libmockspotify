@@ -34,6 +34,8 @@ struct sp_session
 
   sp_player player;
   sp_bitrate preferred_bitrate;
+  sp_connection_type connection_type;
+  sp_connection_rules connection_rules;
 };
 
 struct sp_album

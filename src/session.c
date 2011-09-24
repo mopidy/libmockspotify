@@ -158,3 +158,15 @@ sp_session_preferred_bitrate(sp_session *session, sp_bitrate bitrate)
 {
   session->preferred_bitrate = bitrate;
 }
+
+void
+sp_session_set_connection_type(sp_session *session, sp_connection_type connection_type)
+{
+  session->connection_type = connection_type;
+}
+
+void
+sp_session_set_connection_rules(sp_session *session, sp_connection_rules connection_rules)
+{
+  session->connection_rules = connection_rules;
+}
