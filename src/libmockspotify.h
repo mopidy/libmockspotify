@@ -121,15 +121,23 @@ struct sp_search
 {
   int total_tracks;
   int num_tracks;
+  sp_track **tracks;
+
+  int total_artists;
   int num_artists;
+  sp_artist **artists;
+
+  int total_albums;
   int num_albums;
-  sp_track *track[20];
-  sp_album *album[20];
-  sp_artist *artist[20];
+  sp_album **albums;
+
   char *query;
   char *did_you_mean;
+
   int error;
-  bool is_loaded;
+
+  search_complete_cb *callback;
+  void *userdata;
 };
 
 struct sp_track
@@ -219,8 +227,10 @@ mocksp_user_create(const char *, const char *, const char *, const char *, sp_re
 sp_image*
 mocksp_image_create(const byte[20], sp_imageformat, size_t, const byte *, sp_error);
 
-
 sp_toplistbrowse *
 mocksp_toplistbrowse_create(sp_error, int, sp_artist **, int, sp_album **, int, sp_track **, toplistbrowse_complete_cb *, void *);
+
+sp_search *
+mocksp_search_create(sp_error, const char *, const char *, int, int, const sp_track **, int, int, const sp_album **, int, int, const sp_artist **, search_complete_cb *, void *);
 
 #endif /* LIBMOCKSPOTIFY_API_H */

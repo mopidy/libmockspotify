@@ -1,11 +1,38 @@
 #include "libmockspotify.h"
 
 sp_search *
-sp_search_create(sp_session *session, const char *query, int track_offset,
-                 int track_count, int album_offset, int album_count, int artist_offset,
-                 int artist_count, search_complete_cb *callback, void *userdata)
+mocksp_search_create(sp_error error, const char *query, const char *did_you_mean,
+                     int total_tracks, int num_tracks, const sp_track **tracks,
+                     int total_albums, int num_albums, const sp_album **albums,
+                     int total_artists, int num_artists, const sp_artist **artists,
+                     search_complete_cb *callback, void *userdata)
 {
-  return NULL; /* TODO */
+  sp_search *search = ALLOC(sp_search);
+
+  search->error = error;
+  search->query = strclone(query);
+  search->did_you_mean = strclone(did_you_mean);
+
+  search->total_tracks  = total_tracks;
+  search->total_artists = total_artists;
+  search->total_albums  = total_albums;
+
+  search->num_tracks  = num_tracks;
+  search->num_artists = num_artists;
+  search->num_albums  = num_albums;
+
+  search->tracks  = ALLOC_N(sp_track *, num_tracks);
+  search->artists = ALLOC_N(sp_artist *, num_artists);
+  search->albums  = ALLOC_N(sp_album *, num_artists);
+
+  MEMCPY_N(search->tracks, tracks, sp_track *, num_tracks);
+  MEMCPY_N(search->artists, artists, sp_artist *, num_artists);
+  MEMCPY_N(search->albums, albums, sp_album *, num_albums);
+
+  search->callback = callback;
+  search->userdata = userdata;
+
+  return search;
 }
 
 DEFINE_REFCOUNTERS_FOR(search);
@@ -13,8 +40,27 @@ DEFINE_REFCOUNTERS_FOR(search);
 DEFINE_READER(search, query, const char *);
 DEFINE_READER(search, did_you_mean, const char *);
 DEFINE_READER(search, error, sp_error);
-DEFINE_READER(search, is_loaded, bool);
+
 DEFINE_READER(search, num_artists, int);
+DEFINE_ARRAY_READER(search, artist, sp_artist *);
+DEFINE_READER(search, total_artists, int);
+
 DEFINE_READER(search, num_albums, int);
+DEFINE_ARRAY_READER(search, album, sp_album *);
+DEFINE_READER(search, total_albums, int);
+
 DEFINE_READER(search, num_tracks, int);
+DEFINE_ARRAY_READER(search, track, sp_track *);
 DEFINE_READER(search, total_tracks, int);
+
+sp_search *
+sp_search_create(sp_session *session, const char *query, int tracks_offset, int tracks, int albums_offset, int albums, int artists_offset, int artists, search_complete_cb *cb, void *userdata)
+{
+  return mocksp_search_create(SP_ERROR_OK, query, "did you mean", 0, 0, NULL, 0, 0, NULL, 0, 0, NULL, cb, userdata);
+}
+
+bool
+sp_search_is_loaded(sp_search *search)
+{
+  return search->error == SP_ERROR_OK;
+}
