@@ -96,9 +96,11 @@ sp_link_create_from_artist(sp_artist *artist)
 }
 
 sp_link *
-sp_link_create_from_search(sp_search *s)
+sp_link_create_from_search(sp_search *search)
 {
-  return NULL; /* TODO */
+  char *uri = ALLOC_N(char, strlen("spotify:search:") + strlen(search->query) + 1);
+  sprintf(uri, "spotify:search:%s", search->query);
+  return sp_link_create_from_string(uri);
 }
 
 /* * * * * * * * * * * *
