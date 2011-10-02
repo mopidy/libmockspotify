@@ -27,6 +27,12 @@ char *strclone(const char *string);
     return x->field;                            \
   }
 
+#define DEFINE_MOCK_READER(kind, field, return_type) \
+  return_type mocksp_##kind##_get_##field(sp_##kind *x) \
+  {                                             \
+    return x->field;                            \
+  }
+
 #define DEFINE_SESSION_READER(kind, field, return_type) \
   return_type sp_##kind##_##field(sp_session *x, sp_##kind *y) \
   {                                                     \
@@ -38,6 +44,13 @@ char *strclone(const char *string);
   {                                                        \
     if (index >= x->num_##field##s) return NULL;         \
     return x->field##s[index];                           \
+  }
+
+#define DEFINE_ARRAY_MEMBER_READER(kind, field, member, return_type) \
+  return_type sp_##kind##_##field##_##member(sp_##kind *x, int index) \
+  {                                                        \
+    if (index >= x->num_##field##s) return (return_type) NULL;         \
+    return x->field##s[index].member;                   \
   }
 
 #endif /* UTIL_H */

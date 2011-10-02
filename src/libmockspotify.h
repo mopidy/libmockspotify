@@ -105,21 +105,54 @@ struct sp_image
   sp_error error;
 };
 
+/* custom struct */
+struct sp_playlist_track
+{
+  sp_track *track;
+  int create_time;
+  sp_user *creator;
+  char *message;
+  bool seen;
+};
+typedef struct sp_playlist_track sp_playlist_track_t;
+
 struct sp_playlist
 {
   char *name;
-  sp_track *track[32];
-  int num_tracks;
-  sp_playlist_callbacks *callbacks;
-  void *userdata;
   bool is_loaded;
+  sp_user *owner;
   bool is_collaborative;
+  char *get_description;
+  byte image[20];
+  bool has_pending_changes;
+  int num_subscribers;
+  sp_subscribers *subscribers;
+  bool is_in_ram;
+  sp_playlist_offline_status get_offline_status;
+  int get_offline_download_completed;
+  int num_tracks;
+  sp_playlist_track_t *tracks;
+  bool autolink_tracks;
 };
+
+/* custom struct */
+struct sp_playlistcontainer_playlist
+{
+  sp_playlist *playlist;
+  sp_playlist_type type;
+  char * folder_name;
+  sp_uint64 folder_id;
+};
+typedef struct sp_playlistcontainer_playlist sp_playlistcontainer_playlist_t;
 
 struct sp_playlistcontainer
 {
-  sp_playlist *playlist[32];
+  bool is_loaded;
+  sp_user *owner;
+
   int num_playlists;
+  sp_playlistcontainer_playlist_t *playlists;
+
   sp_playlistcontainer_callbacks *callbacks;
   void *userdata;
 };
@@ -220,7 +253,10 @@ sp_artistbrowse *
 mocksp_artistbrowse_create(sp_error, sp_artist *, int, const byte **, int, sp_track **, int, sp_album **, int, sp_artist **, const char *, artistbrowse_complete_cb *, void *);
 
 sp_playlist *
-mocksp_playlist_create(const char *);
+mocksp_playlist_create(const char *, bool, sp_user *, bool, const char *, const byte *, bool, unsigned int, sp_subscribers *, bool, sp_playlist_offline_status, int, int, sp_playlist_track_t *);
+
+sp_subscribers *
+mocksp_subscribers(int, char **);
 
 sp_playlistcontainer *
 mocksp_playlistcontainer_create(void);
@@ -239,5 +275,9 @@ mocksp_toplistbrowse_create(sp_error, int, sp_artist **, int, sp_album **, int, 
 
 sp_search *
 mocksp_search_create(sp_error, const char *, const char *, int, int, const sp_track **, int, int, const sp_album **, int, int, const sp_artist **, search_complete_cb *, void *);
+
+/* custom accessors for testing libmockspotify state */
+bool
+mocksp_playlist_get_autolink_tracks(sp_playlist *);
 
 #endif /* LIBMOCKSPOTIFY_API_H */
