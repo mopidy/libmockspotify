@@ -28,14 +28,17 @@ char*
 hextoa(const char *str, int size)
 {
   if (size % 2) return NULL;
+  int length = (size / 2) + 1;
 
-  char *result = ALLOC_N(char, size / 2);
+  char *result = ALLOC_N(char, length);
 
   int i;
   for (i = 0; i < size; i += 2)
   {
     result[i/2] = (htoi(str[i]) << 4) + htoi(str[i+1]);
   }
+
+  result[length - 1] = '\0';
 
   return result;
 }
