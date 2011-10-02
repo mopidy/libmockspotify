@@ -147,3 +147,26 @@ sp_playlist_set_offline_mode(sp_session *session, sp_playlist *playlist, bool of
 {
   playlist->get_offline_status = SP_PLAYLIST_OFFLINE_STATUS_YES;
 }
+
+void
+sp_playlist_add_callbacks(sp_playlist *playlist, sp_playlist_callbacks *callbacks, void *userdata)
+{
+  playlist->callbacks = callbacks;
+  playlist->userdata  = userdata;
+}
+
+void
+sp_playlist_remove_callbacks(sp_playlist *playlist, sp_playlist_callbacks *callbacks, void *userdata)
+{
+  playlist->callbacks = NULL;
+  playlist->userdata  = NULL;
+}
+
+void
+sp_playlist_update_subscribers(sp_session *session, sp_playlist *playlist)
+{
+  if (playlist->callbacks && playlist->callbacks->subscribers_changed)
+  {
+    playlist->callbacks->subscribers_changed(playlist, playlist->userdata);
+  }
+}

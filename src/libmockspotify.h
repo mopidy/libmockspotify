@@ -133,6 +133,9 @@ struct sp_playlist
   int num_tracks;
   sp_playlist_track_t *tracks;
   bool autolink_tracks;
+
+  sp_playlist_callbacks *callbacks;
+  void *userdata;
 };
 
 /* custom struct */
