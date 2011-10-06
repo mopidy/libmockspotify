@@ -87,6 +87,17 @@ DEFINE_ARRAY_MEMBER_READER(playlist, track, seen, bool);
 
 DEFINE_MOCK_READER(playlist, autolink_tracks, bool);
 
+sp_playlist *
+sp_playlist_create(sp_session *session, sp_link *link)
+{
+  if (sp_link_type(link) != SP_LINKTYPE_PLAYLIST)
+  {
+    return NULL;
+  }
+
+  return registry_find(link->data);
+}
+
 sp_track *
 sp_playlist_track(sp_playlist *playlist, int index)
 {
