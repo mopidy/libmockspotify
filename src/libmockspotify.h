@@ -31,6 +31,7 @@ struct sp_session
 
   int num_friends;
   sp_user **friends;
+  sp_user *user;
 
   sp_player player;
   sp_bitrate preferred_bitrate;
