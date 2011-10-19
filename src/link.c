@@ -80,19 +80,22 @@ sp_link_create_from_track(sp_track *track, int offset)
 sp_link *
 sp_link_create_from_album(sp_album *album)
 {
-  return NULL; /* TODO */
+  const char *link = registry_reverse_find((void *) album);
+  return sp_link_create_from_string(link);
 }
 
 sp_link *
 sp_link_create_from_playlist(sp_playlist *playlist)
 {
-  return NULL; /* TODO */
+  const char *link = registry_reverse_find((void *) playlist);
+  return sp_link_create_from_string(link);
 }
 
 sp_link *
 sp_link_create_from_artist(sp_artist *artist)
 {
-  return NULL; /* TODO */
+  const char *link = registry_reverse_find((void *) artist);
+  return sp_link_create_from_string(link);
 }
 
 sp_link *

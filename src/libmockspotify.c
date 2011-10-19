@@ -24,6 +24,19 @@ registry_find(const char *url)
   return NULL;
 }
 
+const char *
+registry_reverse_find(void *sp_pointer)
+{
+  node_t *curr;
+
+  for (curr = g_node; curr; curr = curr->next)
+  {
+    if (curr->ptr == sp_pointer) return curr->url;
+  }
+
+  return NULL;
+}
+
 void
 registry_add(const char *url, void *ptr)
 {
