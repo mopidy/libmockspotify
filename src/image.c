@@ -34,19 +34,19 @@ sp_image_is_loaded(sp_image *i)
 }
 
 sp_image*
-sp_image_create_from_link(sp_session *session, sp_link *l)
+sp_image_create_from_link(sp_session *session, sp_link *link)
 {
-  byte *real_id = l->data + strlen("spotify:image:");
-  return sp_image_create(session, hextoa(real_id, 40));
+  return (sp_image *)registry_find(link->data);
 }
 
 
 sp_image *
 sp_image_create(sp_session *session, const byte image_id[20])
 {
-  sp_image *image = ALLOC(sp_image);
-  memcpy(image->image_id, image_id, 20);
-  return image;
+  sp_image *tmp_image = ALLOC(sp_image);
+  MEMCPY_N(tmp_image->image_id, image_id, byte, 20);
+  sp_link *tmp_link   = sp_link_create_from_image(tmp_image);
+  return (sp_image *)registry_find(tmp_link->data);
 }
 
 void
