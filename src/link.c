@@ -67,7 +67,7 @@ sp_link *
 sp_link_create_from_track(sp_track *track, int offset)
 {
   sp_link *link = ALLOC(sp_link);
-  link->data = ALLOC_N(char, strlen("spotify:track:") + strlen(track->name) + 5 + 1);
+  link->data = ALLOC_N(char, strlen("spotify:track:") + strlen(track->name) + 6 + 1);
 
   int mins = 0, secs = 0;
   mins = offset % 60;
