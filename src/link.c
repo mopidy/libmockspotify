@@ -66,15 +66,17 @@ sp_link_create_from_image(sp_image *image)
 sp_link *
 sp_link_create_from_track(sp_track *track, int offset)
 {
-  sp_link *link = ALLOC(sp_link);
-  link->data = ALLOC_N(char, strlen("spotify:track:") + strlen(track->name) + 6 + 1);
+  const char *link = registry_reverse_find((void *) track);
+  char *link_with_offset = ALLOC_N(char, strlen(link) + strlen("#00:00") + 1);
 
+  offset = offset / 1000;
   int mins = 0, secs = 0;
-  mins = offset % 60;
-  secs = offset - mins * 60;
+  mins = (offset / 60) % 60;
+  secs = (offset - mins * 60) % 60;
 
-  sprintf(link->data, "spotify:track:%s#%20d:%20d", track->name, mins, secs);
-  return link;
+  sprintf(link_with_offset, "%s", link);
+  sprintf(link_with_offset + strlen(link), "#%02d:%02d", mins, secs);
+  return sp_link_create_from_string(link_with_offset);
 }
 
 sp_link *
@@ -145,7 +147,7 @@ sp_link_as_track_and_offset(sp_link *link, int *offset)
 
   if (optr = strchr(link->data, '#'))
   {
-    sscanf(optr, "#%u:%u", &mins, &secs);
+    sscanf(optr, "#%2u:%2u", &mins, &secs);
     *offset = (mins * 60 + secs) * 1000;
     *optr   = '\0';
   }
