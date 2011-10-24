@@ -235,6 +235,17 @@ struct sp_toplistbrowse
   void *userdata;
 };
 
+struct sp_inbox
+{
+  char *user;
+  char *message;
+  sp_track *tracks;
+  int num_tracks;
+
+  inboxpost_complete_cb *callback;
+  void *userdata;
+};
+
 void *
 registry_find(const char *url);
 
