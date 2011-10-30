@@ -42,6 +42,8 @@ struct sp_session
   sp_offline_sync_status *offline_sync_status;
   int offline_num_playlists;
   int offline_tracks_to_sync;
+
+  sp_playlist *inbox;
 };
 
 struct sp_album
@@ -256,7 +258,7 @@ const char *
 registry_reverse_find(void *);
 
 sp_session *
-mocksp_session_create(const sp_session_config *, sp_connectionstate, int, sp_user **, int, sp_offline_sync_status *, int, int);
+mocksp_session_create(const sp_session_config *, sp_connectionstate, int, sp_user **, int, sp_offline_sync_status *, int, int, sp_playlist *);
 
 sp_album *
 mocksp_album_create(const char *, sp_artist *, int, const byte *, sp_albumtype, bool, bool);

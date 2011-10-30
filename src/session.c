@@ -4,7 +4,7 @@ sp_session *
 mocksp_session_create(const sp_session_config *config, sp_connectionstate connectionstate,
                       int num_friends, sp_user **friends,
                       int offline_time_left, sp_offline_sync_status *sync_status,
-                      int offline_num_playlists, int offline_tracks_to_sync)
+                      int offline_num_playlists, int offline_tracks_to_sync, sp_playlist *inbox)
 {
   sp_session_config *cloned_config = ALLOC(sp_session_config);
 
@@ -29,6 +29,8 @@ mocksp_session_create(const sp_session_config *config, sp_connectionstate connec
   MEMCPY(session->offline_sync_status, sync_status, sp_offline_sync_status);
   session->offline_num_playlists = offline_num_playlists;
   session->offline_tracks_to_sync = offline_tracks_to_sync;
+
+  session->inbox = inbox;
 
   return session;
 }
@@ -222,4 +224,15 @@ sp_session_starred_for_user_create(sp_session *session, const char *name)
   char *link = ALLOC_N(char, strlen("spotify:user:") + strlen(name) + strlen(":starred"));
   sprintf(link, "spotify:user:%s:starred", name);
   return (sp_playlist *)registry_find(link);
+}
+
+sp_playlist *
+sp_session_inbox_create(sp_session *session)
+{
+  if (sp_session_connectionstate(session) != SP_CONNECTION_STATE_LOGGED_IN)
+  {
+    return NULL;
+  }
+
+  return session->inbox;
 }
