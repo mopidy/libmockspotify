@@ -204,7 +204,7 @@ sp_playlist_add_tracks(sp_playlist *playlist, sp_track *const *tracks, int num_t
     if (i >= position && j < num_tracks)
     {
       new_tracks[i].track = tracks[j++];
-      new_tracks[i].create_time = time(NULL);
+      new_tracks[i].create_time = (int) time(NULL); // let’s hope before year 2038 we fix this :)
       new_tracks[i].creator = sp_session_user(session);
       new_tracks[i].message = NULL;
       new_tracks[i].seen = true;
@@ -215,6 +215,54 @@ sp_playlist_add_tracks(sp_playlist *playlist, sp_track *const *tracks, int num_t
     }
   }
 
+  free(playlist->tracks);
+  playlist->tracks = new_tracks;
+  playlist->num_tracks = new_size;
+
+  return SP_ERROR_OK;
+}
+
+sp_error
+sp_playlist_remove_tracks(sp_playlist *playlist, const int *tracks, int num_tracks)
+{
+  int size     = sp_playlist_num_tracks(playlist);
+  int new_size = size - num_tracks;
+  int i = 0, j = 0, k = 0;
+
+  // Make sure all indices are unique and not too small/large
+  for (i = 0; i < num_tracks; ++i)
+  {
+    if (tracks[i] < 0 || tracks[i] >= size)
+      return SP_ERROR_INVALID_INDATA;
+
+    for (j = i + 1; j < num_tracks; ++j)
+    {
+      if (tracks[i] == tracks[j])
+        return SP_ERROR_INVALID_INDATA;
+    }
+  }
+
+  sp_playlist_track_t *new_tracks = ALLOC_N(sp_playlist_track_t, new_size);
+
+  // this simplifies the remove operation quite a bit!
+  int *sorted_tracks = ALLOC_N(int, num_tracks);
+  MEMCPY_N(sorted_tracks, tracks, int, num_tracks);
+  qsort(sorted_tracks, num_tracks, sizeof(int), compare_ints);
+
+  for (i = 0, j = 0, k = 0; i < size; ++i)
+  {
+    if (sorted_tracks[j] == i)
+    {
+      j += 1;
+      continue;
+    }
+
+    MEMCPY(&new_tracks[k++], &playlist->tracks[i], sp_playlist_track_t);
+  }
+
+
+  // we usually don’t do memory management, but in this case why not?
+  free(sorted_tracks);
   free(playlist->tracks);
   playlist->tracks = new_tracks;
   playlist->num_tracks = new_size;

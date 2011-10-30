@@ -67,3 +67,12 @@ strclone(const char *string)
   strcpy(dst, string);
   return dst;
 }
+
+int
+compare_ints(const void *a, const void *b)
+{
+  const int *ia = (int *)a;
+  const int *ib = (int *)b;
+
+  return *ia - *ib;
+}

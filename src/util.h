@@ -14,6 +14,7 @@
 void *xmalloc(size_t);
 char *hextoa(const char *, int);
 char *strclone(const char *string);
+int compare_ints(const void *, const void *);
 
 #define STARTS_WITH(x, y) (strncmp((x), (y), strlen(y)) == 0)
 
