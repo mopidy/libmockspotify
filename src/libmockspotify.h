@@ -134,6 +134,7 @@ struct sp_playlist
   sp_playlist_offline_status get_offline_status;
   int get_offline_download_completed;
   int num_tracks;
+
   sp_playlist_track_t *tracks;
   bool autolink_tracks;
 

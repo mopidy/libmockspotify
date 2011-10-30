@@ -49,7 +49,7 @@ char *strclone(const char *string);
 #define DEFINE_ARRAY_MEMBER_READER(kind, field, member, return_type) \
   return_type sp_##kind##_##field##_##member(sp_##kind *x, int index) \
   {                                                        \
-    if (index >= x->num_##field##s) return (return_type) NULL;         \
+    if (index >= x->num_##field##s) return (return_type) 0;         \
     return x->field##s[index].member;                   \
   }
 

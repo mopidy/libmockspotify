@@ -1,4 +1,5 @@
 #include "libmockspotify.h"
+#include "time.h"
 
 sp_playlist *
 mocksp_playlist_create(const char *name, bool is_loaded, sp_user *owner, bool is_collaborative,
@@ -182,4 +183,41 @@ sp_playlist_update_subscribers(sp_session *session, sp_playlist *playlist)
   {
     playlist->callbacks->subscribers_changed(playlist, playlist->userdata);
   }
+}
+
+sp_error
+sp_playlist_add_tracks(sp_playlist *playlist, sp_track *const *tracks, int num_tracks, int position, sp_session *session)
+{
+  int size = sp_playlist_num_tracks(playlist);
+  int new_size = size + num_tracks;
+
+  if (position < 0 || position > size)
+  {
+    return SP_ERROR_INVALID_INDATA;
+  }
+
+  sp_playlist_track_t *new_tracks = ALLOC_N(sp_playlist_track_t, new_size);
+
+  int i = 0, j = 0, k = 0;
+  for (i = 0; i < new_size; ++i)
+  {
+    if (i >= position && j < num_tracks)
+    {
+      new_tracks[i].track = tracks[j++];
+      new_tracks[i].create_time = time(NULL);
+      new_tracks[i].creator = sp_session_user(session);
+      new_tracks[i].message = NULL;
+      new_tracks[i].seen = true;
+    }
+    else
+    {
+      MEMCPY(&new_tracks[i], &playlist->tracks[k++], sp_playlist_track_t);
+    }
+  }
+
+  free(playlist->tracks);
+  playlist->tracks = new_tracks;
+  playlist->num_tracks = new_size;
+
+  return SP_ERROR_OK;
 }
