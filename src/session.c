@@ -214,6 +214,11 @@ sp_session_starred_create(sp_session *session)
 sp_playlist *
 sp_session_starred_for_user_create(sp_session *session, const char *name)
 {
+  if (sp_session_connectionstate(session) != SP_CONNECTION_STATE_LOGGED_IN)
+  {
+    return NULL;
+  }
+
   char *link = ALLOC_N(char, strlen("spotify:user:") + strlen(name) + strlen(":starred"));
   sprintf(link, "spotify:user:%s:starred", name);
   return (sp_playlist *)registry_find(link);
