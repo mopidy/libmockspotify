@@ -90,7 +90,9 @@ DEFINE_MOCK_READER(playlist, autolink_tracks, bool);
 sp_playlist *
 sp_playlist_create(sp_session *session, sp_link *link)
 {
-  if (sp_link_type(link) != SP_LINKTYPE_PLAYLIST)
+  sp_linktype type = sp_link_type(link);
+
+  if (type != SP_LINKTYPE_PLAYLIST && type != SP_LINKTYPE_STARRED)
   {
     return NULL;
   }
