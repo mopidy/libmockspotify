@@ -200,6 +200,18 @@ int sp_offline_num_playlists(sp_session *x) { return x->offline_num_playlists; }
 int sp_offline_tracks_to_sync(sp_session *x) { return x->offline_tracks_to_sync; }
 
 sp_playlist *
+sp_session_starred_create(sp_session *session)
+{
+  if (sp_session_connectionstate(session) != SP_CONNECTION_STATE_LOGGED_IN)
+  {
+    return NULL;
+  }
+
+  const char *current_user = sp_user_canonical_name(session->user);
+  return sp_session_starred_for_user_create(session, current_user);
+}
+
+sp_playlist *
 sp_session_starred_for_user_create(sp_session *session, const char *name)
 {
   char *link = ALLOC_N(char, strlen("spotify:user:") + strlen(name) + strlen(":starred"));
