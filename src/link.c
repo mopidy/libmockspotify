@@ -16,7 +16,7 @@ sp_link_type(sp_link *link)
 
   // Order of these three is significant
   LINK_CASE_FOR(playlist, PLAYLIST);
-  LINK_CASE_FOR(starred,  STARRED);
+  LINK_CASE_FOR(starred,  PLAYLIST);
   LINK_CASE_FOR(user,     PROFILE);
 
   return SP_LINKTYPE_INVALID;

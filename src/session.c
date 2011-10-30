@@ -198,3 +198,11 @@ sp_offline_sync_get_status(sp_session *session, sp_offline_sync_status *status)
 int sp_offline_time_left(sp_session *x) { return x->offline_time_left; }
 int sp_offline_num_playlists(sp_session *x) { return x->offline_num_playlists; }
 int sp_offline_tracks_to_sync(sp_session *x) { return x->offline_tracks_to_sync; }
+
+sp_playlist *
+sp_session_starred_for_user_create(sp_session *session, const char *name)
+{
+  char *link = ALLOC_N(char, strlen("spotify:user:") + strlen(name) + strlen(":starred"));
+  sprintf(link, "spotify:user:%s:starred", name);
+  return (sp_playlist *)registry_find(link);
+}
