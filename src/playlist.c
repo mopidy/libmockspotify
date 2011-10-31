@@ -89,7 +89,7 @@ DEFINE_ARRAY_MEMBER_READER(playlist, track, seen, bool);
 DEFINE_MOCK_READER(playlist, autolink_tracks, bool);
 
 sp_playlist *
-sp_playlist_create(sp_session *session, sp_link *link)
+sp_playlist_create(sp_session *UNUSED(session), sp_link *link)
 {
   sp_linktype type = sp_link_type(link);
 
@@ -151,15 +151,15 @@ sp_playlist_set_autolink_tracks(sp_playlist *playlist, bool autolink_tracks)
 }
 
 void
-sp_playlist_set_in_ram(sp_session *session, sp_playlist *playlist, bool in_ram)
+sp_playlist_set_in_ram(sp_session *UNUSED(session), sp_playlist *playlist, bool in_ram)
 {
   playlist->is_in_ram = in_ram;
 }
 
 void
-sp_playlist_set_offline_mode(sp_session *session, sp_playlist *playlist, bool offline_mode)
+sp_playlist_set_offline_mode(sp_session *UNUSED(session), sp_playlist *playlist, bool offline_mode)
 {
-  playlist->get_offline_status = SP_PLAYLIST_OFFLINE_STATUS_YES;
+  playlist->get_offline_status = offline_mode ? SP_PLAYLIST_OFFLINE_STATUS_YES : SP_PLAYLIST_OFFLINE_STATUS_NO;
 }
 
 void
@@ -170,14 +170,14 @@ sp_playlist_add_callbacks(sp_playlist *playlist, sp_playlist_callbacks *callback
 }
 
 void
-sp_playlist_remove_callbacks(sp_playlist *playlist, sp_playlist_callbacks *callbacks, void *userdata)
+sp_playlist_remove_callbacks(sp_playlist *playlist, sp_playlist_callbacks *UNUSED(callbacks), void *UNUSED(userdata))
 {
   playlist->callbacks = NULL;
   playlist->userdata  = NULL;
 }
 
 void
-sp_playlist_update_subscribers(sp_session *session, sp_playlist *playlist)
+sp_playlist_update_subscribers(sp_session *UNUSED(session), sp_playlist *playlist)
 {
   if (playlist->callbacks && playlist->callbacks->subscribers_changed)
   {

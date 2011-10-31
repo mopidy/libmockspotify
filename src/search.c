@@ -54,7 +54,7 @@ DEFINE_ARRAY_READER(search, track, sp_track *);
 DEFINE_READER(search, total_tracks, int);
 
 sp_search *
-sp_search_create(sp_session *session, const char *query, int tracks_offset, int tracks, int albums_offset, int albums, int artists_offset, int artists, search_complete_cb *cb, void *userdata)
+sp_search_create(sp_session *UNUSED(session), const char *query, int UNUSED(tracks_offset), int UNUSED(tracks), int UNUSED(albums_offset), int UNUSED(albums), int UNUSED(artists_offset), int UNUSED(artists), search_complete_cb *UNUSED(cb), void *UNUSED(userdata))
 {
   char *searchquery = ALLOC_N(char, strlen("spotify:search:") + strlen(query) + 1);
   sprintf(searchquery, "spotify:search:%s", query);

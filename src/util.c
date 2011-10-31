@@ -46,7 +46,7 @@ hextoa(const char *str, int size)
 }
 
 void
-atohex(char *dst, const char *src, int size)
+atohex(char *dst, const byte *src, int size)
 {
   int i;
   int p;

@@ -63,7 +63,7 @@ sp_artistbrowse_is_loaded(sp_artistbrowse *artistbrowse)
 }
 
 sp_artistbrowse *
-sp_artistbrowse_create(sp_session *session, sp_artist *artist, artistbrowse_complete_cb *callback, void *userdata)
+sp_artistbrowse_create(sp_session *UNUSED(session), sp_artist *artist, artistbrowse_complete_cb *callback, void *userdata)
 {
   return mocksp_artistbrowse_create(SP_ERROR_OK, artist, 0, NULL, 0, NULL, 0, NULL, 0, NULL, "", callback, userdata);
 }

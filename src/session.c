@@ -45,7 +45,7 @@ const char * sp_build_id(void)
 }
 
 sp_playlistcontainer *
-sp_session_playlistcontainer(sp_session *session)
+sp_session_playlistcontainer(sp_session *UNUSED(session))
 {
   return mocksp_playlistcontainer_create();
 }
@@ -85,18 +85,18 @@ sp_session_create(const sp_session_config *config, sp_session * *sess)
   return SP_ERROR_OK;
 }
 
-void sp_session_release(sp_session *session)
+void sp_session_release(sp_session *UNUSED(session))
 {
 }
 
 void
-sp_session_process_events(sp_session *session, int *next_timeout)
+sp_session_process_events(sp_session *UNUSED(session), int *next_timeout)
 {
   *next_timeout = 1;
 }
 
 void
-sp_session_login(sp_session *session, const char *username, const char *password, bool remember_me)
+sp_session_login(sp_session *session, const char *username, const char *UNUSED(password), bool remember_me)
 {
   session->user = mocksp_user_create(username, username, username, NULL, SP_RELATION_TYPE_NONE, true);
   session->connectionstate = SP_CONNECTION_STATE_LOGGED_IN;
@@ -156,7 +156,7 @@ sp_session_user(sp_session *session)
 }
 
 int
-sp_session_user_country(sp_session *session)
+sp_session_user_country(sp_session *UNUSED(session))
 {
   return ('S' << 8 | 'E');
 }
@@ -186,7 +186,7 @@ sp_session_set_connection_rules(sp_session *session, sp_connection_rules connect
 }
 
 void
-sp_session_preferred_offline_bitrate(sp_session *session, sp_bitrate bitrate, bool allow_resync)
+sp_session_preferred_offline_bitrate(sp_session *UNUSED(session), sp_bitrate UNUSED(bitrate), bool UNUSED(allow_resync))
 {
 }
 

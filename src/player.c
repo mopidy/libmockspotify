@@ -26,7 +26,7 @@ sp_session_player_unload(sp_session *session)
 }
 
 sp_error
-sp_session_player_prefetch(sp_session *session, sp_track *track)
+sp_session_player_prefetch(sp_session *UNUSED(session), sp_track *UNUSED(track))
 {
   return SP_ERROR_OK;
 }

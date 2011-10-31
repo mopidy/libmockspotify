@@ -106,6 +106,9 @@ struct sp_image
   size_t data_size;
   byte *data;
   sp_error error;
+
+  image_loaded_cb *callback;
+  void *userdata;
 };
 
 /* custom struct */

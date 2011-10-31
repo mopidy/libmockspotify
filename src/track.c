@@ -61,7 +61,7 @@ sp_localtrack_create(const char *artist, const char *title, const char *album, i
 
 
 void
-sp_track_set_starred(sp_session *session, sp_track *const *tracks, int num_tracks, bool starred)
+sp_track_set_starred(sp_session *UNUSED(session), sp_track *const *tracks, int num_tracks, bool starred)
 {
   int i;
 

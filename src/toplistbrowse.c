@@ -45,7 +45,7 @@ sp_toplistbrowse_is_loaded(sp_toplistbrowse *toplistbrowse)
 }
 
 sp_toplistbrowse *
-sp_toplistbrowse_create(sp_session *session, sp_toplisttype type, sp_toplistregion region, const char *username, toplistbrowse_complete_cb *callback, void *userdata)
+sp_toplistbrowse_create(sp_session *UNUSED(session), sp_toplisttype UNUSED(type), sp_toplistregion UNUSED(region), const char *UNUSED(username), toplistbrowse_complete_cb *callback, void *userdata)
 {
   return mocksp_toplistbrowse_create(SP_ERROR_OK, 0, NULL, 0, NULL, 0, NULL, callback, userdata);
 }

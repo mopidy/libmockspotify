@@ -49,8 +49,7 @@ sp_albumbrowse_is_loaded(sp_albumbrowse *albumbrowse)
 }
 
 sp_albumbrowse *
-sp_albumbrowse_create(sp_session *session, sp_album *album,
-                      albumbrowse_complete_cb cb, void *userdata)
+sp_albumbrowse_create(sp_session *UNUSED(session), sp_album *album, albumbrowse_complete_cb cb, void *userdata)
 {
   return mocksp_albumbrowse_create(SP_ERROR_OK, album, album->artist, 0, NULL, 0, NULL, "", cb, userdata);
 }

@@ -48,7 +48,7 @@ sp_playlistcontainer_add_callbacks(sp_playlistcontainer *pc, sp_playlistcontaine
 }
 
 void
-sp_playlistcontainer_remove_callbacks(sp_playlistcontainer *pc, sp_playlistcontainer_callbacks *callbacks, void *userdata) 
+sp_playlistcontainer_remove_callbacks(sp_playlistcontainer *pc, sp_playlistcontainer_callbacks *UNUSED(callbacks), void *UNUSED(userdata)) 
 {
   /* TODO: multi-callback support */
   pc->callbacks = NULL;

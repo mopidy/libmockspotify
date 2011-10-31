@@ -34,14 +34,14 @@ sp_image_is_loaded(sp_image *i)
 }
 
 sp_image*
-sp_image_create_from_link(sp_session *session, sp_link *link)
+sp_image_create_from_link(sp_session *UNUSED(session), sp_link *link)
 {
   return (sp_image *)registry_find(link->data);
 }
 
 
 sp_image *
-sp_image_create(sp_session *session, const byte image_id[20])
+sp_image_create(sp_session *UNUSED(session), const byte image_id[20])
 {
   sp_link *tmp_link;
   sp_image *tmp_image = ALLOC(sp_image);
@@ -53,15 +53,15 @@ sp_image_create(sp_session *session, const byte image_id[20])
 }
 
 void
-sp_image_add_load_callback(sp_image *i, image_loaded_cb *callback,
-                           void *userdata)
+sp_image_add_load_callback(sp_image *image, image_loaded_cb *callback, void *userdata)
 {
-    /* TODO */
+  image->callback = callback;
+  image->userdata = userdata;
 }
 
 void
-sp_image_remove_load_callback(sp_image *i, image_loaded_cb *callback,
-                              void *userdata)
+sp_image_remove_load_callback(sp_image *image, image_loaded_cb *UNUSED(callback), void *UNUSED(userdata))
 {
-    /* TODO */
+  image->callback = NULL;
+  image->userdata = NULL;
 }
