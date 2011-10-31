@@ -190,16 +190,17 @@ sp_playlist_add_tracks(sp_playlist *playlist, sp_track *const *tracks, int num_t
 {
   int size = sp_playlist_num_tracks(playlist);
   int new_size = size + num_tracks;
+  int i, j, k;
+  sp_playlist_track_t *new_tracks = NULL;
 
   if (position < 0 || position > size)
   {
     return SP_ERROR_INVALID_INDATA;
   }
 
-  sp_playlist_track_t *new_tracks = ALLOC_N(sp_playlist_track_t, new_size);
+  new_tracks = ALLOC_N(sp_playlist_track_t, new_size);
 
-  int i = 0, j = 0, k = 0;
-  for (i = 0; i < new_size; ++i)
+  for (i = 0, j = 0, k = 0; i < new_size; ++i)
   {
     if (i >= position && j < num_tracks)
     {
@@ -228,6 +229,8 @@ sp_playlist_remove_tracks(sp_playlist *playlist, const int *tracks, int num_trac
   int size     = sp_playlist_num_tracks(playlist);
   int new_size = size - num_tracks;
   int i = 0, j = 0, k = 0;
+  sp_playlist_track_t *new_tracks = NULL;
+  int *sorted_tracks = NULL;
 
   // Make sure all indices are unique and not too small/large
   for (i = 0; i < num_tracks; ++i)
@@ -242,10 +245,10 @@ sp_playlist_remove_tracks(sp_playlist *playlist, const int *tracks, int num_trac
     }
   }
 
-  sp_playlist_track_t *new_tracks = ALLOC_N(sp_playlist_track_t, new_size);
+  new_tracks = ALLOC_N(sp_playlist_track_t, new_size);
 
   // this simplifies the remove operation quite a bit!
-  int *sorted_tracks = ALLOC_N(int, num_tracks);
+  sorted_tracks = ALLOC_N(int, num_tracks);
   MEMCPY_N(sorted_tracks, tracks, int, num_tracks);
   qsort(sorted_tracks, num_tracks, sizeof(int), compare_ints);
 

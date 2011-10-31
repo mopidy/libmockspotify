@@ -36,10 +36,12 @@ sp_link_create_from_string(const char *link)
   {
     return NULL;
   }
-
-  sp_link *lnk = ALLOC(sp_link);
-  lnk->data    = strclone(link);
-  return lnk;
+  else
+  {
+    sp_link *lnk = ALLOC(sp_link);
+    lnk->data    = strclone(link);
+    return lnk;
+  }
 }
 
 sp_link *
@@ -67,13 +69,14 @@ sp_link *
 sp_link_create_from_track(sp_track *track, int offset)
 {
   const char *link = registry_reverse_find((void *) track);
+  int mins = 0, secs = 0;
+  char *link_with_offset = NULL;
 
   if (offset > 0)
   {
-    char *link_with_offset = ALLOC_N(char, strlen(link) + strlen("#00:00") + 1);
+    link_with_offset = ALLOC_N(char, strlen(link) + strlen("#00:00") + 1);
 
     offset = offset / 1000;
-    int mins = 0, secs = 0;
     mins = (offset / 60) % 60;
     secs = (offset - mins * 60) % 60;
 
@@ -151,9 +154,10 @@ sp_link_as_track_and_offset(sp_link *link, int *offset)
 {
   /* parse the offset */
   int mins = 0, secs = 0;
+  char *optr = NULL;
+
   sp_link *my_link = ALLOC(sp_link);
   my_link->data = strclone(link->data);
-  char *optr    = NULL;
 
   if (optr = strchr(my_link->data, '#'))
   {

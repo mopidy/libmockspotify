@@ -13,6 +13,7 @@
 
 void *xmalloc(size_t);
 char *hextoa(const char *, int);
+void atohex(char *, const char *, int);
 char *strclone(const char *string);
 int compare_ints(const void *, const void *);
 

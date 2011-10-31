@@ -43,9 +43,12 @@ sp_image_create_from_link(sp_session *session, sp_link *link)
 sp_image *
 sp_image_create(sp_session *session, const byte image_id[20])
 {
+  sp_link *tmp_link;
   sp_image *tmp_image = ALLOC(sp_image);
+
   MEMCPY_N(tmp_image->image_id, image_id, byte, 20);
-  sp_link *tmp_link   = sp_link_create_from_image(tmp_image);
+  tmp_link = sp_link_create_from_image(tmp_image);
+
   return (sp_image *)registry_find(tmp_link->data);
 }
 

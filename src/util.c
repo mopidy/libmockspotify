@@ -27,12 +27,14 @@ itoh(int n)
 char*
 hextoa(const char *str, int size)
 {
+  int length, i;
+  char *result = NULL;
+
   if (size % 2) return NULL;
-  int length = (size / 2) + 1;
 
-  char *result = ALLOC_N(char, length);
+  length = (size / 2) + 1;
+  result = ALLOC_N(char, length);
 
-  int i;
   for (i = 0; i < size; i += 2)
   {
     result[i/2] = (htoi(str[i]) << 4) + htoi(str[i+1]);
@@ -48,6 +50,7 @@ atohex(char *dst, const char *src, int size)
 {
   int i;
   int p;
+
   for (i = p = 0; i < size; i += 2, p = i/2)
   {
     dst[i]   = itoh((src[p] >> 4) & 0x0F);
@@ -58,12 +61,14 @@ atohex(char *dst, const char *src, int size)
 char *
 strclone(const char *string)
 {
+  char *dst = NULL;
+
   if (string == NULL)
   {
     return (char *) ""; /* Oh shit… */
   }
 
-  char *dst = ALLOC_N(char, strlen(string) + 1);
+  dst = ALLOC_N(char, strlen(string) + 1);
   strcpy(dst, string);
   return dst;
 }

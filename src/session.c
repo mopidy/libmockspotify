@@ -6,16 +6,15 @@ mocksp_session_create(const sp_session_config *config, sp_connectionstate connec
                       int offline_time_left, sp_offline_sync_status *sync_status,
                       int offline_num_playlists, int offline_tracks_to_sync, sp_playlist *inbox)
 {
-  sp_session_config *cloned_config = ALLOC(sp_session_config);
+  sp_session *session = ALLOC(sp_session);
 
+  sp_session_config *cloned_config = ALLOC(sp_session_config);
   if (config)
   {
     config = MEMCPY(cloned_config, config, sp_session_config);
   }
-
   cloned_config->application_key = "appkey_good";
 
-  sp_session *session = ALLOC(sp_session);
   sp_session_create(cloned_config, &session);
 
   session->friends     = ALLOC_N(sp_user *, num_friends);
@@ -54,11 +53,12 @@ sp_session_playlistcontainer(sp_session *session)
 sp_error
 sp_session_create(const sp_session_config *config, sp_session * *sess)
 {
+  sp_session *session;
+
   if (memcmp(config->application_key, "appkey_good", config->application_key_size))
       return SP_ERROR_BAD_APPLICATION_KEY;
 
-  *sess = ALLOC(sp_session);
-  sp_session *session = *sess;
+  session = *sess = ALLOC(sp_session);
 
   session->config.api_version       = config->api_version;
   session->config.cache_location    = strclone(config->cache_location);
@@ -209,19 +209,20 @@ sp_session_starred_create(sp_session *session)
     return NULL;
   }
 
-  const char *current_user = sp_user_canonical_name(session->user);
-  return sp_session_starred_for_user_create(session, current_user);
+  return sp_session_starred_for_user_create(session, sp_user_canonical_name(session->user));
 }
 
 sp_playlist *
 sp_session_starred_for_user_create(sp_session *session, const char *name)
 {
+  char *link;
+
   if (sp_session_connectionstate(session) != SP_CONNECTION_STATE_LOGGED_IN)
   {
     return NULL;
   }
 
-  char *link = ALLOC_N(char, strlen("spotify:user:") + strlen(name) + strlen(":starred"));
+  link = ALLOC_N(char, strlen("spotify:user:") + strlen(name) + strlen(":starred"));
   sprintf(link, "spotify:user:%s:starred", name);
   return (sp_playlist *)registry_find(link);
 }
