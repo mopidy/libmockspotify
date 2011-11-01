@@ -29,8 +29,6 @@ struct sp_session
   sp_connectionstate connectionstate;
   size_t cache_size;
 
-  int num_friends;
-  sp_user **friends;
   sp_user *user;
 
   sp_player player;
@@ -94,6 +92,7 @@ struct sp_artistbrowse
   int num_similar_artists;
   sp_artist **similar_artists;
   char *biography;
+  sp_artistbrowse_type type;
 
   artistbrowse_complete_cb *callback;
   void *userdata;
@@ -206,16 +205,14 @@ struct sp_track
   bool is_starred;
   bool is_local;
   bool is_autolinked;
-  bool is_available;
+
+  sp_track_availability availability;
 };
 
 struct sp_user
 {
   char *canonical_name;
   char *display_name;
-  char *full_name;
-  char *picture;
-  sp_relation_type relation_type;
   bool is_loaded;
 };
 
@@ -262,7 +259,7 @@ const char *
 registry_reverse_find(void *);
 
 sp_session *
-mocksp_session_create(const sp_session_config *, sp_connectionstate, int, sp_user **, int, sp_offline_sync_status *, int, int, sp_playlist *);
+mocksp_session_create(const sp_session_config *, sp_connectionstate, int, sp_offline_sync_status *, int, int, sp_playlist *);
 
 sp_album *
 mocksp_album_create(const char *, sp_artist *, int, const byte *, sp_albumtype, bool, bool);
@@ -274,7 +271,7 @@ sp_artist *
 mocksp_artist_create(const char *, bool);
 
 sp_artistbrowse *
-mocksp_artistbrowse_create(sp_error, sp_artist *, int, const byte **, int, sp_track **, int, sp_album **, int, sp_artist **, const char *, artistbrowse_complete_cb *, void *);
+mocksp_artistbrowse_create(sp_error, sp_artist *, int, const byte **, int, sp_track **, int, sp_album **, int, sp_artist **, const char *, sp_artistbrowse_type, artistbrowse_complete_cb *, void *);
 
 sp_playlist *
 mocksp_playlist_create(const char *, bool, sp_user *, bool, const char *, const byte *, bool, unsigned int, sp_subscribers *, bool, sp_playlist_offline_status, int, int, sp_playlist_track_t *);
@@ -286,10 +283,10 @@ sp_playlistcontainer *
 mocksp_playlistcontainer_create(void);
 
 sp_track *
-mocksp_track_create(const char *, int, sp_artist **, sp_album *, int, int, int, int, sp_error, bool, bool, bool, bool, bool);
+mocksp_track_create(const char *, int, sp_artist **, sp_album *, int, int, int, int, sp_error, bool, sp_track_availability, bool, bool, bool);
 
 sp_user *
-mocksp_user_create(const char *, const char *, const char *, const char *, sp_relation_type, bool); 
+mocksp_user_create(const char *, const char *, bool);
 
 sp_image*
 mocksp_image_create(const byte[20], sp_imageformat, size_t, const byte *, sp_error);

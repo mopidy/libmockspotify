@@ -2,7 +2,6 @@
 
 sp_session *
 mocksp_session_create(const sp_session_config *config, sp_connectionstate connectionstate,
-                      int num_friends, sp_user **friends,
                       int offline_time_left, sp_offline_sync_status *sync_status,
                       int offline_num_playlists, int offline_tracks_to_sync, sp_playlist *inbox)
 {
@@ -16,10 +15,6 @@ mocksp_session_create(const sp_session_config *config, sp_connectionstate connec
   cloned_config->application_key = "appkey_good";
 
   sp_session_create(cloned_config, &session);
-
-  session->friends     = ALLOC_N(sp_user *, num_friends);
-  session->num_friends = num_friends;
-  MEMCPY_N(session->friends, friends, sp_user *, num_friends);
 
   session->connectionstate = connectionstate;
 
@@ -36,12 +31,10 @@ mocksp_session_create(const sp_session_config *config, sp_connectionstate connec
 
 DEFINE_READER(session, connectionstate, sp_connectionstate);
 DEFINE_READER(session, userdata, void *);
-DEFINE_READER(session, num_friends, int);
-DEFINE_ARRAY_READER(session, friend, sp_user *);
 
 const char * sp_build_id(void)
 {
-  return "9.1.32.g8edbd53c Release (Core: 0.5.3.425.g18537e22)";
+  return "10.1.16.g7a6bc7ea Release Darwin-x86_64 ";
 }
 
 sp_playlistcontainer *
@@ -98,7 +91,7 @@ sp_session_process_events(sp_session *UNUSED(session), int *next_timeout)
 void
 sp_session_login(sp_session *session, const char *username, const char *UNUSED(password), bool remember_me)
 {
-  session->user = mocksp_user_create(username, username, username, NULL, SP_RELATION_TYPE_NONE, true);
+  session->user = mocksp_user_create(username, username, true);
   session->connectionstate = SP_CONNECTION_STATE_LOGGED_IN;
 
   if (remember_me)

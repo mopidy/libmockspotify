@@ -6,7 +6,7 @@ mocksp_artistbrowse_create(sp_error error, sp_artist *artist,
                            int num_tracks, sp_track **tracks,
                            int num_albums, sp_album **albums,
                            int num_similar_artists, sp_artist **similar_artists,
-                           const char *biography,
+                           const char *biography, sp_artistbrowse_type type,
                            artistbrowse_complete_cb *cb, void *userdata)
 {
   int i = 0;
@@ -36,6 +36,7 @@ mocksp_artistbrowse_create(sp_error error, sp_artist *artist,
   MEMCPY_N(artistbrowse->similar_artists, similar_artists, sp_artist *, num_similar_artists);
 
   artistbrowse->biography = strclone(biography);
+  artistbrowse->type      = type;
 
   artistbrowse->callback = cb;
   artistbrowse->userdata = userdata;
@@ -63,7 +64,7 @@ sp_artistbrowse_is_loaded(sp_artistbrowse *artistbrowse)
 }
 
 sp_artistbrowse *
-sp_artistbrowse_create(sp_session *UNUSED(session), sp_artist *artist, artistbrowse_complete_cb *callback, void *userdata)
+sp_artistbrowse_create(sp_session *UNUSED(session), sp_artist *artist, sp_artistbrowse_type type, artistbrowse_complete_cb *callback, void *userdata)
 {
-  return mocksp_artistbrowse_create(SP_ERROR_OK, artist, 0, NULL, 0, NULL, 0, NULL, 0, NULL, "", callback, userdata);
+  return mocksp_artistbrowse_create(SP_ERROR_OK, artist, 0, NULL, 0, NULL, 0, NULL, 0, NULL, "", type, callback, userdata);
 }

@@ -3,7 +3,7 @@
 sp_track *
 mocksp_track_create(const char *name, int num_artists, sp_artist **artists, sp_album *album,
                     int duration, int popularity, int disc, int index, sp_error error,
-                    bool is_loaded, bool is_available, bool is_local, bool is_autolinked,
+                    bool is_loaded, sp_track_availability availability, bool is_local, bool is_autolinked,
                     bool is_starred)
 {
   sp_track *track = ALLOC(sp_track);
@@ -16,7 +16,7 @@ mocksp_track_create(const char *name, int num_artists, sp_artist **artists, sp_a
   track->index         = index;
   track->error         = error;
   track->is_loaded     = is_loaded;
-  track->is_available  = is_available;
+  track->availability  = availability;
   track->is_local      = is_local;
   track->is_autolinked = is_autolinked;
   track->is_starred    = is_starred;
@@ -37,12 +37,17 @@ DEFINE_READER(track, disc, int);
 DEFINE_READER(track, index, int);
 DEFINE_READER(track, error, sp_error);
 DEFINE_READER(track, is_loaded, bool);
-DEFINE_SESSION_READER(track, is_available, bool);
 DEFINE_SESSION_READER(track, is_local, bool);
 DEFINE_SESSION_READER(track, is_autolinked, bool);
 DEFINE_SESSION_READER(track, is_starred, bool);
 DEFINE_READER(track, num_artists, int);
 DEFINE_ARRAY_READER(track, artist, sp_artist *);
+
+sp_track_availability
+sp_track_get_availability(sp_session *UNUSED(session), sp_track *track)
+{
+  return sp_track_is_loaded(track) ? track->availability : SP_TRACK_AVAILABILITY_UNAVAILABLE;
+}
 
 sp_track *
 sp_localtrack_create(const char *artist, const char *title, const char *album, int length)
