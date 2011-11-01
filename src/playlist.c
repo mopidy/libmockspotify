@@ -272,3 +272,71 @@ sp_playlist_remove_tracks(sp_playlist *playlist, const int *tracks, int num_trac
 
   return SP_ERROR_OK;
 }
+
+sp_error sp_playlist_reorder_tracks	(sp_playlist *playlist, const int *tracks, int num_tracks, int new_position)
+{
+  int i, j, k;
+  int continues_from = new_position;
+  int size = sp_playlist_num_tracks(playlist);
+  int *sorted_tracks;
+  sp_playlist_track_t *new_tracks;
+  sp_playlist_track_t *from;
+  sp_playlist_track_t *to;
+
+  if (new_position > 0)
+    new_position = new_position - 1;
+
+  // Make sure all indices are unique and not too small/large
+  for (i = 0; i < num_tracks; ++i)
+  {
+    if (tracks[i] < 0 || tracks[i] >= size)
+      return SP_ERROR_INVALID_INDATA;
+
+    for (j = i + 1; j < num_tracks; ++j)
+    {
+      if (tracks[i] == tracks[j])
+        return SP_ERROR_INVALID_INDATA;
+    }
+  }
+
+  new_tracks = ALLOC_N(sp_playlist_track_t, size);
+
+  // this simplifies the move operation quite a bit!
+  sorted_tracks = ALLOC_N(int, num_tracks);
+  MEMCPY_N(sorted_tracks, tracks, int, num_tracks);
+  qsort(sorted_tracks, num_tracks, sizeof(int), compare_ints);
+
+  // Now, this is confusing! :D
+  //
+  // We keep three counters;
+  //   i: item we are currently placing
+  //   j: if we are moving, this is the index we are moving from
+  //   k: if we are not moving, this is the index we should now place to
+  for (i = 0, j = 0, k = 0; i < size; ++i)
+  {
+    if (i == tracks[j])
+    {
+      to   = &new_tracks[new_position + j];
+      from = &playlist->tracks[i];
+      j += 1;
+    }
+    else
+    {
+      to   = &new_tracks[k++];
+      from = &playlist->tracks[i];
+
+      if (k >= new_position && k < continues_from)
+      {
+        k = continues_from + 1;
+      }
+    }
+
+    MEMCPY(to, from, sp_playlist_track_t);
+  }
+
+  free(sorted_tracks);
+  free(playlist->tracks);
+  playlist->tracks = new_tracks;
+
+  return SP_ERROR_OK;
+}
