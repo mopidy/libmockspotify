@@ -57,11 +57,7 @@ sp_link *
 sp_link_create_from_image(sp_image *image)
 {
   sp_link *link = ALLOC(sp_link);
-  link->data    = ALLOC_N(char, 54 + 1);
-
-  sprintf(link->data, "spotify:image:");
-  atohex(link->data + strlen("spotify:image:"), image->image_id, 40);
-
+  link->data = image_id_to_uri(image->image_id);
   return link;
 }
 
@@ -95,6 +91,15 @@ sp_link_create_from_album(sp_album *album)
 {
   const char *link = registry_reverse_find((void *) album);
   return sp_link_create_from_string(link);
+}
+
+sp_link *
+sp_link_create_from_album_cover(sp_album *album)
+{
+  sp_link *link = ALLOC(sp_link);
+  const byte *image_id = sp_album_cover(album);
+  link->data = image_id_to_uri(image_id);
+  return link;
 }
 
 sp_link *

@@ -81,3 +81,12 @@ compare_ints(const void *a, const void *b)
 
   return *ia - *ib;
 }
+
+char *
+image_id_to_uri(const byte *image_id)
+{
+  char *data = ALLOC_N(char, 54 + 1);
+  sprintf(data, "spotify:image:");
+  atohex(data + strlen("spotify:image:"), image_id, 40);
+  return data;
+}
