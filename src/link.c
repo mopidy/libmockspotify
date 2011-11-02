@@ -117,6 +117,15 @@ sp_link_create_from_artist(sp_artist *artist)
 }
 
 sp_link *
+sp_link_create_from_artist_portrait(sp_artist *artist)
+{
+  sp_link *link = ALLOC(sp_link);
+  const byte *image_id = sp_artist_portrait(artist);
+  link->data = image_id_to_uri(image_id);
+  return link;
+}
+
+sp_link *
 sp_link_create_from_search(sp_search *search)
 {
   char *uri = ALLOC_N(char, strlen("spotify:search:") + strlen(search->query) + 1);

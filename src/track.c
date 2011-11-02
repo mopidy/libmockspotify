@@ -52,7 +52,7 @@ sp_track_get_availability(sp_session *UNUSED(session), sp_track *track)
 sp_track *
 sp_localtrack_create(const char *artist, const char *title, const char *album, int length)
 {
-  sp_artist *partist = mocksp_artist_create(artist, true);
+  sp_artist *partist = mocksp_artist_create(artist, NULL, true);
   sp_album  *palbum  = NULL;
 
   if (strlen(album) > 0)

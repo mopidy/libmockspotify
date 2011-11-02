@@ -77,6 +77,7 @@ struct sp_artist
 {
   char *name;
   int is_loaded;
+  byte portrait[20];
 };
 
 struct sp_artistbrowse
@@ -268,7 +269,7 @@ sp_albumbrowse *
 mocksp_albumbrowse_create(sp_error, sp_album *, sp_artist *, int, const char **, int, sp_track **, const char *, albumbrowse_complete_cb *cb, void *userdata);
 
 sp_artist *
-mocksp_artist_create(const char *, bool);
+mocksp_artist_create(const char *, const byte *, bool);
 
 sp_artistbrowse *
 mocksp_artistbrowse_create(sp_error, sp_artist *, int, const byte **, int, sp_track **, int, sp_album **, int, sp_artist **, const char *, sp_artistbrowse_type, artistbrowse_complete_cb *, void *);
