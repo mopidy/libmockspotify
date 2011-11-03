@@ -205,6 +205,7 @@ struct sp_track
   sp_error error;
 
   bool is_loaded;
+  bool is_placeholder;
   bool is_starred;
   bool is_local;
   bool is_autolinked;
@@ -286,7 +287,7 @@ sp_playlistcontainer *
 mocksp_playlistcontainer_create(void);
 
 sp_track *
-mocksp_track_create(const char *, int, sp_artist **, sp_album *, int, int, int, int, sp_error, bool, sp_track_availability, bool, bool, bool);
+mocksp_track_create(const char *, int, sp_artist **, sp_album *, int, int, int, int, sp_error, bool, sp_track_availability, bool, bool, bool, bool);
 
 sp_user *
 mocksp_user_create(const char *, const char *, bool);
