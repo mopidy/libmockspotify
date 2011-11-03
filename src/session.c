@@ -230,3 +230,15 @@ sp_session_inbox_create(sp_session *session)
 
   return session->inbox;
 }
+
+bool
+sp_session_get_volume_normalization(sp_session *session)
+{
+  return session->volume_normalization;
+}
+
+void
+sp_session_set_volume_normalization(sp_session *session, bool yepnope)
+{
+  session->volume_normalization = yepnope;
+}

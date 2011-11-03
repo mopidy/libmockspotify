@@ -42,6 +42,8 @@ struct sp_session
   int offline_tracks_to_sync;
 
   sp_playlist *inbox;
+
+  bool volume_normalization;
 };
 
 struct sp_album
