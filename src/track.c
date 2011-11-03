@@ -3,7 +3,8 @@
 sp_track *
 mocksp_track_create(const char *name, int num_artists, sp_artist **artists, sp_album *album,
                     int duration, int popularity, int disc, int index, sp_error error,
-                    bool is_loaded, sp_track_availability availability, bool is_local, bool is_autolinked,
+                    bool is_loaded, sp_track_availability availability, sp_track_offline_status status,
+                    bool is_local, bool is_autolinked,
                     bool is_starred, bool is_placeholder)
 {
   sp_track *track = ALLOC(sp_track);
@@ -17,6 +18,7 @@ mocksp_track_create(const char *name, int num_artists, sp_artist **artists, sp_a
   track->error         = error;
   track->is_loaded     = is_loaded;
   track->availability  = availability;
+  track->offline_status = status;
   track->is_local      = is_local;
   track->is_autolinked = is_autolinked;
   track->is_starred    = is_starred;
@@ -62,7 +64,7 @@ sp_localtrack_create(const char *artist, const char *title, const char *album, i
     palbum  = mocksp_album_create(album, partist, 2011, NULL, SP_ALBUMTYPE_UNKNOWN, 1, 1);
   }
 
-  return mocksp_track_create(title, 1, &partist, palbum, length, 0, 0, 0, SP_ERROR_OK, true, true, true, false, false, false);
+  return mocksp_track_create(title, 1, &partist, palbum, length, 0, 0, 0, SP_ERROR_OK, SP_TRACK_OFFLINE_DONE, true, true, true, false, false, false);
 }
 
 void
@@ -74,4 +76,10 @@ sp_track_set_starred(sp_session *UNUSED(session), sp_track *const *tracks, int n
   {
     tracks[i]->is_starred = starred;
   }
+}
+
+sp_track_offline_status
+sp_track_offline_get_status(sp_track *track)
+{
+  return track->offline_status;
 }
