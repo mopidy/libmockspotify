@@ -1,9 +1,14 @@
 #include "libmockspotify.h"
 
 sp_playlistcontainer *
-mocksp_playlistcontainer_create(void)
+mocksp_playlistcontainer_create(sp_user *owner, bool loaded)
 {
-  return ALLOC(sp_playlistcontainer);
+  sp_playlistcontainer *container = ALLOC(sp_playlistcontainer);
+
+  container->is_loaded = loaded;
+  container->owner     = owner;
+
+  return container;
 }
 
 DEFINE_REFCOUNTERS_FOR(playlistcontainer);

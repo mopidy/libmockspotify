@@ -285,7 +285,7 @@ sp_subscribers *
 mocksp_subscribers(int, char **);
 
 sp_playlistcontainer *
-mocksp_playlistcontainer_create(void);
+mocksp_playlistcontainer_create(sp_user *, bool);
 
 sp_track *
 mocksp_track_create(const char *, int, sp_artist **, sp_album *, int, int, int, int, sp_error, bool, sp_track_availability, sp_track_offline_status, bool, bool, bool, bool);
