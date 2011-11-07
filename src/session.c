@@ -38,9 +38,11 @@ const char * sp_build_id(void)
 }
 
 sp_playlistcontainer *
-sp_session_playlistcontainer(sp_session *UNUSED(session))
+sp_session_playlistcontainer(sp_session *session)
 {
-  return mocksp_playlistcontainer_create();
+  if ( ! session->user) return NULL;
+
+  return mocksp_playlistcontainer_create(session->user, true);
 }
 
 sp_error
