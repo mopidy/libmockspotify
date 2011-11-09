@@ -263,6 +263,9 @@ registry_add(const char *url, void *ptr);
 const char *
 registry_reverse_find(void *);
 
+void
+registry_clean(void);
+
 sp_session *
 mocksp_session_create(const sp_session_config *, sp_connectionstate, int, sp_offline_sync_status *, int, int, sp_playlist *);
 

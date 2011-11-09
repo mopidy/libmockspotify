@@ -45,3 +45,19 @@ registry_add(const char *url, void *ptr)
   (*g_tail)->ptr = ptr;
   g_tail = &((*g_tail)->next);
 }
+
+void
+registry_clean(void)
+{
+  node_t *curr;
+  node_t *next;
+
+  for (curr = g_node; curr; curr = next)
+  {
+    next = curr->next;
+    free(curr);
+  }
+
+  g_node = NULL;
+  g_tail = &g_node;
+}
