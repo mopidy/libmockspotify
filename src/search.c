@@ -54,10 +54,25 @@ DEFINE_ARRAY_READER(search, track, sp_track *);
 DEFINE_READER(search, total_tracks, int);
 
 sp_search *
-sp_search_create(sp_session *UNUSED(session), const char *query, int UNUSED(tracks_offset), int UNUSED(tracks), int UNUSED(albums_offset), int UNUSED(albums), int UNUSED(artists_offset), int UNUSED(artists), search_complete_cb *UNUSED(cb), void *UNUSED(userdata))
+sp_search_create(sp_session *UNUSED(session), const char *query,
+                 int UNUSED(tracks_offset), int UNUSED(tracks),
+                 int UNUSED(albums_offset), int UNUSED(albums),
+                 int UNUSED(artists_offset), int UNUSED(artists),
+                 search_complete_cb *UNUSED(cb), void *UNUSED(userdata))
 {
   char *searchquery = ALLOC_N(char, strlen("spotify:search:") + strlen(query) + 1);
   sprintf(searchquery, "spotify:search:%s", query);
+  return (sp_search *)registry_find(searchquery);
+}
+
+sp_search *
+sp_radio_search_create(sp_session *UNUSED(session),
+                       unsigned int from_year, unsigned int to_year,
+                       sp_radio_genre genres,
+                       search_complete_cb *UNUSED(callback), void *UNUSED(userdata))
+{
+  char *searchquery = ALLOC_N(char, strlen("spotify:radio:deadbeef:1990-2011"));
+  sprintf(searchquery, "spotify:radio:%08x:%04d-%04d", genres, from_year, to_year);
   return (sp_search *)registry_find(searchquery);
 }
 
