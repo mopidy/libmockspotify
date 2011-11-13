@@ -71,7 +71,7 @@ sp_radio_search_create(sp_session *UNUSED(session),
                        sp_radio_genre genres,
                        search_complete_cb *UNUSED(callback), void *UNUSED(userdata))
 {
-  char *searchquery = ALLOC_N(char, strlen("spotify:radio:deadbeef:1990-2011"));
+  char *searchquery = ALLOC_N(char, strlen("spotify:radio:deadbeef:1990-2011") + 1);
   sprintf(searchquery, "spotify:radio:%08x:%04d-%04d", genres, from_year, to_year);
   return (sp_search *)registry_find(searchquery);
 }

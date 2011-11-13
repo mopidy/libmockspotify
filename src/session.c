@@ -217,7 +217,7 @@ sp_session_starred_for_user_create(sp_session *session, const char *name)
     return NULL;
   }
 
-  link = ALLOC_N(char, strlen("spotify:user:") + strlen(name) + strlen(":starred"));
+  link = ALLOC_N(char, strlen("spotify:user:") + strlen(name) + strlen(":starred") + 1);
   sprintf(link, "spotify:user:%s:starred", name);
   return (sp_playlist *)registry_find(link);
 }
