@@ -60,7 +60,7 @@ sp_search_create(sp_session *UNUSED(session), const char *query,
                  int UNUSED(artists_offset), int UNUSED(artists),
                  search_complete_cb *UNUSED(cb), void *UNUSED(userdata))
 {
-  char *searchquery = ALLOC_N(char, strlen("spotify:search:") + strlen(query) + 1);
+  char *searchquery = ALLOC_STR(strlen("spotify:search:") + strlen(query));
   sprintf(searchquery, "spotify:search:%s", query);
   return (sp_search *)registry_find(searchquery);
 }
@@ -71,7 +71,7 @@ sp_radio_search_create(sp_session *UNUSED(session),
                        sp_radio_genre genres,
                        search_complete_cb *UNUSED(callback), void *UNUSED(userdata))
 {
-  char *searchquery = ALLOC_N(char, strlen("spotify:radio:deadbeef:1990-2011") + 1);
+  char *searchquery = ALLOC_STR(strlen("spotify:radio:deadbeef:1990-2011"));
   sprintf(searchquery, "spotify:radio:%08x:%04d-%04d", genres, from_year, to_year);
   return (sp_search *)registry_find(searchquery);
 }

@@ -48,7 +48,7 @@ sp_link *
 sp_link_create_from_user(sp_user *user)
 {
   sp_link *link = ALLOC(sp_link);
-  link->data    = ALLOC_N(char, strlen("spotify:user:") + strlen(user->canonical_name) + 1);
+  link->data    = ALLOC_STR(strlen("spotify:user:") + strlen(user->canonical_name));
   sprintf(link->data, "spotify:user:%s", user->canonical_name);
   return link;
 }
@@ -70,7 +70,7 @@ sp_link_create_from_track(sp_track *track, int offset)
 
   if (offset > 0)
   {
-    link_with_offset = ALLOC_N(char, strlen(link) + strlen("#00:00") + 1);
+    link_with_offset = ALLOC_STR(strlen(link) + strlen("#00:00"));
 
     offset = offset / 1000;
     mins = (offset / 60) % 60;
@@ -128,7 +128,7 @@ sp_link_create_from_artist_portrait(sp_artist *artist)
 sp_link *
 sp_link_create_from_search(sp_search *search)
 {
-  char *uri = ALLOC_N(char, strlen("spotify:search:") + strlen(search->query) + 1);
+  char *uri = ALLOC_STR(strlen("spotify:search:") + strlen(search->query));
   sprintf(uri, "spotify:search:%s", search->query);
   return sp_link_create_from_string(uri);
 }

@@ -32,15 +32,16 @@ hextoa(const char *str, int size)
 
   if (size % 2) return NULL;
 
-  length = (size / 2) + 1;
-  result = ALLOC_N(char, length);
+  length = (size / 2);
+  result = ALLOC_STR(length);
 
   for (i = 0; i < size; i += 2)
   {
     result[i/2] = (htoi(str[i]) << 4) + htoi(str[i+1]);
   }
 
-  result[length - 1] = '\0';
+  // this is okay, length is actually strlen(result) -1
+  result[length] = '\0';
 
   return result;
 }
@@ -68,7 +69,7 @@ strclone(const char *string)
     return (char *) ""; /* Oh shit… */
   }
 
-  dst = ALLOC_N(char, strlen(string) + 1);
+  dst = ALLOC_STR(strlen(string));
   strcpy(dst, string);
   return dst;
 }
@@ -85,7 +86,7 @@ compare_ints(const void *a, const void *b)
 char *
 image_id_to_uri(const byte *image_id)
 {
-  char *data = ALLOC_N(char, 54 + 1);
+  char *data = ALLOC_STR(54);
   sprintf(data, "spotify:image:");
   atohex(data + strlen("spotify:image:"), image_id, 40);
   return data;
