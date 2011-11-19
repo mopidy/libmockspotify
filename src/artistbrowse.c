@@ -64,7 +64,17 @@ sp_artistbrowse_is_loaded(sp_artistbrowse *artistbrowse)
 }
 
 sp_artistbrowse *
-sp_artistbrowse_create(sp_session *UNUSED(session), sp_artist *artist, sp_artistbrowse_type type, artistbrowse_complete_cb *callback, void *userdata)
+sp_artistbrowse_create(sp_session *UNUSED(session), sp_artist *artist, sp_artistbrowse_type UNUSED(type), artistbrowse_complete_cb *UNUSED(callback), void *UNUSED(userdata))
 {
-  return mocksp_artistbrowse_create(SP_ERROR_OK, artist, 0, NULL, 0, NULL, 0, NULL, 0, NULL, "", type, callback, userdata);
+  sp_link *link = sp_link_create_from_artist(artist);
+  char *artistbrowse_link;
+
+  if (link == NULL || sp_link_type(link) != SP_LINKTYPE_ARTIST)
+  {
+    return NULL;
+  }
+
+  artistbrowse_link = ALLOC_STR(strlen("spotify:artistbrowse:1xvnWMz2PNFf7mXOSRuLws"));
+  sprintf(artistbrowse_link, "spotify:artistbrowse:%s", link->data + strlen("spotify:artist:"));
+  return (sp_artistbrowse *)registry_find(artistbrowse_link);
 }
