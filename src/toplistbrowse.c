@@ -45,7 +45,26 @@ sp_toplistbrowse_is_loaded(sp_toplistbrowse *toplistbrowse)
 }
 
 sp_toplistbrowse *
-sp_toplistbrowse_create(sp_session *UNUSED(session), sp_toplisttype UNUSED(type), sp_toplistregion UNUSED(region), const char *UNUSED(username), toplistbrowse_complete_cb *callback, void *userdata)
+sp_toplistbrowse_create(sp_session *UNUSED(session), sp_toplisttype type, sp_toplistregion region, const char *username, toplistbrowse_complete_cb *UNUSED(callback), void *UNUSED(userdata))
 {
-  return mocksp_toplistbrowse_create(SP_ERROR_OK, 0, NULL, 0, NULL, 0, NULL, callback, userdata);
+  char *toplistbrowse_link;
+
+  if (region == SP_TOPLIST_REGION_USER)
+  {
+    const char *user = username == NULL ? "current" : username;
+    toplistbrowse_link = ALLOC_STR(strlen("spotify:toplist:user:") + strlen(user));
+    sprintf(toplistbrowse_link, "spotify:toplist:user:%s", user);
+  }
+  else // everywhere or by a country
+  {
+    const char *str_types[3] = {"artists", "albums", "tracks"};
+    const char *real_type = str_types[type];
+    const char *real_region = region == SP_TOPLIST_REGION_EVERYWHERE ? "everywhere" : unregion(region);
+
+    // longest possible string: artists everywhere
+    toplistbrowse_link = ALLOC_STR(strlen("spotify:toplist:artists:everywhere"));
+    sprintf(toplistbrowse_link, "spotify:toplist:%s:%s", real_type, real_region);
+  }
+
+  return (sp_toplistbrowse *)registry_find(toplistbrowse_link);
 }

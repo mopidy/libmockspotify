@@ -21,6 +21,7 @@ void atohex(char *, const byte *, int);
 char *strclone(const char *string);
 int compare_ints(const void *, const void *);
 char *image_id_to_uri(const byte *);
+char *unregion(int);
 
 #define STARTS_WITH(x, y) (strncmp((x), (y), strlen(y)) == 0)
 

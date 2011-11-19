@@ -91,3 +91,11 @@ image_id_to_uri(const byte *image_id)
   atohex(data + strlen("spotify:image:"), image_id, 40);
   return data;
 }
+
+char *unregion(int iregion)
+{
+  char *region = ALLOC_STR(2);
+  region[0] = (iregion >> 8) & 0x00FF;
+  region[1] = iregion & 0x00FF;
+  return region;
+}
