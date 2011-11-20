@@ -16,7 +16,7 @@ mocksp_playlist_create(const char *name, bool is_loaded, sp_user *owner, bool is
   playlist->owner = owner;
   playlist->is_collaborative = is_collaborative;
   playlist->get_description = strclone(description);
-  MEMCPY_N(playlist->image, image, byte, 20);
+  if (image) MEMCPY_N(playlist->image, image, byte, 20);
   playlist->has_pending_changes = has_pending_changes;
 
   playlist->num_subscribers = num_subscribers;

@@ -40,9 +40,14 @@ const char * sp_build_id(void)
 sp_playlistcontainer *
 sp_session_playlistcontainer(sp_session *session)
 {
+  char *name, *link;
+
   if ( ! session->user) return NULL;
 
-  return mocksp_playlistcontainer_create(session->user, true);
+  name = session->user->canonical_name;
+  link = ALLOC_STR(strlen("spotify:container:") + strlen(name));
+  sprintf(link, "spotify:container:%s", name);
+  return (sp_playlistcontainer *)registry_find(link);
 }
 
 sp_error
