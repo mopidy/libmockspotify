@@ -1,7 +1,7 @@
 #include "libmockspotify.h"
 
 sp_artistbrowse *
-mocksp_artistbrowse_create(sp_error error, sp_artist *artist,
+mocksp_artistbrowse_create(sp_error error, int request_duration, sp_artist *artist,
                            int num_portraits, const byte **portraits,
                            int num_tracks, sp_track **tracks,
                            int num_albums, sp_album **albums,
@@ -13,6 +13,7 @@ mocksp_artistbrowse_create(sp_error error, sp_artist *artist,
   sp_artistbrowse *artistbrowse = ALLOC(sp_artistbrowse);
 
   artistbrowse->error = error;
+  artistbrowse->backend_request_duration = request_duration;
   artistbrowse->artist = artist;
 
   artistbrowse->portraits     = ALLOC_N(byte *, num_portraits);
@@ -46,6 +47,7 @@ mocksp_artistbrowse_create(sp_error error, sp_artist *artist,
 
 DEFINE_REFCOUNTERS_FOR(artistbrowse);
 DEFINE_READER(artistbrowse, error, sp_error);
+DEFINE_READER(artistbrowse, backend_request_duration, int);
 DEFINE_READER(artistbrowse, artist, sp_artist *);
 DEFINE_READER(artistbrowse, num_portraits, int);
 DEFINE_ARRAY_READER(artistbrowse, portrait, const byte *);

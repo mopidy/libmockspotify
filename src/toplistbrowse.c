@@ -1,7 +1,7 @@
 #include "libmockspotify.h"
 
 sp_toplistbrowse *
-mocksp_toplistbrowse_create(sp_error error,
+mocksp_toplistbrowse_create(sp_error error, int request_duration,
                             int num_artists, sp_artist **artists,
                             int num_albums, sp_album **albums,
                             int num_tracks, sp_track **tracks,
@@ -23,6 +23,8 @@ mocksp_toplistbrowse_create(sp_error error,
   toplistbrowse->num_tracks = num_tracks;
   MEMCPY_N(toplistbrowse->tracks, tracks, sp_track *, num_tracks);
 
+  toplistbrowse->backend_request_duration = request_duration;
+
   toplistbrowse->callback = callback;
   toplistbrowse->userdata = userdata;
 
@@ -31,6 +33,7 @@ mocksp_toplistbrowse_create(sp_error error,
 
 DEFINE_REFCOUNTERS_FOR(toplistbrowse);
 DEFINE_READER(toplistbrowse, error, sp_error);
+DEFINE_READER(toplistbrowse, backend_request_duration, int);
 DEFINE_READER(toplistbrowse, num_artists, int);
 DEFINE_ARRAY_READER(toplistbrowse, artist, sp_artist *);
 DEFINE_READER(toplistbrowse, num_albums, int);

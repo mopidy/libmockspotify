@@ -60,6 +60,8 @@ struct sp_album
 struct sp_albumbrowse
 {
   sp_error error;
+  int backend_request_duration;
+
   sp_album *album;
   sp_artist *artist;
 
@@ -85,6 +87,7 @@ struct sp_artist
 struct sp_artistbrowse
 {
   sp_error error;
+  int backend_request_duration;
   sp_artist *artist;
   int num_portraits;
   byte **portraits;
@@ -229,6 +232,7 @@ struct sp_link
 struct sp_toplistbrowse
 {
   sp_error error;
+  int backend_request_duration;
 
   int num_artists;
   sp_artist **artists;
@@ -273,13 +277,13 @@ sp_album *
 mocksp_album_create(const char *, sp_artist *, int, const byte *, sp_albumtype, bool, bool);
 
 sp_albumbrowse *
-mocksp_albumbrowse_create(sp_error, sp_album *, sp_artist *, int, const char **, int, sp_track **, const char *, albumbrowse_complete_cb *cb, void *userdata);
+mocksp_albumbrowse_create(sp_error, int, sp_album *, sp_artist *, int, const char **, int, sp_track **, const char *, albumbrowse_complete_cb *cb, void *userdata);
 
 sp_artist *
 mocksp_artist_create(const char *, const byte *, bool);
 
 sp_artistbrowse *
-mocksp_artistbrowse_create(sp_error, sp_artist *, int, const byte **, int, sp_track **, int, sp_album **, int, sp_artist **, const char *, sp_artistbrowse_type, artistbrowse_complete_cb *, void *);
+mocksp_artistbrowse_create(sp_error, int, sp_artist *, int, const byte **, int, sp_track **, int, sp_album **, int, sp_artist **, const char *, sp_artistbrowse_type, artistbrowse_complete_cb *, void *);
 
 sp_playlist *
 mocksp_playlist_create(const char *, bool, sp_user *, bool, const char *, const byte *, bool, unsigned int, sp_subscribers *, bool, sp_playlist_offline_status, int, int, sp_playlist_track_t *);
@@ -300,7 +304,7 @@ sp_image*
 mocksp_image_create(const byte[20], sp_imageformat, size_t, const byte *, sp_error);
 
 sp_toplistbrowse *
-mocksp_toplistbrowse_create(sp_error, int, sp_artist **, int, sp_album **, int, sp_track **, toplistbrowse_complete_cb *, void *);
+mocksp_toplistbrowse_create(sp_error, int, int, sp_artist **, int, sp_album **, int, sp_track **, toplistbrowse_complete_cb *, void *);
 
 sp_search *
 mocksp_search_create(sp_error, const char *, const char *, int, int, const sp_track **, int, int, const sp_album **, int, int, const sp_artist **, search_complete_cb *, void *);

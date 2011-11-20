@@ -1,7 +1,7 @@
 #include "libmockspotify.h"
 
 sp_albumbrowse *
-mocksp_albumbrowse_create(sp_error error, sp_album *album, sp_artist *artist,
+mocksp_albumbrowse_create(sp_error error, int request_duration, sp_album *album, sp_artist *artist,
                           int num_copyrights, const char **copyrights, int num_tracks,
                           sp_track **tracks, const char *review, albumbrowse_complete_cb *cb,
                           void *userdata)
@@ -25,6 +25,7 @@ mocksp_albumbrowse_create(sp_error error, sp_album *album, sp_artist *artist,
   MEMCPY_N(albumbrowse->tracks, tracks, sp_track *, num_tracks);
 
   albumbrowse->review    = strclone(review);
+  albumbrowse->backend_request_duration = request_duration;
 
   albumbrowse->callback = cb;
   albumbrowse->userdata = userdata;
@@ -34,6 +35,7 @@ mocksp_albumbrowse_create(sp_error error, sp_album *album, sp_artist *artist,
 
 DEFINE_REFCOUNTERS_FOR(albumbrowse);
 DEFINE_READER(albumbrowse, error, sp_error);
+DEFINE_READER(albumbrowse, backend_request_duration, int);
 DEFINE_READER(albumbrowse, album, sp_album *);
 DEFINE_READER(albumbrowse, artist, sp_artist *);
 DEFINE_READER(albumbrowse, num_copyrights, int);
