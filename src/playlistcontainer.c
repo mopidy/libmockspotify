@@ -69,8 +69,28 @@ sp_playlistcontainer_remove_callbacks(sp_playlistcontainer *pc, sp_playlistconta
   pc->userdata  = NULL;
 }
 
+sp_playlist *
+sp_playlistcontainer_add_new_playlist(sp_playlistcontainer *pc, const char *name)
+{
+  sp_playlistcontainer_playlist_t container_playlist;
+  sp_playlist *playlist = mocksp_playlist_create(name, true, NULL, false, NULL, NULL, false, 0, NULL, true, SP_PLAYLIST_OFFLINE_STATUS_NO, 0, 0, NULL);
+  int num_playlists = sp_playlistcontainer_num_playlists(pc);
+
+  container_playlist.playlist = playlist;
+  container_playlist.type     = SP_PLAYLIST_TYPE_PLAYLIST;
+
+  sp_playlistcontainer_playlist_t *new_playlists = ALLOC_N(sp_playlistcontainer_playlist_t, num_playlists + 1);
+  MEMCPY_N(new_playlists, pc->playlists, sp_playlistcontainer_playlist_t, num_playlists);
+  MEMCPY(&new_playlists[num_playlists], &container_playlist, sp_playlistcontainer_playlist_t);
+
+  free(pc->playlists);
+  pc->playlists = new_playlists;
+  pc->num_playlists += 1;
+
+  return playlist;
+}
+
 /*
-playlistcontainer_add_new_playlist
 playlistcontainer_add_playlist
 playlistcontainer_remove_playlist
 playlistcontainer_move_playlist
