@@ -134,6 +134,13 @@ sp_playlist_get_image(sp_playlist *playlist, byte *buffout)
 sp_error
 sp_playlist_rename(sp_playlist *playlist, const char *new_name)
 {
+  size_t length = strlen(new_name);
+
+  if (length == 0 || length > 255)
+  {
+    return SP_ERROR_INVALID_INDATA;
+  }
+
   playlist->name = strclone(new_name);
   return SP_ERROR_OK;
 }
