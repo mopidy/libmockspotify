@@ -1,5 +1,8 @@
 #include "libmockspotify.h"
 
+static sp_playlist *
+mocksp_playlistcontainer_add(sp_playlistcontainer *, sp_playlist *);
+
 sp_playlistcontainer *
 mocksp_playlistcontainer_create(sp_user *owner, bool loaded,
                                 int num_playlists, sp_playlistcontainer_playlist_t *playlists,
@@ -69,11 +72,10 @@ sp_playlistcontainer_remove_callbacks(sp_playlistcontainer *pc, sp_playlistconta
   pc->userdata  = NULL;
 }
 
-sp_playlist *
-sp_playlistcontainer_add_new_playlist(sp_playlistcontainer *pc, const char *name)
+static sp_playlist *
+mocksp_playlistcontainer_add(sp_playlistcontainer *pc, sp_playlist *playlist)
 {
   sp_playlistcontainer_playlist_t container_playlist;
-  sp_playlist *playlist = mocksp_playlist_create(name, true, NULL, false, NULL, NULL, false, 0, NULL, true, SP_PLAYLIST_OFFLINE_STATUS_NO, 0, 0, NULL);
   int num_playlists = sp_playlistcontainer_num_playlists(pc);
 
   container_playlist.playlist = playlist;
@@ -90,8 +92,32 @@ sp_playlistcontainer_add_new_playlist(sp_playlistcontainer *pc, const char *name
   return playlist;
 }
 
+sp_playlist *
+sp_playlistcontainer_add_new_playlist(sp_playlistcontainer *pc, const char *name)
+{
+  sp_playlist *playlist = mocksp_playlist_create(name, true, NULL, false, NULL, NULL, false, 0, NULL, true, SP_PLAYLIST_OFFLINE_STATUS_NO, 0, 0, NULL);
+  return mocksp_playlistcontainer_add(pc, playlist);
+}
+
+sp_playlist *
+sp_playlistcontainer_add_playlist(sp_playlistcontainer *pc, sp_link *link)
+{
+  sp_playlist *playlist = NULL;
+
+  switch (sp_link_type(link))
+  {
+    case SP_LINKTYPE_PLAYLIST:
+    case SP_LINKTYPE_STARRED:
+      playlist = (sp_playlist *)registry_find(link->data);
+      break;
+
+    default: return NULL;
+  }
+
+  return playlist ? mocksp_playlistcontainer_add(pc, playlist) : NULL;
+}
+
 /*
-playlistcontainer_add_playlist
 playlistcontainer_remove_playlist
 playlistcontainer_move_playlist
 playlistcontainer_add_folder
