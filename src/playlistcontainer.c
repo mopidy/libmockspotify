@@ -76,12 +76,13 @@ static sp_playlist *
 mocksp_playlistcontainer_add(sp_playlistcontainer *pc, sp_playlist *playlist)
 {
   sp_playlistcontainer_playlist_t container_playlist;
+  sp_playlistcontainer_playlist_t *new_playlists;
   int num_playlists = sp_playlistcontainer_num_playlists(pc);
 
   container_playlist.playlist = playlist;
   container_playlist.type     = SP_PLAYLIST_TYPE_PLAYLIST;
 
-  sp_playlistcontainer_playlist_t *new_playlists = ALLOC_N(sp_playlistcontainer_playlist_t, num_playlists + 1);
+  new_playlists = ALLOC_N(sp_playlistcontainer_playlist_t, num_playlists + 1);
   MEMCPY_N(new_playlists, pc->playlists, sp_playlistcontainer_playlist_t, num_playlists);
   MEMCPY(&new_playlists[num_playlists], &container_playlist, sp_playlistcontainer_playlist_t);
 

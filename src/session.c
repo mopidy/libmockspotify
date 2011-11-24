@@ -46,6 +46,8 @@ sp_session_playlistcontainer(sp_session *session)
 sp_playlistcontainer *
 sp_session_publishedcontainer_for_user_create(sp_session *session, const char *username)
 {
+  char *link;
+
   if (sp_session_connectionstate(session) != SP_CONNECTION_STATE_LOGGED_IN)
   {
     return NULL;
@@ -56,7 +58,6 @@ sp_session_publishedcontainer_for_user_create(sp_session *session, const char *u
     username = session->user->canonical_name;
   }
 
-  char *link;
   link = ALLOC_STR(strlen("spotify:container:") + strlen(username));
   sprintf(link, "spotify:container:%s", username);
   return (sp_playlistcontainer *)registry_find(link);
