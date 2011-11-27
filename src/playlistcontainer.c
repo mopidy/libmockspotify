@@ -44,7 +44,7 @@ sp_playlistcontainer_playlist(sp_playlistcontainer *pc, int index)
 sp_error
 sp_playlistcontainer_playlist_folder_name(sp_playlistcontainer *pc, int index, char *buffer, int buffer_size)
 {
-  int null_byte_index = 0;
+  long null_byte_index = 0;
 
   if (index >= pc->num_playlists || index < 0)
   {
@@ -55,7 +55,7 @@ sp_playlistcontainer_playlist_folder_name(sp_playlistcontainer *pc, int index, c
   {
     strncpy(buffer, pc->playlists[index].folder_name, buffer_size);
 
-    if (buffer_size <= strlen(pc->playlists[index].folder_name))
+    if ((unsigned int) buffer_size <= strlen(pc->playlists[index].folder_name))
     {
       null_byte_index = buffer_size - 1;
     }
@@ -133,6 +133,7 @@ sp_playlistcontainer_add_folder(sp_playlistcontainer *pc, int index, const char 
 {
   sp_playlistcontainer_playlist_t start_folder;
   sp_playlistcontainer_playlist_t end_folder;
+  sp_error error;
   long folder_id = random();
 
   start_folder.folder_id   = folder_id;
@@ -143,7 +144,7 @@ sp_playlistcontainer_add_folder(sp_playlistcontainer *pc, int index, const char 
   end_folder.folder_name = "";
   end_folder.type        = SP_PLAYLIST_TYPE_END_FOLDER;
 
-  sp_error error = mocksp_playlistcontainer_insert(pc, index, start_folder);
+  error = mocksp_playlistcontainer_insert(pc, index, start_folder);
 
   if (error == SP_ERROR_OK)
   {
@@ -180,6 +181,36 @@ sp_playlistcontainer_remove_playlist(sp_playlistcontainer *pc, int index)
   pc->num_playlists = new_num_playlists;
 
   return SP_ERROR_OK;
+}
+
+sp_error
+sp_playlistcontainer_move_playlist(sp_playlistcontainer *pc, int from, int to, bool dry_run)
+{
+  int num_playlists = sp_playlistcontainer_num_playlists(pc);
+  sp_error error = SP_ERROR_OK;
+
+  if (from >= num_playlists || from < 0 || to < 0 || to > num_playlists)
+  {
+    return SP_ERROR_INDEX_OUT_OF_RANGE;
+  }
+
+  if (from == to - 1)
+  {
+    return SP_ERROR_INVALID_INDATA; // don’t look at me, libspotify is strange
+  }
+
+  // TODO: error if moving folder into itself
+
+  if ( ! dry_run)
+  {
+    sp_playlistcontainer_playlist_t playlist;
+    MEMCPY(&playlist, &pc->playlists[from], sp_playlistcontainer_playlist_t);
+
+    error |= mocksp_playlistcontainer_insert(pc, to, playlist);
+    error |= sp_playlistcontainer_remove_playlist(pc, from);
+  }
+
+  return error;
 }
 
 /* UTILITY */
