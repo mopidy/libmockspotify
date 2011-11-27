@@ -3,6 +3,9 @@
 static sp_error
 mocksp_playlistcontainer_insert(sp_playlistcontainer *, int, sp_playlistcontainer_playlist_t);
 
+static sp_error
+mocksp_playlistcontainer_remove(sp_playlistcontainer *pc, int index);
+
 sp_playlistcontainer *
 mocksp_playlistcontainer_create(sp_user *owner, bool loaded,
                                 int num_playlists, sp_playlistcontainer_playlist_t *playlists,
@@ -43,7 +46,7 @@ sp_playlistcontainer_playlist_folder_name(sp_playlistcontainer *pc, int index, c
 {
   int null_byte_index = 0;
 
-  if (index >= pc->num_playlists)
+  if (index >= pc->num_playlists || index < 0)
   {
     return SP_ERROR_INDEX_OUT_OF_RANGE;
   }
@@ -81,39 +84,6 @@ sp_playlistcontainer_remove_callbacks(sp_playlistcontainer *pc, sp_playlistconta
   /* TODO: multi-callback support */
   pc->callbacks = NULL;
   pc->userdata  = NULL;
-}
-
-static sp_error
-mocksp_playlistcontainer_insert(sp_playlistcontainer *pc, int index, sp_playlistcontainer_playlist_t playlist)
-{
-  sp_playlistcontainer_playlist_t *new_playlists;
-  int num_playlists = sp_playlistcontainer_num_playlists(pc);
-  int new_num_playlists = num_playlists + 1;
-  int i, j;
-
-  if (index > num_playlists)
-  {
-    return SP_ERROR_INDEX_OUT_OF_RANGE;
-  }
-
-  new_playlists = ALLOC_N(sp_playlistcontainer_playlist_t, new_num_playlists);
-  for (i = 0, j = 0; i < new_num_playlists; i++)
-  {
-    if (i == index)
-    {
-      MEMCPY(&new_playlists[i], &playlist, sp_playlistcontainer_playlist_t);
-    }
-    else
-    {
-      MEMCPY(&new_playlists[i], &pc->playlists[j++], sp_playlistcontainer_playlist_t);
-    }
-  }
-
-  free(pc->playlists);
-  pc->playlists = new_playlists;
-  pc->num_playlists = new_num_playlists;
-
-  return SP_ERROR_OK;
 }
 
 sp_playlist *
@@ -181,6 +151,69 @@ sp_playlistcontainer_add_folder(sp_playlistcontainer *pc, int index, const char 
   }
 
   return error;
+}
+
+sp_error
+sp_playlistcontainer_remove_playlist(sp_playlistcontainer *pc, int index)
+{
+  sp_playlistcontainer_playlist_t *new_playlists;
+  int num_playlists = sp_playlistcontainer_num_playlists(pc);
+  int new_num_playlists = num_playlists - 1;
+  int i, j;
+
+  if (index >= num_playlists || index < 0)
+  {
+    return SP_ERROR_INDEX_OUT_OF_RANGE;
+  }
+
+  new_playlists = ALLOC_N(sp_playlistcontainer_playlist_t, new_num_playlists);
+  for (i = 0, j = 0; i < num_playlists; ++i)
+  {
+    if (i != index)
+    {
+      MEMCPY(&new_playlists[j++], &pc->playlists[i], sp_playlistcontainer_playlist_t);
+    }
+  }
+
+  free(pc->playlists);
+  pc->playlists = new_playlists;
+  pc->num_playlists = new_num_playlists;
+
+  return SP_ERROR_OK;
+}
+
+/* UTILITY */
+static sp_error
+mocksp_playlistcontainer_insert(sp_playlistcontainer *pc, int index, sp_playlistcontainer_playlist_t playlist)
+{
+  sp_playlistcontainer_playlist_t *new_playlists;
+  int num_playlists = sp_playlistcontainer_num_playlists(pc);
+  int new_num_playlists = num_playlists + 1;
+  int i, j;
+
+  if (index > num_playlists || index < 0)
+  {
+    return SP_ERROR_INDEX_OUT_OF_RANGE;
+  }
+
+  new_playlists = ALLOC_N(sp_playlistcontainer_playlist_t, new_num_playlists);
+  for (i = 0, j = 0; i < new_num_playlists; i++)
+  {
+    if (i == index)
+    {
+      MEMCPY(&new_playlists[i], &playlist, sp_playlistcontainer_playlist_t);
+    }
+    else
+    {
+      MEMCPY(&new_playlists[i], &pc->playlists[j++], sp_playlistcontainer_playlist_t);
+    }
+  }
+
+  free(pc->playlists);
+  pc->playlists = new_playlists;
+  pc->num_playlists = new_num_playlists;
+
+  return SP_ERROR_OK;
 }
 
 /*
