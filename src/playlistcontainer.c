@@ -41,17 +41,28 @@ sp_playlistcontainer_playlist(sp_playlistcontainer *pc, int index)
 sp_error
 sp_playlistcontainer_playlist_folder_name(sp_playlistcontainer *pc, int index, char *buffer, int buffer_size)
 {
+  int null_byte_index = 0;
+
   if (index >= pc->num_playlists)
   {
     return SP_ERROR_INDEX_OUT_OF_RANGE;
   }
 
-  strncpy(buffer, pc->playlists[index].folder_name, buffer_size);
-
-  if (buffer_size > 0)
+  if (pc->playlists[index].folder_name)
   {
-    buffer[buffer_size - 1] = '\0';
+    strncpy(buffer, pc->playlists[index].folder_name, buffer_size);
+
+    if (buffer_size <= strlen(pc->playlists[index].folder_name))
+    {
+      null_byte_index = buffer_size - 1;
+    }
+    else
+    {
+      null_byte_index = strlen(pc->playlists[index].folder_name);
+    }
   }
+
+  buffer[null_byte_index] = '\0';
 
   return SP_ERROR_OK;
 }
@@ -152,12 +163,15 @@ sp_playlistcontainer_add_folder(sp_playlistcontainer *pc, int index, const char 
 {
   sp_playlistcontainer_playlist_t start_folder;
   sp_playlistcontainer_playlist_t end_folder;
+  long folder_id = random();
 
+  start_folder.folder_id   = folder_id;
   start_folder.folder_name = strclone(name);
   start_folder.type        = SP_PLAYLIST_TYPE_START_FOLDER;
 
-  end_folder.folder_name   = "";
-  end_folder.type          = SP_PLAYLIST_TYPE_END_FOLDER;
+  end_folder.folder_id   = folder_id;
+  end_folder.folder_name = "";
+  end_folder.type        = SP_PLAYLIST_TYPE_END_FOLDER;
 
   sp_error error = mocksp_playlistcontainer_insert(pc, index, start_folder);
 
