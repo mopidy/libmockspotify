@@ -207,6 +207,12 @@ sp_playlistcontainer_move_playlist(sp_playlistcontainer *pc, int from, int to, b
     MEMCPY(&playlist, &pc->playlists[from], sp_playlistcontainer_playlist_t);
 
     error |= mocksp_playlistcontainer_insert(pc, to, playlist);
+
+    if (from > to)
+    {
+      from += 1;
+    }
+
     error |= sp_playlistcontainer_remove_playlist(pc, from);
   }
 
