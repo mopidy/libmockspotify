@@ -1,7 +1,7 @@
 #include "libmockspotify.h"
 
-static sp_playlist *
-mocksp_playlistcontainer_add(sp_playlistcontainer *, sp_playlist *);
+static sp_error
+mocksp_playlistcontainer_insert(sp_playlistcontainer *, int, sp_playlistcontainer_playlist_t);
 
 sp_playlistcontainer *
 mocksp_playlistcontainer_create(sp_user *owner, bool loaded,
@@ -72,32 +72,51 @@ sp_playlistcontainer_remove_callbacks(sp_playlistcontainer *pc, sp_playlistconta
   pc->userdata  = NULL;
 }
 
-static sp_playlist *
-mocksp_playlistcontainer_add(sp_playlistcontainer *pc, sp_playlist *playlist)
+static sp_error
+mocksp_playlistcontainer_insert(sp_playlistcontainer *pc, int index, sp_playlistcontainer_playlist_t playlist)
 {
-  sp_playlistcontainer_playlist_t container_playlist;
   sp_playlistcontainer_playlist_t *new_playlists;
   int num_playlists = sp_playlistcontainer_num_playlists(pc);
+  int new_num_playlists = num_playlists + 1;
+  int i, j;
 
-  container_playlist.playlist = playlist;
-  container_playlist.type     = SP_PLAYLIST_TYPE_PLAYLIST;
+  if (index > num_playlists)
+  {
+    return SP_ERROR_INDEX_OUT_OF_RANGE;
+  }
 
-  new_playlists = ALLOC_N(sp_playlistcontainer_playlist_t, num_playlists + 1);
-  MEMCPY_N(new_playlists, pc->playlists, sp_playlistcontainer_playlist_t, num_playlists);
-  MEMCPY(&new_playlists[num_playlists], &container_playlist, sp_playlistcontainer_playlist_t);
+  new_playlists = ALLOC_N(sp_playlistcontainer_playlist_t, new_num_playlists);
+  for (i = 0, j = 0; i < new_num_playlists; i++)
+  {
+    if (i == index)
+    {
+      MEMCPY(&new_playlists[i], &playlist, sp_playlistcontainer_playlist_t);
+    }
+    else
+    {
+      MEMCPY(&new_playlists[i], &pc->playlists[j++], sp_playlistcontainer_playlist_t);
+    }
+  }
 
   free(pc->playlists);
   pc->playlists = new_playlists;
-  pc->num_playlists += 1;
+  pc->num_playlists = new_num_playlists;
 
-  return playlist;
+  return SP_ERROR_OK;
 }
 
 sp_playlist *
 sp_playlistcontainer_add_new_playlist(sp_playlistcontainer *pc, const char *name)
 {
   sp_playlist *playlist = mocksp_playlist_create(name, true, NULL, false, NULL, NULL, false, 0, NULL, true, SP_PLAYLIST_OFFLINE_STATUS_NO, 0, 0, NULL);
-  return mocksp_playlistcontainer_add(pc, playlist);
+
+  sp_playlistcontainer_playlist_t container_playlist;
+  container_playlist.playlist = playlist;
+  container_playlist.type     = SP_PLAYLIST_TYPE_PLAYLIST;
+
+  mocksp_playlistcontainer_insert(pc, sp_playlistcontainer_num_playlists(pc), container_playlist);
+
+  return playlist;
 }
 
 sp_playlist *
@@ -115,11 +134,42 @@ sp_playlistcontainer_add_playlist(sp_playlistcontainer *pc, sp_link *link)
     default: return NULL;
   }
 
-  return playlist ? mocksp_playlistcontainer_add(pc, playlist) : NULL;
+  if (playlist)
+  {
+    sp_playlistcontainer_playlist_t container_playlist;
+
+    container_playlist.playlist = playlist;
+    container_playlist.type     = SP_PLAYLIST_TYPE_PLAYLIST;
+
+    mocksp_playlistcontainer_insert(pc, sp_playlistcontainer_num_playlists(pc), container_playlist);
+  }
+
+  return playlist;
+}
+
+sp_error
+sp_playlistcontainer_add_folder(sp_playlistcontainer *pc, int index, const char *name)
+{
+  sp_playlistcontainer_playlist_t start_folder;
+  sp_playlistcontainer_playlist_t end_folder;
+
+  start_folder.folder_name = strclone(name);
+  start_folder.type        = SP_PLAYLIST_TYPE_START_FOLDER;
+
+  end_folder.folder_name   = "";
+  end_folder.type          = SP_PLAYLIST_TYPE_END_FOLDER;
+
+  sp_error error = mocksp_playlistcontainer_insert(pc, index, start_folder);
+
+  if (error == SP_ERROR_OK)
+  {
+    error = mocksp_playlistcontainer_insert(pc, index + 1, end_folder);
+  }
+
+  return error;
 }
 
 /*
 playlistcontainer_remove_playlist
 playlistcontainer_move_playlist
-playlistcontainer_add_folder
 */
