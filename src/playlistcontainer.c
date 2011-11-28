@@ -141,7 +141,7 @@ sp_playlistcontainer_add_folder(sp_playlistcontainer *pc, int index, const char 
   start_folder.type        = SP_PLAYLIST_TYPE_START_FOLDER;
 
   end_folder.folder_id   = folder_id;
-  end_folder.folder_name = "";
+  end_folder.folder_name = NULL;
   end_folder.type        = SP_PLAYLIST_TYPE_END_FOLDER;
 
   error = mocksp_playlistcontainer_insert(pc, index, start_folder);
