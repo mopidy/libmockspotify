@@ -27,10 +27,10 @@ mocksp_track_create(char *name, int num_artists, sp_artist **artists,
 
 /*** Spotify API ***/
 
-bool
-sp_track_is_available(sp_session *session, sp_track *t)
+sp_track_availability
+sp_track_get_availability(sp_session *session, sp_track *t)
 {
-    return 1;
+        return 1;
 }
 
 bool
@@ -111,7 +111,7 @@ sp_track_is_starred(sp_session *s, sp_track *t)
 }
 
 void
-sp_track_set_starred(sp_session *s, const sp_track **ts, int n, bool starred)
+sp_track_set_starred(sp_session *s, sp_track *const *ts, int n, bool starred)
 {
     int i;
 
