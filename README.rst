@@ -18,4 +18,4 @@ Installation
     $ ./autogen.sh
     $ ./configure
     $ make
-    # make install
+    $ sudo make install
