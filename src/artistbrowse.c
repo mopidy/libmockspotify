@@ -27,8 +27,10 @@ sp_artistbrowse_release(sp_artistbrowse * ab)
 }
 
 sp_artistbrowse *
-sp_artistbrowse_create(sp_session * s, sp_artist * a,
-                       artistbrowse_complete_cb cb, void *userdata)
+sp_artistbrowse_create(sp_session *s, sp_artist *a,
+                       sp_artistbrowse_type type,
+                       artistbrowse_complete_cb cb,
+                       void *userdata)
 {
     sp_artistbrowse *ab;
 
