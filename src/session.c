@@ -13,11 +13,20 @@ int events = 0;
 
 void
 sp_session_login(sp_session *session, const char *username,
-                 const char *password)
+                 const char *password, bool remember_me)
 {
     strcpy(g_data.username, username);
     strcpy(g_data.password, password);
     eventq[events++] = MOCK_LOGGED_IN;
+}
+
+sp_error
+sp_session_relogin(sp_session *session)
+{
+    if (!g_data.username || !g_data.password)
+        return SP_ERROR_NO_CREDENTIALS;
+    eventq[events++] = MOCK_LOGGED_IN;
+    return SP_ERROR_OK;
 }
 
 void
@@ -29,7 +38,7 @@ sp_session_logout(sp_session *session)
 sp_user *
 sp_session_user(sp_session *session)
 {
-    return mocksp_user_create(g_data.username, "", NULL, "", 0, 1);
+    return mocksp_user_create(g_data.username, "", 1);
 }
 
 sp_playlistcontainer *

@@ -62,6 +62,7 @@ struct sp_playlist {
     int num_tracks;
     sp_playlist_callbacks *callbacks;
     void *userdata;
+    sp_playlist_type type;
 };
 
 struct sp_playlistcontainer {
@@ -103,9 +104,15 @@ struct sp_user {
     bool loaded;
     char *canonical_name;
     char *display_name;
-    char *full_name;
-    char *picture;
-    sp_relation_type relation;
+};
+
+struct sp_toplistbrowse {
+    bool                loaded;
+    sp_toplisttype      type;
+    sp_toplistregion    region;
+    sp_album            *albums[3];
+    sp_artist           *artists[3];
+    sp_track            *tracks[3];
 };
 
 /*** Mock events ***/
@@ -172,7 +179,6 @@ mocksp_track_create(char *name, int num_artists, sp_artist ** artists,
                     int disc, int index, sp_error error, int loaded);
 
 sp_user *
-mocksp_user_create(char *canonical_name, char *display_name, char *full_name,
-                   char *picture, sp_relation_type relation, bool loaded);
+mocksp_user_create(char *canonical_name, char *display_name, bool loaded);
 
 #endif /* LIBMOCKSPOTIFY_API_H */
