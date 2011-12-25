@@ -59,6 +59,29 @@ sp_playlistcontainer_playlist(sp_playlistcontainer *pc, int index)
     return pc->playlist[index];
 }
 
+sp_playlist_type
+sp_playlistcontainer_playlist_type(sp_playlistcontainer *pc, int index)
+{
+    return pc->playlist[index]->type;
+}
+
+sp_error
+sp_playlistcontainer_playlist_folder_name(sp_playlistcontainer *pc, int index,
+                                          char *buffer, int size)
+{
+    if (pc->playlist[index]->type == SP_PLAYLIST_TYPE_START_FOLDER)
+        strncpy(buffer, pc->playlist[index]->name, size);
+    else
+        buffer[0] = 0;
+    return SP_ERROR_OK;
+}
+
+sp_uint64
+sp_playlistcontainer_playlist_folder_id(sp_playlistcontainer *pc, int index)
+{
+    return 42;
+}
+
 int
 sp_playlistcontainer_num_playlists(sp_playlistcontainer *pc)
 {
