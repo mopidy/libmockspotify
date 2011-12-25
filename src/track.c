@@ -30,7 +30,7 @@ mocksp_track_create(char *name, int num_artists, sp_artist **artists,
 sp_track_availability
 sp_track_get_availability(sp_session *session, sp_track *t)
 {
-        return 1;
+    return 1;
 }
 
 bool
