@@ -106,6 +106,15 @@ struct sp_user {
     char *display_name;
 };
 
+struct sp_toplistbrowse {
+    bool                loaded;
+    sp_toplisttype      type;
+    sp_toplistregion    region;
+    sp_album            *albums[3];
+    sp_artist           *artists[3];
+    sp_track            *tracks[3];
+};
+
 /*** Mock events ***/
 
 typedef enum event_type {
