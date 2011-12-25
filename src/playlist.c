@@ -170,6 +170,14 @@ sp_playlist_is_collaborative(sp_playlist *p)
 }
 
 sp_error
+sp_playlist_add_tracks(sp_playlist *p, sp_track *const *tracks, int num_tracks,
+                       int position, sp_session *session) {
+    if (position > p->num_tracks - 1)
+        return SP_ERROR_INVALID_INDATA;
+    return SP_ERROR_OK;
+};
+
+sp_error
 sp_playlist_remove_tracks(sp_playlist *p, const int *tracks, int num_tracks)
 {
     // TODO
