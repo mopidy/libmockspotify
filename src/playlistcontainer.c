@@ -94,6 +94,21 @@ sp_playlistcontainer_num_playlists(sp_playlistcontainer *pc)
     return pc->num_playlists;
 }
 
+sp_playlist *
+sp_playlistcontainer_add_playlist(sp_playlistcontainer *pc, sp_link *link)
+{
+    // TODO
+    return NULL;
+}
+
+sp_playlist *
+sp_playlistcontainer_add_new_playlist(sp_playlistcontainer *pc,
+                                      const char *name)
+{
+    // TODO
+    return mocksp_playlist_create((char *)name);
+}
+
 void
 sp_playlistcontainer_add_callbacks(sp_playlistcontainer *pc,
                                    sp_playlistcontainer_callbacks *cb,
