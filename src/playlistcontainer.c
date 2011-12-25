@@ -53,6 +53,12 @@ sp_playlistcontainer_release(sp_playlistcontainer *p)
 {
 }
 
+bool
+sp_playlistcontainer_is_loaded(sp_playlistcontainer *p)
+{
+    return 1;
+}
+
 sp_playlist *
 sp_playlistcontainer_playlist(sp_playlistcontainer *pc, int index)
 {
