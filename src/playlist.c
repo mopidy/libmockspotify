@@ -21,7 +21,7 @@ mocksp_playlist_event(event_type event, sp_playlist *p)
     sp_artist *artist = mocksp_artist_create("foo_", 1);
     sp_album *album = mocksp_album_create("bar_", artist, 2011,
                                   (byte *) "01234567890123456789", 0, 1, 1);
-    sp_user *user = mocksp_user_create("foo", "", "", "", 0, 0);
+    sp_user *user = mocksp_user_create("foo", "", 0);
     sp_track *tracks[3] = {
         mocksp_track_create("foo", 1, &artist, album, 0, 0, 0, 0, 0, 1),
         mocksp_track_create("bar", 1, &artist, album, 0, 0, 0, 0, 0, 1),

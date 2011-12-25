@@ -103,9 +103,6 @@ struct sp_user {
     bool loaded;
     char *canonical_name;
     char *display_name;
-    char *full_name;
-    char *picture;
-    sp_relation_type relation;
 };
 
 /*** Mock events ***/
@@ -172,7 +169,6 @@ mocksp_track_create(char *name, int num_artists, sp_artist ** artists,
                     int disc, int index, sp_error error, int loaded);
 
 sp_user *
-mocksp_user_create(char *canonical_name, char *display_name, char *full_name,
-                   char *picture, sp_relation_type relation, bool loaded);
+mocksp_user_create(char *canonical_name, char *display_name, bool loaded);
 
 #endif /* LIBMOCKSPOTIFY_API_H */

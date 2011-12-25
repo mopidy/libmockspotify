@@ -38,7 +38,7 @@ sp_session_logout(sp_session *session)
 sp_user *
 sp_session_user(sp_session *session)
 {
-    return mocksp_user_create(g_data.username, "", NULL, "", 0, 1);
+    return mocksp_user_create(g_data.username, "", 1);
 }
 
 sp_playlistcontainer *
