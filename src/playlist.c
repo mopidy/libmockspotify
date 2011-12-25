@@ -12,6 +12,7 @@ mocksp_playlist_create(char *name)
     p = malloc(sizeof(sp_playlist));
     memset(p, 0, sizeof(sp_playlist));
     strcpy(p->name, name);
+    p->type = SP_PLAYLIST_TYPE_PLAYLIST;
     return p;
 }
 
@@ -173,4 +174,43 @@ sp_playlist_remove_tracks(sp_playlist *p, const int *tracks, int num_tracks)
 {
     // TODO
     return SP_ERROR_OK;
+}
+
+int
+sp_playlist_track_create_time(sp_playlist *p, int index)
+{
+    return 1320961109;
+}
+
+unsigned int
+sp_playlist_num_subscribers(sp_playlist *p)
+{
+    return 42;
+}
+
+sp_subscribers *
+sp_playlist_subscribers(sp_playlist *p)
+{
+    typedef struct {
+        unsigned int count;
+        char *names[3];
+    } sub_t;
+
+    sub_t *s = malloc(sizeof(sub_t));
+    s->names[0] = "foo";
+    s->names[1] = "bar";
+    s->names[2] = "baz";
+    s->count = 3;
+    return (sp_subscribers *)s;
+}
+
+void
+sp_playlist_update_subscribers(sp_session *s, sp_playlist *p)
+{
+}
+
+void
+sp_playlist_subscribers_free(sp_subscribers *sub)
+{
+    free(sub);
 }

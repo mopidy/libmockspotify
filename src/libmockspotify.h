@@ -62,6 +62,7 @@ struct sp_playlist {
     int num_tracks;
     sp_playlist_callbacks *callbacks;
     void *userdata;
+    sp_playlist_type type;
 };
 
 struct sp_playlistcontainer {
