@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libmockspotify
+Description: A mock of the libspotify API
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -lmockspotify
+Cflags: -I${includedir}
