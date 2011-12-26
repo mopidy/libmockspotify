@@ -11,6 +11,7 @@ the Node.js and Ruby bindings for libspotify.
 Coordination of the development efforts happens on GitHub and #spotify on
 Freenode.
 
+
 Installation
 ============
 
@@ -30,3 +31,10 @@ v0.1 (in development)
 
 - Synced with pyspotify's mock of libspotify. libmockspotify is now compatible
   with libspotify 10.
+
+
+License
+=======
+
+libmockspotify is licensed under the Apache License, Version 2.0. A full copy
+of the license may be found in the ``LICENSE`` file bundled with the software.
