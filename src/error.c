@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "libmockspotify.h"
+#include "util.h"
 
 const char*
 sp_error_message(sp_error error)

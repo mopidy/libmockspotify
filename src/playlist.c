@@ -1,4 +1,5 @@
 #include "libmockspotify.h"
+#include "util.h"
 #include "time.h"
 
 sp_playlist *

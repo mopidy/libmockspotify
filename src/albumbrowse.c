@@ -1,4 +1,5 @@
 #include "libmockspotify.h"
+#include "util.h"
 
 sp_albumbrowse *
 mocksp_albumbrowse_create(sp_error error, int request_duration, sp_album *album, sp_artist *artist,

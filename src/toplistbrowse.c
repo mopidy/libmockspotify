@@ -1,4 +1,5 @@
 #include "libmockspotify.h"
+#include "util.h"
 
 sp_toplistbrowse *
 mocksp_toplistbrowse_create(sp_error error, int request_duration,

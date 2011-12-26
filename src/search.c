@@ -1,4 +1,5 @@
 #include "libmockspotify.h"
+#include "util.h"
 
 sp_search *
 mocksp_search_create(sp_error error, const char *query, const char *did_you_mean,

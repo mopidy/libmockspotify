@@ -1,4 +1,5 @@
 #include "libmockspotify.h"
+#include "util.h"
 
 sp_track *
 mocksp_track_create(const char *name, int num_artists, sp_artist **artists, sp_album *album,

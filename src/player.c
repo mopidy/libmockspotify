@@ -1,4 +1,5 @@
 #include "libmockspotify.h"
+#include "util.h"
 
 sp_error
 sp_session_player_load(sp_session *session, sp_track *track)

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "libmockspotify.h"
+#include "util.h"
 
 sp_image*
 mocksp_image_create(const byte image_id[20], sp_imageformat format, size_t data_size, const byte *data, sp_error error)

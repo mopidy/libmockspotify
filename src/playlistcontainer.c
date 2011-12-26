@@ -1,4 +1,5 @@
 #include "libmockspotify.h"
+#include "util.h"
 
 static sp_error
 mocksp_playlistcontainer_insert(sp_playlistcontainer *, int, sp_playlistcontainer_playlist_t);

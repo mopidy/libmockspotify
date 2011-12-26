@@ -10,7 +10,6 @@
 #include <string.h>
 #include <stdio.h>
 #include "libspotify/api.h"
-#include "util.h"
 
 /* custom type */
 struct sp_player

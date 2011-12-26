@@ -1,4 +1,5 @@
 #include "libmockspotify.h"
+#include "util.h"
 
 sp_user *
 mocksp_user_create(const char *canonical_name, const char *display_name, bool is_loaded)

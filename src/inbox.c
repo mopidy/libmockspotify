@@ -1,4 +1,5 @@
 #include "libmockspotify.h"
+#include "util.h"
 
 sp_inbox *
 sp_inbox_post_tracks(sp_session *UNUSED(session), const char *user, sp_track *const *tracks, int num_tracks, const char *message, inboxpost_complete_cb *callback, void *userdata)

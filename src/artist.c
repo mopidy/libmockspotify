@@ -1,4 +1,5 @@
 #include "libmockspotify.h"
+#include "util.h"
 
 sp_artist *
 mocksp_artist_create(const char *name, const byte* portrait, bool is_loaded)

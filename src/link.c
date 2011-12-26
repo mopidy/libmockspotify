@@ -1,4 +1,5 @@
 #include "libmockspotify.h"
+#include "util.h"
 
 DEFINE_REFCOUNTERS_FOR(link);
 

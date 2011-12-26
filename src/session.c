@@ -1,4 +1,5 @@
 #include "libmockspotify.h"
+#include "util.h"
 
 sp_session *
 mocksp_session_create(const sp_session_config *config, sp_connectionstate connectionstate,

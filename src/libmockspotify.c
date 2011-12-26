@@ -1,4 +1,5 @@
 #include "libmockspotify.h"
+#include "util.h"
 
 typedef struct node_t node_t;
 struct node_t

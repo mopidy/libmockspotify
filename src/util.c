@@ -1,4 +1,5 @@
 #include "libmockspotify.h"
+#include "util.h"
 
 void*
 xmalloc(size_t size)
