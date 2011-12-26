@@ -1,5 +1,6 @@
+**************
 libmockspotify
-==============
+**************
 
 A mock of libspotify for use in development of language bindings.
 
@@ -11,11 +12,22 @@ Coordination of the development efforts happens on GitHub and #spotify on
 Freenode.
 
 Installation
-------------
+============
 
 ::
 
     $ ./autogen.sh
     $ ./configure
     $ make
-    # make install
+    $ sudo make install
+
+
+Changes
+=======
+
+v0.1 (in development)
+---------------------
+
+- Synced with pyspotify's mock of libspotify. libmockspotify is now compatible
+  with libspotify 10.
+- Merged the fork from Burgestrand/libmockspotify.
