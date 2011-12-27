@@ -52,10 +52,11 @@ sp_albumbrowse_is_loaded(sp_albumbrowse *albumbrowse)
 }
 
 sp_albumbrowse *
-sp_albumbrowse_create(sp_session *UNUSED(session), sp_album *album, albumbrowse_complete_cb UNUSED(cb), void *UNUSED(userdata))
+sp_albumbrowse_create(sp_session *UNUSED(session), sp_album *album, albumbrowse_complete_cb cb, void *userdata)
 {
   sp_link *link = sp_link_create_from_album(album);
   char *albumbrowse_link;
+  sp_albumbrowse *browser;
 
   if (link == NULL || sp_link_type(link) != SP_LINKTYPE_ALBUM)
   {
@@ -64,5 +65,8 @@ sp_albumbrowse_create(sp_session *UNUSED(session), sp_album *album, albumbrowse_
 
   albumbrowse_link = ALLOC_STR(strlen("spotify:albumbrowse:1xvnWMz2PNFf7mXOSRuLws"));
   sprintf(albumbrowse_link, "spotify:albumbrowse:%s", link->data + strlen("spotify:album:"));
-  return (sp_albumbrowse *)registry_find(albumbrowse_link);
+  browser = (sp_albumbrowse *)registry_find(albumbrowse_link);
+  if (cb)
+      cb(browser, userdata);
+  return browser;
 }
