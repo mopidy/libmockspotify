@@ -6,6 +6,16 @@
 #define true 1
 #define false 0
 
+#ifdef DEBUG
+#define DEBUGTEST 1
+#else
+#define DEBUGTEST 0
+#endif
+
+#define DEBUG_PRINT(fmt, ...)                                               \
+    do { if (DEBUGTEST) fprintf(stderr, "%s:%d:%s(): " fmt "\n", __FILE__,     \
+                            __LINE__, __func__, __VA_ARGS__); } while (0)
+
 #define ALLOC(type) ALLOC_N(type, 1)
 #define ALLOC_N(type, n) ((type*) xmalloc(sizeof(type) * (n)))
 #define ALLOC_STR(n) ALLOC_N(char, n + 1)
