@@ -32,7 +32,7 @@ sp_link *
 sp_link_create_from_string(const char *link)
 {
   /* unless the link starts with spotify: it is invalid */
-  if ( ! STARTS_WITH(link, "spotify:"))
+  if ( ! link || ! STARTS_WITH(link, "spotify:"))
   {
     return NULL;
   }
