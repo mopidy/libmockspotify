@@ -81,7 +81,7 @@ mocksp_event_playlist(event_type event, sp_playlist *p)
 
     case MOCK_PLAYLIST_IMAGE_CHANGED:
         if (p->callbacks->image_changed)
-            p->callbacks->image_changed(p, NULL,
+            p->callbacks->image_changed(p, "01234567890123456789",
                                         p->userdata);
         break;
 
