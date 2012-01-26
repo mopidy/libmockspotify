@@ -31,7 +31,6 @@ mocksp_session_create(const sp_session_config *config, sp_connectionstate connec
 }
 
 DEFINE_READER(session, connectionstate, sp_connectionstate);
-DEFINE_READER(session, userdata, void *);
 
 const char * sp_build_id(void)
 {
@@ -262,4 +261,10 @@ void
 sp_session_set_volume_normalization(sp_session *session, bool yepnope)
 {
   session->volume_normalization = yepnope;
+}
+
+void *
+sp_session_userdata(sp_session *session)
+{
+  return session->config.userdata;
 }
