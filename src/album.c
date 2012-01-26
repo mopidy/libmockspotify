@@ -1,77 +1,33 @@
-#include <stdlib.h>
-#include <string.h>
 #include "libmockspotify.h"
-
-/*** MockSpotify API ***/
+#include "util.h"
 
 sp_album *
-mocksp_album_create(char *name, sp_artist *artist, int year, byte * cover,
-                    int type, int loaded, int available)
+mocksp_album_create(const char *name, sp_artist *artist, int year, const byte *cover,
+                    sp_albumtype type, bool loaded, bool available)
 {
-    sp_album *a;
+  sp_album *album = ALLOC(sp_album);
 
-    a = malloc(sizeof(sp_album));
-    memset(a, 0, sizeof(sp_album));
-    strcpy(a->name, name);
-    a->artist = artist;
-    a->year = year;
-    memcpy(a->cover, cover, 20);
-    a->type = type;
-    a->loaded = loaded;
-    a->available = available;
-    return a;
+  album->name         = strclone(name);
+  album->year         = year;
+  album->type         = type;
+  album->artist       = artist;
+  album->is_loaded    = loaded;
+  album->is_available = available;
+
+  if (cover)
+  {
+    MEMCPY_N(album->cover, cover, byte, 20);
+  }
+
+  return album;
 }
 
-/*** Spotify API ***/
+DEFINE_REFCOUNTERS_FOR(album);
 
-void
-sp_album_add_ref(sp_album *a)
-{
-}
-
-void
-sp_album_release(sp_album *a)
-{
-}
-
-bool
-sp_album_is_loaded(sp_album *a)
-{
-    return a->loaded;
-}
-
-bool
-sp_album_is_available(sp_album *a)
-{
-    return a->available;
-}
-
-sp_artist *
-sp_album_artist(sp_album *a)
-{
-    return a->artist;
-}
-
-const byte *
-sp_album_cover(sp_album *a)
-{
-    return a->cover;
-}
-
-const char *
-sp_album_name(sp_album *a)
-{
-    return a->name;
-}
-
-int
-sp_album_year(sp_album *a)
-{
-    return a->year;
-}
-
-sp_albumtype
-sp_album_type(sp_album *a)
-{
-    return a->type;
-}
+DEFINE_READER(album, is_loaded, bool);
+DEFINE_READER(album, is_available, bool);
+DEFINE_READER(album, artist, sp_artist *);
+DEFINE_READER(album, cover, const byte *);
+DEFINE_READER(album, name, const char *);
+DEFINE_READER(album, year, int);
+DEFINE_READER(album, type, sp_albumtype);

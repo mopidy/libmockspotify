@@ -1,112 +1,87 @@
-#include <stdlib.h>
 #include "libmockspotify.h"
-
-/*** MockSpotify API ***/
-
-sp_artistbrowse *
-mocksp_artistbrowse_create(sp_artist * artist, bool loaded)
-{
-    sp_artistbrowse *ab;
-
-    ab = malloc(sizeof(sp_artistbrowse));
-    ab->loaded = loaded;
-    ab->artist = artist;
-    return ab;
-}
-
-/*** Spotify API ***/
-
-void
-sp_artistbrowse_add_ref(sp_artistbrowse * ab)
-{
-}
-
-void
-sp_artistbrowse_release(sp_artistbrowse * ab)
-{
-}
+#include "util.h"
 
 sp_artistbrowse *
-sp_artistbrowse_create(sp_session *s, sp_artist *a,
-                       sp_artistbrowse_type type,
-                       artistbrowse_complete_cb cb,
-                       void *userdata)
+mocksp_artistbrowse_create(sp_error error, int request_duration, sp_artist *artist,
+                           int num_portraits, const byte **portraits,
+                           int num_tracks, sp_track **tracks,
+                           int num_albums, sp_album **albums,
+                           int num_similar_artists, sp_artist **similar_artists,
+                           const char *biography, sp_artistbrowse_type type,
+                           artistbrowse_complete_cb *cb, void *userdata)
 {
-    sp_artistbrowse *ab;
+  int i = 0;
+  sp_artistbrowse *artistbrowse = ALLOC(sp_artistbrowse);
 
-    ab = mocksp_artistbrowse_create(a, 1);
-    if (cb)
-        cb(ab, userdata);
-    return ab;
+  artistbrowse->error = error;
+  artistbrowse->backend_request_duration = request_duration;
+  artistbrowse->artist = artist;
+
+  artistbrowse->portraits     = ALLOC_N(byte *, num_portraits);
+  artistbrowse->num_portraits = num_portraits;
+  for (i = 0; i < num_portraits; ++i)
+  {
+    artistbrowse->portraits[i] = ALLOC_N(byte, 20); // image_id = 20 bytes
+    MEMCPY_N(artistbrowse->portraits[i], portraits[i], byte, 20);
+  }
+
+  artistbrowse->tracks     = ALLOC_N(sp_track *, num_tracks);
+  artistbrowse->num_tracks = num_tracks;
+  MEMCPY_N(artistbrowse->tracks, tracks, sp_track *, num_tracks);
+
+  artistbrowse->albums     = ALLOC_N(sp_album *, num_albums);
+  artistbrowse->num_albums = num_albums;
+  MEMCPY_N(artistbrowse->albums, albums, sp_album *, num_albums);
+
+  artistbrowse->similar_artists     = ALLOC_N(sp_artist *, num_similar_artists);
+  artistbrowse->num_similar_artists = num_similar_artists;
+  MEMCPY_N(artistbrowse->similar_artists, similar_artists, sp_artist *, num_similar_artists);
+
+  artistbrowse->biography = strclone(biography);
+  artistbrowse->type      = type;
+
+  artistbrowse->callback = cb;
+  artistbrowse->userdata = userdata;
+
+  return artistbrowse;
 }
 
-sp_track *
-sp_artistbrowse_track(sp_artistbrowse * ab, int index)
-{
-    sp_album *album;
-    sp_track *track;
-
-    album = mocksp_album_create("fool-album", ab->artist, 2001,
-                        (byte *) "01234567890123456789", 1, 1, 1);
-    switch (index) {
-    case 0:
-        track = mocksp_track_create("foo", 1, &(album->artist), album,
-                            123, 0, 1, 1, SP_ERROR_OK, 1);
-        break;
-    case 1:
-        track = mocksp_track_create("bar", 1, &(album->artist), album,
-                            123, 0, 1, 2, SP_ERROR_OK, 1);
-        break;
-    case 2:
-        track = mocksp_track_create("baz", 1, &(album->artist), album,
-                            123, 0, 1, 3, SP_ERROR_OK, 1);
-        break;
-    default:
-        track = NULL;
-        break;
-    }
-    return track;
-}
-
-sp_album *
-sp_artistbrowse_album(sp_artistbrowse * ab, int index)
-{
-    sp_album *album;
-
-    switch (index) {
-    case 0:
-        album = mocksp_album_create("foo", ab->artist, 2001,
-                            (byte *) "01234567890123456789", 1, 1, 1);
-        break;
-    case 1:
-        album = mocksp_album_create("bar", ab->artist, 2002,
-                            (byte *) "01234567890123456789", 1, 1, 1);
-        break;
-    case 2:
-        album = mocksp_album_create("baz", ab->artist, 2003,
-                            (byte *) "01234567890123456789", 1, 1, 1);
-        break;
-    default:
-        album = NULL;
-        break;
-    }
-    return album;
-}
-
-int
-sp_artistbrowse_num_albums(sp_artistbrowse * ab)
-{
-    return 3;
-}
-
-int
-sp_artistbrowse_num_tracks(sp_artistbrowse * ab)
-{
-    return 3;
-}
+DEFINE_REFCOUNTERS_FOR(artistbrowse);
+DEFINE_READER(artistbrowse, error, sp_error);
+DEFINE_READER(artistbrowse, backend_request_duration, int);
+DEFINE_READER(artistbrowse, artist, sp_artist *);
+DEFINE_READER(artistbrowse, num_portraits, int);
+DEFINE_ARRAY_READER(artistbrowse, portrait, const byte *);
+DEFINE_READER(artistbrowse, num_tracks, int);
+DEFINE_ARRAY_READER(artistbrowse, track, sp_track *);
+DEFINE_READER(artistbrowse, num_albums, int);
+DEFINE_ARRAY_READER(artistbrowse, album, sp_album *);
+DEFINE_READER(artistbrowse, num_similar_artists, int);
+DEFINE_ARRAY_READER(artistbrowse, similar_artist, sp_artist *);
+DEFINE_READER(artistbrowse, biography, const char *);
 
 bool
-sp_artistbrowse_is_loaded(sp_artistbrowse * ab)
+sp_artistbrowse_is_loaded(sp_artistbrowse *artistbrowse)
 {
-    return ab->loaded;
+  return artistbrowse->error == SP_ERROR_OK;
+}
+
+sp_artistbrowse *
+sp_artistbrowse_create(sp_session *UNUSED(session), sp_artist *artist, sp_artistbrowse_type UNUSED(type), artistbrowse_complete_cb *callback, void *userdata)
+{
+  sp_link *link = sp_link_create_from_artist(artist);
+  char *artistbrowse_link;
+  sp_artistbrowse *browser;
+
+  if (link == NULL || sp_link_type(link) != SP_LINKTYPE_ARTIST)
+  {
+    return NULL;
+  }
+
+  artistbrowse_link = ALLOC_STR(strlen("spotify:artistbrowse:1xvnWMz2PNFf7mXOSRuLws"));
+  sprintf(artistbrowse_link, "spotify:artistbrowse:%s", link->data + strlen("spotify:artist:"));
+  browser = (sp_artistbrowse *)registry_find(artistbrowse_link);
+  if (callback)
+      callback(browser, userdata);
+  return browser;
 }

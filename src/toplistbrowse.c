@@ -1,98 +1,79 @@
-#include <stdlib.h>
 #include "libmockspotify.h"
+#include "util.h"
 
-/*** MockSpotify API ***/
-
-
-/*** Spotify API ***/
-void
-sp_toplistbrowse_add_ref(sp_toplistbrowse *tb)
+sp_toplistbrowse *
+mocksp_toplistbrowse_create(sp_error error, int request_duration,
+                            int num_artists, sp_artist **artists,
+                            int num_albums, sp_album **albums,
+                            int num_tracks, sp_track **tracks,
+                            toplistbrowse_complete_cb *callback, void *userdata)
 {
+  sp_toplistbrowse *toplistbrowse = ALLOC(sp_toplistbrowse);
+
+  toplistbrowse->error = error;
+
+  toplistbrowse->artists     = ALLOC_N(sp_artist *, num_artists);
+  toplistbrowse->num_artists = num_artists;
+  MEMCPY_N(toplistbrowse->artists, artists, sp_artist *, num_artists);
+
+  toplistbrowse->albums     = ALLOC_N(sp_album *, num_albums);
+  toplistbrowse->num_albums = num_albums;
+  MEMCPY_N(toplistbrowse->albums, albums, sp_album *, num_albums);
+
+  toplistbrowse->tracks     = ALLOC_N(sp_track *, num_tracks);
+  toplistbrowse->num_tracks = num_tracks;
+  MEMCPY_N(toplistbrowse->tracks, tracks, sp_track *, num_tracks);
+
+  toplistbrowse->backend_request_duration = request_duration;
+
+  toplistbrowse->callback = callback;
+  toplistbrowse->userdata = userdata;
+
+  return toplistbrowse;
 }
 
-void
-sp_toplistbrowse_release(sp_toplistbrowse *tb)
-{
-}
+DEFINE_REFCOUNTERS_FOR(toplistbrowse);
+DEFINE_READER(toplistbrowse, error, sp_error);
+DEFINE_READER(toplistbrowse, backend_request_duration, int);
+DEFINE_READER(toplistbrowse, num_artists, int);
+DEFINE_ARRAY_READER(toplistbrowse, artist, sp_artist *);
+DEFINE_READER(toplistbrowse, num_albums, int);
+DEFINE_ARRAY_READER(toplistbrowse, album, sp_album *);
+DEFINE_READER(toplistbrowse, num_tracks, int);
+DEFINE_ARRAY_READER(toplistbrowse, track, sp_track *);
 
 bool
-sp_toplistbrowse_is_loaded(sp_toplistbrowse *tb)
+sp_toplistbrowse_is_loaded(sp_toplistbrowse *toplistbrowse)
 {
-    return tb->loaded;
-}
-
-sp_error
-sp_toplistbrowse_error(sp_toplistbrowse *tb)
-{
-    return SP_ERROR_OK;
-}
-
-int
-sp_toplistbrowse_num_albums(sp_toplistbrowse *tb)
-{
-    return tb->type == SP_TOPLIST_TYPE_ALBUMS ? 3 : 0;
-}
-
-int
-sp_toplistbrowse_num_artists(sp_toplistbrowse *tb)
-{
-    return tb->type == SP_TOPLIST_TYPE_ARTISTS ? 3 : 0;
-}
-
-int
-sp_toplistbrowse_num_tracks(sp_toplistbrowse *tb)
-{
-    return tb->type == SP_TOPLIST_TYPE_TRACKS ? 3 : 0;
-}
-
-sp_album *
-sp_toplistbrowse_album(sp_toplistbrowse *tb, int index)
-{
-    return tb->albums[index];
-}
-
-sp_artist *
-sp_toplistbrowse_artist(sp_toplistbrowse *tb, int index)
-{
-    return tb->artists[index];
-}
-
-sp_track *
-sp_toplistbrowse_track(sp_toplistbrowse *tb, int index)
-{
-    return tb->tracks[index];
+  return toplistbrowse->error == SP_ERROR_OK;
 }
 
 sp_toplistbrowse *
-sp_toplistbrowse_create(sp_session *session,
-                        sp_toplisttype type, sp_toplistregion region,
-                        const char *username,
-                        toplistbrowse_complete_cb *cb, void *userdata)
+sp_toplistbrowse_create(sp_session *UNUSED(session), sp_toplisttype type, sp_toplistregion region, const char *username, toplistbrowse_complete_cb *callback, void *userdata)
 {
-    sp_toplistbrowse *tb;
+  char *toplistbrowse_link;
+  sp_toplistbrowse *browser;
 
-    tb = (sp_toplistbrowse *)malloc(sizeof(struct sp_toplistbrowse));
-    tb->albums[0] = mocksp_album_create("foo", NULL, 2001,
-                                        (byte *) "01234567890123456789",
-                                        1, 1, 1);
-    tb->albums[1] = mocksp_album_create("bar", NULL, 2001,
-                                        (byte *) "01234567890123456789",
-                                        1, 1, 1);
-    tb->albums[2] = mocksp_album_create("baz", NULL, 2001,
-                                        (byte *) "01234567890123456789",
-                                        1, 1, 1);
-    tb->artists[0] = mocksp_artist_create("foo", 1);
-    tb->artists[1] = mocksp_artist_create("bar", 1);
-    tb->artists[2] = mocksp_artist_create("baz", 1);
-    tb->tracks[0] = mocksp_track_create("foo", 1, NULL, NULL, 5, 0, 1, 1,
-                                                                SP_ERROR_OK, 1);
-    tb->tracks[1] = mocksp_track_create("bar", 1, NULL, NULL, 5, 0, 1, 1,
-                                                                SP_ERROR_OK, 1);
-    tb->tracks[2] = mocksp_track_create("baz", 1, NULL, NULL, 5, 0, 1, 1,
-                                                                SP_ERROR_OK, 1);
-    tb->type = type;
-    tb->region = region;
-    tb->loaded = 1;
-    cb(tb, userdata);
-    return tb;
+  if (region == SP_TOPLIST_REGION_USER)
+  {
+    const char *user = username == NULL ? "current" : username;
+    toplistbrowse_link = ALLOC_STR(strlen("spotify:toplist:user:") + strlen(user));
+    sprintf(toplistbrowse_link, "spotify:toplist:user:%s", user);
+  }
+  else // everywhere or by a country
+  {
+    const char *str_types[3] = {"artists", "albums", "tracks"};
+    const char *real_type = str_types[type];
+    const char *real_region = region == SP_TOPLIST_REGION_EVERYWHERE ? "everywhere" : unregion(region);
+
+    // longest possible string: artists everywhere
+    toplistbrowse_link = ALLOC_STR(strlen("spotify:toplist:artists:everywhere"));
+    sprintf(toplistbrowse_link, "spotify:toplist:%s:%s", real_type, real_region);
+  }
+
+  browser = (sp_toplistbrowse *)registry_find(toplistbrowse_link);
+  if (browser && callback)
+    callback(browser, userdata);
+
+  return browser;
 }

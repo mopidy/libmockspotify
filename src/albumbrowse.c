@@ -1,77 +1,72 @@
-#include <stdlib.h>
-#include <string.h>
 #include "libmockspotify.h"
-
-/*** MockSpotify API ***/
+#include "util.h"
 
 sp_albumbrowse *
-mocksp_albumbrowse_create(sp_album *album, bool loaded)
+mocksp_albumbrowse_create(sp_error error, int request_duration, sp_album *album, sp_artist *artist,
+                          int num_copyrights, const char **copyrights, int num_tracks,
+                          sp_track **tracks, const char *review, albumbrowse_complete_cb *cb,
+                          void *userdata)
 {
-    sp_albumbrowse *ab;
+  int i = 0;
+  sp_albumbrowse *albumbrowse = ALLOC(sp_albumbrowse);
 
-    ab = malloc(sizeof(sp_albumbrowse));
-    ab->loaded = loaded;
-    ab->album = album;
-    return ab;
+  albumbrowse->error  = error;
+  albumbrowse->album  = album;
+  albumbrowse->artist = artist;
+
+  albumbrowse->copyrights     = ALLOC_N(char*, num_copyrights);
+  albumbrowse->num_copyrights = num_copyrights;
+  for (i = 0; i < num_copyrights; ++i)
+  {
+    albumbrowse->copyrights[i] = strclone(copyrights[i]);
+  }
+
+  albumbrowse->tracks     = ALLOC_N(sp_track*, num_tracks);
+  albumbrowse->num_tracks = num_tracks;
+  MEMCPY_N(albumbrowse->tracks, tracks, sp_track *, num_tracks);
+
+  albumbrowse->review    = strclone(review);
+  albumbrowse->backend_request_duration = request_duration;
+
+  albumbrowse->callback = cb;
+  albumbrowse->userdata = userdata;
+
+  return albumbrowse;
 }
 
-/*** Spotify API ***/
-
-void
-sp_albumbrowse_add_ref(sp_albumbrowse *ab)
-{
-}
-
-void
-sp_albumbrowse_release(sp_albumbrowse *ab)
-{
-}
-
-sp_track *
-sp_albumbrowse_track(sp_albumbrowse *ab, int index)
-{
-    sp_track *track;
-
-    switch (index) {
-    case 0:
-        track = mocksp_track_create("foo", 1, &(ab->album->artist), ab->album,
-                                    123, 0, 1, 1, SP_ERROR_OK, 1);
-        break;
-    case 1:
-        track = mocksp_track_create("bar", 1, &(ab->album->artist), ab->album,
-                                    123, 0, 1, 2, SP_ERROR_OK, 1);
-        break;
-    case 2:
-        track = mocksp_track_create("baz", 1, &(ab->album->artist), ab->album,
-                                    123, 0, 1, 3, SP_ERROR_OK, 1);
-        break;
-    default:
-        track = NULL;
-        break;
-    }
-    return track;
-}
-
-int
-sp_albumbrowse_num_tracks(sp_albumbrowse *ab)
-{
-    return 3;
-}
+DEFINE_REFCOUNTERS_FOR(albumbrowse);
+DEFINE_READER(albumbrowse, error, sp_error);
+DEFINE_READER(albumbrowse, backend_request_duration, int);
+DEFINE_READER(albumbrowse, album, sp_album *);
+DEFINE_READER(albumbrowse, artist, sp_artist *);
+DEFINE_READER(albumbrowse, num_copyrights, int);
+DEFINE_ARRAY_READER(albumbrowse, copyright, const char *);
+DEFINE_READER(albumbrowse, num_tracks, int);
+DEFINE_ARRAY_READER(albumbrowse, track, sp_track *);
+DEFINE_READER(albumbrowse, review, const char *);
 
 bool
-sp_albumbrowse_is_loaded(sp_albumbrowse *ab)
+sp_albumbrowse_is_loaded(sp_albumbrowse *albumbrowse)
 {
-    return ab->loaded;
+  return albumbrowse->error == SP_ERROR_OK;
 }
 
 sp_albumbrowse *
-sp_albumbrowse_create(sp_session *s, sp_album *a,
-                      albumbrowse_complete_cb cb, void *userdata)
+sp_albumbrowse_create(sp_session *UNUSED(session), sp_album *album, albumbrowse_complete_cb cb, void *userdata)
 {
-    sp_albumbrowse *ab;
+  sp_link *link = sp_link_create_from_album(album);
+  char *albumbrowse_link;
+  sp_albumbrowse *browser;
 
-    ab = mocksp_albumbrowse_create(a, 1);
-    if (cb)
-        cb(ab, userdata);
-    return ab;
+  if (link == NULL || sp_link_type(link) != SP_LINKTYPE_ALBUM)
+  {
+    return NULL;
+  }
+
+  albumbrowse_link = ALLOC_STR(strlen("spotify:albumbrowse:1xvnWMz2PNFf7mXOSRuLws"));
+  sprintf(albumbrowse_link, "spotify:albumbrowse:%s", link->data + strlen("spotify:album:"));
+  browser = (sp_albumbrowse *)registry_find(albumbrowse_link);
+  if (cb)
+      cb(browser, userdata);
+  return browser;
 }
