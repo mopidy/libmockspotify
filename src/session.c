@@ -93,7 +93,7 @@ sp_session_create(const sp_session_config *config, sp_session * *sess)
 
   // TODO: v0.0.8 (and earlier) directly call `notify_main_thread` callback here, before returning
   if (config->callbacks && config->callbacks->notify_main_thread)
-    config->callbacks->notify_main_thread(NULL);
+    config->callbacks->notify_main_thread(session);
 
   return SP_ERROR_OK;
 }
