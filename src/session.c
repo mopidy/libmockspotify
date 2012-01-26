@@ -122,7 +122,6 @@ sp_session_login(sp_session *session, const char *username, const char *UNUSED(p
   if (session->config.callbacks != NULL)
   {
     if (session->config.callbacks->logged_in != NULL)
-      DEBUG_PRINT("calling logged_in with session=%p", session);
       session->config.callbacks->logged_in(session, SP_ERROR_OK);
     if (session->config.callbacks->notify_main_thread != NULL)
       session->config.callbacks->notify_main_thread(session);

@@ -49,9 +49,10 @@ sp_toplistbrowse_is_loaded(sp_toplistbrowse *toplistbrowse)
 }
 
 sp_toplistbrowse *
-sp_toplistbrowse_create(sp_session *UNUSED(session), sp_toplisttype type, sp_toplistregion region, const char *username, toplistbrowse_complete_cb *UNUSED(callback), void *UNUSED(userdata))
+sp_toplistbrowse_create(sp_session *UNUSED(session), sp_toplisttype type, sp_toplistregion region, const char *username, toplistbrowse_complete_cb *callback, void *userdata)
 {
   char *toplistbrowse_link;
+  sp_toplistbrowse *browser;
 
   if (region == SP_TOPLIST_REGION_USER)
   {
@@ -70,5 +71,9 @@ sp_toplistbrowse_create(sp_session *UNUSED(session), sp_toplisttype type, sp_top
     sprintf(toplistbrowse_link, "spotify:toplist:%s:%s", real_type, real_region);
   }
 
-  return (sp_toplistbrowse *)registry_find(toplistbrowse_link);
+  browser = (sp_toplistbrowse *)registry_find(toplistbrowse_link);
+  if (browser && callback)
+    callback(browser, userdata);
+
+  return browser;
 }
