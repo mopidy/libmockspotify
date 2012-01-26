@@ -3,6 +3,7 @@ include_HEADERS = libmockspotify.h
 
 AM_CFLAGS = -Wall
 
+libmockspotify_la_LDFLAGS = -version-info 0:1:0
 libmockspotify_la_SOURCES = album.c 		\
 			    albumbrowse.c	\
 			    artist.c		\
