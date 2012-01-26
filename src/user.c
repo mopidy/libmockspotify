@@ -1,48 +1,20 @@
-#include <stdlib.h>
-#include <string.h>
 #include "libmockspotify.h"
-
-/*** MockSpotify API ***/
+#include "util.h"
 
 sp_user *
-mocksp_user_create(char *canonical_name, char *display_name, bool loaded)
+mocksp_user_create(const char *canonical_name, const char *display_name, bool is_loaded)
 {
-    sp_user *user;
+    sp_user *user = ALLOC(sp_user);
 
-    user = malloc(sizeof(sp_user));
-    user->canonical_name = canonical_name;
-    user->display_name = display_name;
-    user->loaded = loaded;
+    user->canonical_name = strclone(canonical_name);
+    user->display_name   = strclone(display_name);
+    user->is_loaded      = is_loaded;
 
     return user;
 }
 
-/*** Spotify API ***/
+DEFINE_REFCOUNTERS_FOR(user);
 
-void
-sp_user_add_ref(sp_user *user)
-{
-}
-
-void
-sp_user_release(sp_user *user)
-{
-}
-
-bool
-sp_user_is_loaded(sp_user *user)
-{
-    return user->loaded;
-}
-
-const char *
-sp_user_canonical_name(sp_user *user)
-{
-    return user->canonical_name;
-}
-
-const char *
-sp_user_display_name(sp_user *user)
-{
-    return user->display_name;
-}
+DEFINE_READER(user, canonical_name, const char *);
+DEFINE_READER(user, display_name, const char *);
+DEFINE_READER(user, is_loaded, bool);

@@ -32,6 +32,9 @@ v0.1 (in development)
 - Synced with pyspotify's mock of libspotify. libmockspotify is now compatible
   with libspotify 10.
 
+- Merged the fork from Burgestrand/libmockspotify.
+
+- Added event handling.
 
 License
 =======

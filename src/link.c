@@ -1,46 +1,7 @@
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 #include "libmockspotify.h"
 #include "util.h"
 
-/*** Spotify API ***/
-void
-sp_link_add_ref(sp_link *link)
-{
-}
-
-void
-sp_link_release(sp_link *link)
-{
-}
-
-sp_link *
-sp_link_create_from_string(const char *link)
-{
-  /* unless the link starts with spotify: it is invalid */
-  if ( ! STARTS_WITH(link, "spotify:"))
-  {
-    return NULL;
-  }
-
-  sp_link *lnk = ALLOC(sp_link);
-  strncpy(lnk->data, link, 1024);
-  return lnk;
-}
-
-int
-sp_link_as_string(sp_link *link, char *buffer, int buffer_size)
-{
-  strncpy(buffer, link->data, buffer_size);
-
-  if (buffer_size > 0)
-  {
-    buffer[buffer_size - 1] = '\0';
-  }
-
-  return strlen(link->data);
-}
+DEFINE_REFCOUNTERS_FOR(link);
 
 sp_linktype
 sp_link_type(sp_link *link)
@@ -52,6 +13,7 @@ sp_link_type(sp_link *link)
   LINK_CASE_FOR(track,  TRACK);
   LINK_CASE_FOR(album,  ALBUM);
   LINK_CASE_FOR(artist, ARTIST);
+  LINK_CASE_FOR(image,  IMAGE);
 
   // Order of these three is significant
   LINK_CASE_FOR(playlist, PLAYLIST);
@@ -61,83 +23,176 @@ sp_link_type(sp_link *link)
   return SP_LINKTYPE_INVALID;
 }
 
-sp_track *
-sp_link_as_track(sp_link *link)
-{
-    if (strncmp(link->data, "spotify:track:", strlen("spotify:track:")))
-        return NULL;
-    sp_track *t = malloc(sizeof(sp_track));
+/* * * * * * * * * * * * * * * * *
+ *                               *
+ * Below: sp_link_create_from_X  *
+ *                               *
+ * * * * * * * * * * * * * * * * */
 
-    memset(t, 0, sizeof(sp_track));
-    return mocksp_track_create(link->data + strlen("spotify:track:"), 0, NULL, NULL, 0,
-                       0, 0, 0, 0, 1);
-    return t;
+sp_link *
+sp_link_create_from_string(const char *link)
+{
+  /* unless the link starts with spotify: it is invalid */
+  if (!link || !STARTS_WITH(link, "spotify:"))
+  {
+    return NULL;
+  }
+  else
+  {
+    sp_link *lnk = ALLOC(sp_link);
+    lnk->data    = strclone(link);
+    return lnk;
+  }
 }
 
-sp_artist *
-sp_link_as_artist(sp_link *link)
+sp_link *
+sp_link_create_from_user(sp_user *user)
 {
-    if (strncmp(link->data, "spotify:artist:", strlen("spotify:artist:")))
-        return NULL;
-    return mocksp_artist_create(link->data + strlen("spotify:artist:"), 1);
+  sp_link *link = ALLOC(sp_link);
+  link->data    = ALLOC_STR(strlen("spotify:user:") + strlen(user->canonical_name));
+  sprintf(link->data, "spotify:user:%s", user->canonical_name);
+  return link;
 }
 
-sp_album *
-sp_link_as_album(sp_link *link)
+sp_link *
+sp_link_create_from_image(sp_image *image)
 {
-    if (strncmp(link->data, "spotify:album:", strlen("spotify:album:")))
-        return NULL;
-    return mocksp_album_create(link->data + strlen("spotify:album:"),
-                       mocksp_artist_create("mock", 1), 1901, (byte *) "",
-                       SP_ALBUMTYPE_ALBUM, 1, 1);
+  sp_link *link = ALLOC(sp_link);
+  link->data = image_id_to_uri(image->image_id);
+  return link;
 }
 
 sp_link *
 sp_link_create_from_track(sp_track *track, int offset)
 {
-    sp_link *l = malloc(sizeof(sp_link));
+  const char *link = registry_reverse_find((void *) track);
+  int mins = 0, secs = 0;
+  char *link_with_offset = NULL;
 
-    memset(l, 0, sizeof(sp_link));
-    sprintf(l->data, "spotify:track:%s/%d", track->name, offset);
-    return l;
+  if (offset > 0)
+  {
+    link_with_offset = ALLOC_STR(strlen(link) + strlen("#00:00"));
+
+    offset = offset / 1000;
+    mins = (offset / 60) % 60;
+    secs = (offset - mins * 60) % 60;
+
+    sprintf(link_with_offset, "%s", link);
+    sprintf(link_with_offset + strlen(link), "#%02d:%02d", mins, secs);
+    return sp_link_create_from_string(link_with_offset);
+  }
+  else
+  {
+    return sp_link_create_from_string(link);
+  }
 }
 
 sp_link *
 sp_link_create_from_album(sp_album *album)
 {
-    sp_link *l = malloc(sizeof(sp_link));
+  const char *link = registry_reverse_find((void *) album);
+  return sp_link_create_from_string(link);
+}
 
-    memset(l, 0, sizeof(sp_link));
-    sprintf(l->data, "spotify:album:%s", album->name);
-    return l;
+sp_link *
+sp_link_create_from_album_cover(sp_album *album)
+{
+  sp_link *link = ALLOC(sp_link);
+  const byte *image_id = sp_album_cover(album);
+  link->data = image_id_to_uri(image_id);
+  return link;
 }
 
 sp_link *
 sp_link_create_from_playlist(sp_playlist *playlist)
 {
-    sp_link *l = malloc(sizeof(sp_link));
-
-    memset(l, 0, sizeof(sp_link));
-    sprintf(l->data, "spotify:playlist:%s", playlist->name);
-    return l;
+  const char *link = registry_reverse_find((void *) playlist);
+  return sp_link_create_from_string(link);
 }
 
 sp_link *
 sp_link_create_from_artist(sp_artist *artist)
 {
-    sp_link *l = malloc(sizeof(sp_link));
-
-    memset(l, 0, sizeof(sp_link));
-    sprintf(l->data, "spotify:artist:%s", artist->name);
-    return l;
+  const char *link = registry_reverse_find((void *) artist);
+  return sp_link_create_from_string(link);
 }
 
 sp_link *
-sp_link_create_from_search(sp_search *s)
+sp_link_create_from_artist_portrait(sp_artist *artist)
 {
-    sp_link *l = malloc(sizeof(sp_link));
+  sp_link *link = ALLOC(sp_link);
+  const byte *image_id = sp_artist_portrait(artist);
+  link->data = image_id_to_uri(image_id);
+  return link;
+}
 
-    memset(l, 0, sizeof(sp_link));
-    sprintf(l->data, "spotify:search:%s", s->query);
-    return l;
+sp_link *
+sp_link_create_from_artistbrowse_portrait(sp_artistbrowse *artistbrowse, int index)
+{
+  sp_link *link = ALLOC(sp_link);
+  const byte *image_id = sp_artistbrowse_portrait(artistbrowse, index);
+  link->data = image_id_to_uri(image_id);
+  return link;
+}
+
+sp_link *
+sp_link_create_from_search(sp_search *search)
+{
+  char *uri = ALLOC_STR(strlen("spotify:search:") + strlen(search->query));
+  sprintf(uri, "spotify:search:%s", search->query);
+  return sp_link_create_from_string(uri);
+}
+
+/* * * * * * * * * * * *
+ *                     *
+ * Below: sp_link_as_X *
+ *                     *
+ * * * * * * * * * * * */
+
+int
+sp_link_as_string(sp_link *link, char *buffer, int buffer_size)
+{
+  strncpy(buffer, link->data, buffer_size);
+
+  if (buffer_size > 0)
+  {
+    buffer[buffer_size - 1] = '\0';
+  }
+
+  return (int) strlen(link->data);
+}
+
+#define SP_LINK_AS(type) \
+  sp_##type * sp_link_as_##type(sp_link *link)      \
+  {                                                 \
+    return (sp_##type *) registry_find(link->data); \
+  }
+
+SP_LINK_AS(user);
+SP_LINK_AS(artist);
+SP_LINK_AS(album);
+SP_LINK_AS(track);
+
+sp_track *
+sp_link_as_track_and_offset(sp_link *link, int *offset)
+{
+  /* parse the offset */
+  int mins = 0, secs = 0;
+  char *optr = NULL;
+
+  sp_link *my_link = ALLOC(sp_link);
+  my_link->data = strclone(link->data);
+
+  if (optr = strchr(my_link->data, '#'))
+  {
+    sscanf(optr, "#%2u:%2u", &mins, &secs);
+    *offset = (mins * 60 + secs) * 1000;
+    *optr   = '\0';
+  }
+  else
+  {
+    *offset = 0;
+  }
+
+  return sp_link_as_track(my_link);
 }
