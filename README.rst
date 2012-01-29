@@ -26,6 +26,22 @@ Installation
     $ sudo make install
 
 
+License
+=======
+
+libmockspotify is licensed under the Apache License, Version 2.0. A full copy
+of the license may be found in the ``LICENSE`` file bundled with the software.
+
+
+Authors
+=======
+
+A list of contributors to libmockspotify from the point where
+the project was extracted from pyspotify is available at:
+
+https://github.com/mopidy/libmockspotify/contributors
+
+
 Changes
 =======
 
@@ -38,10 +54,3 @@ v0.1 (in development)
 - Merged the fork from Burgestrand/libmockspotify.
 
 - Added event handling.
-
-
-License
-=======
-
-libmockspotify is licensed under the Apache License, Version 2.0. A full copy
-of the license may be found in the ``LICENSE`` file bundled with the software.
