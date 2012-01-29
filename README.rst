@@ -45,8 +45,8 @@ https://github.com/mopidy/libmockspotify/contributors
 Changes
 =======
 
-v0.1 (in development)
----------------------
+v0.1 (2012-01-29)
+-----------------
 
 - Synced with pyspotify's mock of libspotify. libmockspotify is now compatible
   with libspotify 10.
