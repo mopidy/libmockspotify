@@ -4,12 +4,15 @@ libmockspotify
 
 A mock of libspotify for use in development of language bindings.
 
-This project was started in July 2011 with the goal of splitting out
-pyspotify's mock of libspotify, so that it could be reused by the developers of
-the Node.js and Ruby bindings for libspotify.
+This project was split out of `pyspotify <http://pyspotify.mopidy.com/>`_, so
+that it could be reused by the developers of other language bindings for
+libspotify, such as the Node.js and Ruby bindings.
 
-Coordination of the development efforts happens on GitHub and #spotify on
-Freenode.
+Coordination of the development efforts takes place on
+`GitHub <https://github.com/mopidy/libmockspotify>`_.
+
+A Debian package of libmockspotify is available from
+`Mopidy's APT archive <http://apt.mopidy.com/>`_.
 
 
 Installation
@@ -35,6 +38,7 @@ v0.1 (in development)
 - Merged the fork from Burgestrand/libmockspotify.
 
 - Added event handling.
+
 
 License
 =======
