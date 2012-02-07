@@ -51,21 +51,21 @@ sp_toplistbrowse *
 sp_toplistbrowse_create(sp_session *UNUSED(session), sp_toplisttype type, sp_toplistregion region, const char *username, toplistbrowse_complete_cb *UNUSED(callback), void *UNUSED(userdata))
 {
   char *toplistbrowse_link;
+  const char *str_types[3] = {"artists", "albums", "tracks"};
+  const char *real_type = str_types[type];
 
   if (region == SP_TOPLIST_REGION_USER)
   {
     const char *user = username == NULL ? "current" : username;
-    toplistbrowse_link = ALLOC_STR(strlen("spotify:toplist:user:") + strlen(user));
-    sprintf(toplistbrowse_link, "spotify:toplist:user:%s", user);
+    toplistbrowse_link = ALLOC_STR(strlen("spotify:toplist:user::") + strlen(user) + strlen(real_type));
+    sprintf(toplistbrowse_link, "spotify:toplist:user:%s:%s", user, real_type);
   }
   else // everywhere or by a country
   {
-    const char *str_types[3] = {"artists", "albums", "tracks"};
-    const char *real_type = str_types[type];
     const char *real_region = region == SP_TOPLIST_REGION_EVERYWHERE ? "everywhere" : unregion(region);
 
     // longest possible string: artists everywhere
-    toplistbrowse_link = ALLOC_STR(strlen("spotify:toplist:artists:everywhere"));
+    toplistbrowse_link = ALLOC_STR(strlen("spotify:toplist::") + strlen(real_type) + strlen(real_region));
     sprintf(toplistbrowse_link, "spotify:toplist:%s:%s", real_type, real_region);
   }
 
