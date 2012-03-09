@@ -60,9 +60,14 @@ sp_search_create(sp_session *UNUSED(session), const char *query,
                  int UNUSED(artists_offset), int UNUSED(artists),
                  search_complete_cb *UNUSED(cb), void *UNUSED(userdata))
 {
-  char *searchquery = ALLOC_STR(strlen("spotify:search:") + strlen(query));
-  sprintf(searchquery, "spotify:search:%s", query);
-  return (sp_search *)registry_find(searchquery);
+  sp_link   *link;
+  sp_search *search;
+
+  search = ALLOC(sp_search);
+  search->query = strclone(query);
+  link   = sp_link_create_from_search(search);
+
+  return (sp_search *)registry_find(link->data);
 }
 
 sp_search *

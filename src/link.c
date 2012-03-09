@@ -1,4 +1,5 @@
 #include "libmockspotify.h"
+#include "urlcode.h"
 
 DEFINE_REFCOUNTERS_FOR(link);
 
@@ -137,8 +138,9 @@ sp_link_create_from_artistbrowse_portrait(sp_artistbrowse *artistbrowse, int ind
 sp_link *
 sp_link_create_from_search(sp_search *search)
 {
-  char *uri = ALLOC_STR(strlen("spotify:search:") + strlen(search->query));
-  sprintf(uri, "spotify:search:%s", search->query);
+  char *uri_encoded = url_encode(search->query);
+  char *uri = ALLOC_STR(strlen("spotify:search:") + strlen(uri_encoded));
+  sprintf(uri, "spotify:search:%s", uri_encoded);
   return sp_link_create_from_string(uri);
 }
 
