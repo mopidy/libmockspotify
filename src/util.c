@@ -8,6 +8,15 @@ xmalloc(size_t size)
   return ptr;
 }
 
+void
+xfree(void *ptr)
+{
+  if (ptr)
+  {
+    free(ptr);
+  }
+}
+
 int
 htoi(char n)
 {

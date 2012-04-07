@@ -5,6 +5,7 @@ mocksp_search_create(sp_error error, const char *query, const char *did_you_mean
                      int total_tracks, int num_tracks, const sp_track **tracks,
                      int total_albums, int num_albums, const sp_album **albums,
                      int total_artists, int num_artists, const sp_artist **artists,
+                     int total_playlists, int num_playlists, const sp_playlist **playlists,
                      search_complete_cb *callback, void *userdata)
 {
   sp_search *search = ALLOC(sp_search);
@@ -16,18 +17,22 @@ mocksp_search_create(sp_error error, const char *query, const char *did_you_mean
   search->total_tracks  = total_tracks;
   search->total_artists = total_artists;
   search->total_albums  = total_albums;
+  search->total_playlists = total_playlists;
 
   search->num_tracks  = num_tracks;
   search->num_artists = num_artists;
   search->num_albums  = num_albums;
+  search->num_playlists = num_playlists;
 
   search->tracks  = ALLOC_N(sp_track *, num_tracks);
   search->artists = ALLOC_N(sp_artist *, num_artists);
   search->albums  = ALLOC_N(sp_album *, num_artists);
+  search->playlists = ALLOC_N(sp_playlist *, num_playlists);
 
   MEMCPY_N(search->tracks, tracks, sp_track *, num_tracks);
   MEMCPY_N(search->artists, artists, sp_artist *, num_artists);
   MEMCPY_N(search->albums, albums, sp_album *, num_albums);
+  MEMCPY_N(search->playlists, playlists, sp_playlist *, num_playlists);
 
   search->callback = callback;
   search->userdata = userdata;
@@ -58,6 +63,8 @@ sp_search_create(sp_session *UNUSED(session), const char *query,
                  int UNUSED(tracks_offset), int UNUSED(tracks),
                  int UNUSED(albums_offset), int UNUSED(albums),
                  int UNUSED(artists_offset), int UNUSED(artists),
+                 int UNUSED(playlist_offset), int UNUSED(playlists),
+                 sp_search_type type,
                  search_complete_cb *UNUSED(cb), void *UNUSED(userdata))
 {
   sp_link   *link;
@@ -65,20 +72,10 @@ sp_search_create(sp_session *UNUSED(session), const char *query,
 
   search = ALLOC(sp_search);
   search->query = strclone(query);
-  link   = sp_link_create_from_search(search);
+  search->type  = type;
+  link = sp_link_create_from_search(search);
 
   return (sp_search *)registry_find(link->data);
-}
-
-sp_search *
-sp_radio_search_create(sp_session *UNUSED(session),
-                       unsigned int from_year, unsigned int to_year,
-                       sp_radio_genre genres,
-                       search_complete_cb *UNUSED(callback), void *UNUSED(userdata))
-{
-  char *searchquery = ALLOC_STR(strlen("spotify:radio:deadbeef:1990-2011"));
-  sprintf(searchquery, "spotify:radio:%08x:%04d-%04d", genres, from_year, to_year);
-  return (sp_search *)registry_find(searchquery);
 }
 
 bool

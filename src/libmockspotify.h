@@ -188,8 +188,13 @@ struct sp_search
   int num_albums;
   sp_album **albums;
 
+  int total_playlists;
+  int num_playlists;
+  sp_playlist **playlists;
+
   char *query;
   char *did_you_mean;
+  sp_search_type type;
 
   int error;
 
@@ -309,7 +314,7 @@ sp_toplistbrowse *
 mocksp_toplistbrowse_create(sp_error, int, int, sp_artist **, int, sp_album **, int, sp_track **, toplistbrowse_complete_cb *, void *);
 
 sp_search *
-mocksp_search_create(sp_error, const char *, const char *, int, int, const sp_track **, int, int, const sp_album **, int, int, const sp_artist **, search_complete_cb *, void *);
+mocksp_search_create(sp_error, const char *, const char *, int, int, const sp_track **, int, int, const sp_album **, int, int, const sp_artist **, int, int, const sp_playlist **, search_complete_cb *, void *);
 
 /* custom accessors for testing libmockspotify state */
 bool

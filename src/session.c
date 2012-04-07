@@ -109,7 +109,7 @@ sp_session_process_events(sp_session *UNUSED(session), int *next_timeout)
 }
 
 void
-sp_session_login(sp_session *session, const char *username, const char *UNUSED(password), bool remember_me)
+sp_session_login(sp_session *session, const char *username, const char *UNUSED(password), bool remember_me, const char *UNUSED(blob))
 {
   session->user = mocksp_user_create(username, username, true);
   session->connectionstate = SP_CONNECTION_STATE_LOGGED_IN;
@@ -128,7 +128,7 @@ sp_session_relogin(sp_session *session)
     return SP_ERROR_NO_CREDENTIALS;
   }
 
-  sp_session_login(session, session->username, "", true);
+  sp_session_login(session, session->username, NULL, true, NULL);
   return SP_ERROR_OK;
 }
 
@@ -160,6 +160,12 @@ void
 sp_session_logout(sp_session *session)
 {
   session->connectionstate = SP_CONNECTION_STATE_LOGGED_OUT;
+}
+
+void
+sp_session_flush_caches(sp_session *session)
+{
+  // no op
 }
 
 sp_user *
