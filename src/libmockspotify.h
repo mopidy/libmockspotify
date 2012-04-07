@@ -159,6 +159,9 @@ struct sp_playlistcontainer_playlist
   sp_playlist_type type;
   char * folder_name;
   sp_uint64 folder_id;
+
+  int num_seen_tracks;
+  sp_track **seen_tracks;
 };
 typedef struct sp_playlistcontainer_playlist sp_playlistcontainer_playlist_t;
 
