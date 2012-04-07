@@ -97,6 +97,8 @@ struct sp_artistbrowse
   sp_album **albums;
   int num_similar_artists;
   sp_artist **similar_artists;
+  int num_tophit_tracks;
+  sp_track **tophit_tracks;
   char *biography;
   sp_artistbrowse_type type;
 
@@ -283,7 +285,7 @@ sp_artist *
 mocksp_artist_create(const char *, const byte *, bool);
 
 sp_artistbrowse *
-mocksp_artistbrowse_create(sp_error, int, sp_artist *, int, const byte **, int, sp_track **, int, sp_album **, int, sp_artist **, const char *, sp_artistbrowse_type, artistbrowse_complete_cb *, void *);
+mocksp_artistbrowse_create(sp_error, int, sp_artist *, int, const byte **, int, sp_track **, int, sp_album **, int, sp_artist **, int, sp_track **, const char *, sp_artistbrowse_type, artistbrowse_complete_cb *, void *);
 
 sp_playlist *
 mocksp_playlist_create(const char *, bool, sp_user *, bool, const char *, const byte *, bool, unsigned int, sp_subscribers *, bool, sp_playlist_offline_status, int, int, sp_playlist_track_t *);
