@@ -220,6 +220,8 @@ struct sp_track
   bool is_local;
   bool is_autolinked;
 
+  sp_track *get_playable;
+
   sp_track_availability availability;
   sp_track_offline_status offline_status;
 };
@@ -302,7 +304,7 @@ sp_playlistcontainer *
 mocksp_playlistcontainer_create(sp_user *, bool, int, sp_playlistcontainer_playlist_t *, sp_playlistcontainer_callbacks *, void *);
 
 sp_track *
-mocksp_track_create(const char *, int, sp_artist **, sp_album *, int, int, int, int, sp_error, bool, sp_track_availability, sp_track_offline_status, bool, bool, bool, bool);
+mocksp_track_create(const char *, int, sp_artist **, sp_album *, int, int, int, int, sp_error, bool, sp_track_availability, sp_track_offline_status, bool, bool, sp_track *, bool, bool);
 
 sp_user *
 mocksp_user_create(const char *, const char *, bool);

@@ -4,10 +4,15 @@ sp_track *
 mocksp_track_create(const char *name, int num_artists, sp_artist **artists, sp_album *album,
                     int duration, int popularity, int disc, int index, sp_error error,
                     bool is_loaded, sp_track_availability availability, sp_track_offline_status status,
-                    bool is_local, bool is_autolinked,
+                    bool is_local, bool is_autolinked, sp_track *playable,
                     bool is_starred, bool is_placeholder)
 {
   sp_track *track = ALLOC(sp_track);
+
+  if ( ! playable)
+  {
+    playable = track;
+  }
 
   track->name          = strclone(name);
   track->album         = album;
@@ -21,6 +26,7 @@ mocksp_track_create(const char *name, int num_artists, sp_artist **artists, sp_a
   track->offline_status = status;
   track->is_local      = is_local;
   track->is_autolinked = is_autolinked;
+  track->get_playable  = playable;
   track->is_starred    = is_starred;
   track->is_placeholder = is_placeholder;
 
@@ -41,6 +47,7 @@ DEFINE_READER(track, index, int);
 DEFINE_READER(track, error, sp_error);
 DEFINE_READER(track, is_loaded, bool);
 DEFINE_READER(track, is_placeholder, bool);
+DEFINE_SESSION_READER(track, get_playable, sp_track *);
 DEFINE_SESSION_READER(track, is_local, bool);
 DEFINE_SESSION_READER(track, is_autolinked, bool);
 DEFINE_SESSION_READER(track, is_starred, bool);
@@ -64,7 +71,7 @@ sp_localtrack_create(const char *artist, const char *title, const char *album, i
     palbum  = mocksp_album_create(album, partist, 2011, NULL, SP_ALBUMTYPE_UNKNOWN, 1, 1);
   }
 
-  return mocksp_track_create(title, 1, &partist, palbum, length, 0, 0, 0, SP_ERROR_OK, SP_TRACK_OFFLINE_DONE, true, true, true, false, false, false);
+  return mocksp_track_create(title, 1, &partist, palbum, length, 0, 0, 0, SP_ERROR_OK, true, SP_TRACK_AVAILABILITY_AVAILABLE, SP_TRACK_OFFLINE_DONE, true, false, NULL, false, false);
 }
 
 void
