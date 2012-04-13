@@ -19,8 +19,13 @@ mocksp_session_create(const sp_session_config *config, sp_connectionstate connec
   session->connectionstate = connectionstate;
 
   session->offline_time_left = offline_time_left;
-  session->offline_sync_status = ALLOC(sp_offline_sync_status);
-  MEMCPY(session->offline_sync_status, sync_status, sp_offline_sync_status);
+
+  if (sync_status)
+  {
+    session->offline_sync_status = ALLOC(sp_offline_sync_status);
+    MEMCPY(session->offline_sync_status, sync_status, sp_offline_sync_status);
+  }
+
   session->offline_num_playlists = offline_num_playlists;
   session->offline_tracks_to_sync = offline_tracks_to_sync;
 
@@ -212,8 +217,13 @@ sp_session_preferred_offline_bitrate(sp_session *UNUSED(session), sp_bitrate UNU
 bool
 sp_offline_sync_get_status(sp_session *session, sp_offline_sync_status *status)
 {
-  MEMCPY(status, session->offline_sync_status, sp_offline_sync_status);
-  return true;
+  if (session->offline_sync_status)
+  {
+    MEMCPY(status, session->offline_sync_status, sp_offline_sync_status);
+    return true;
+  }
+
+  return false;
 }
 
 int sp_offline_time_left(sp_session *x) { return x->offline_time_left; }
