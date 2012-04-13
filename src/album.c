@@ -15,6 +15,7 @@ mocksp_album_create(const char *name, sp_artist *artist, int year, const byte *c
 
   if (cover)
   {
+    album->cover = ALLOC_N(byte, 20);
     MEMCPY_N(album->cover, cover, byte, 20);
   }
 

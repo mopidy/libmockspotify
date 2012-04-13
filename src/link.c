@@ -97,8 +97,15 @@ sp_link_create_from_album(sp_album *album)
 sp_link *
 sp_link_create_from_album_cover(sp_album *album)
 {
-  sp_link *link = ALLOC(sp_link);
   const byte *image_id = sp_album_cover(album);
+  sp_link *link;
+
+  if ( ! image_id)
+  {
+    return NULL;
+  }
+
+  link = ALLOC(sp_link);
   link->data = image_id_to_uri(image_id);
   return link;
 }

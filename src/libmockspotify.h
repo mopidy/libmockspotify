@@ -51,7 +51,7 @@ struct sp_album
   char *name;
   sp_artist *artist;
   int year;
-  byte cover[20];
+  byte *cover;
   int type;
   bool is_loaded;
   bool is_available;
