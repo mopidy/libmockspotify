@@ -5,11 +5,16 @@ sp_image*
 mocksp_image_create(const byte image_id[20], sp_imageformat format, size_t data_size, const byte *data, sp_error error)
 {
   sp_image *image = ALLOC(sp_image);
-  memcpy(image->image_id, image_id, 20);
+  MEMCPY_N(image->image_id, image_id, byte, 20);
   image->format = format;
   image->data_size = data_size;
-  image->data = ALLOC_N(byte, data_size + 1);
-  memcpy(image->data, data, data_size);
+
+  if (data)
+  {
+    image->data = ALLOC_N(byte, data_size);
+    MEMCPY_N(image->data, data, byte, data_size);
+  }
+
   image->error = error;
   return image;
 }
