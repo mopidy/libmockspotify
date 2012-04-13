@@ -136,7 +136,7 @@ struct sp_playlist
   sp_user *owner;
   bool is_collaborative;
   char *get_description;
-  byte image[20];
+  byte *image;
   bool has_pending_changes;
   int num_subscribers;
   sp_subscribers *subscribers;
