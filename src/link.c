@@ -57,9 +57,7 @@ sp_link_create_from_user(sp_user *user)
 sp_link *
 sp_link_create_from_image(sp_image *image)
 {
-  sp_link *link = ALLOC(sp_link);
-  link->data = image_id_to_uri(image->image_id);
-  return link;
+  return sp_link_create_from_string(image_id_to_uri(image->image_id));
 }
 
 sp_link *
@@ -105,9 +103,7 @@ sp_link_create_from_album_cover(sp_album *album)
     return NULL;
   }
 
-  link = ALLOC(sp_link);
-  link->data = image_id_to_uri(image_id);
-  return link;
+  return sp_link_create_from_string(image_id_to_uri(image_id));
 }
 
 sp_link *
@@ -127,19 +123,28 @@ sp_link_create_from_artist(sp_artist *artist)
 sp_link *
 sp_link_create_from_artist_portrait(sp_artist *artist)
 {
-  sp_link *link = ALLOC(sp_link);
   const byte *image_id = sp_artist_portrait(artist);
-  link->data = image_id_to_uri(image_id);
-  return link;
+  sp_link *link;
+
+  if ( ! image_id)
+  {
+    return NULL;
+  }
+
+  return sp_link_create_from_string(image_id_to_uri(image_id));
 }
 
 sp_link *
 sp_link_create_from_artistbrowse_portrait(sp_artistbrowse *artistbrowse, int index)
 {
-  sp_link *link = ALLOC(sp_link);
   const byte *image_id = sp_artistbrowse_portrait(artistbrowse, index);
-  link->data = image_id_to_uri(image_id);
-  return link;
+
+  if ( ! image_id)
+  {
+    return NULL;
+  }
+
+  return sp_link_create_from_string(image_id_to_uri(image_id));
 }
 
 sp_link *

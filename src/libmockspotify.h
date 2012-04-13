@@ -81,7 +81,7 @@ struct sp_artist
 {
   char *name;
   int is_loaded;
-  byte portrait[20];
+  byte *portrait;
 };
 
 struct sp_artistbrowse
