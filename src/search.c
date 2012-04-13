@@ -12,7 +12,11 @@ mocksp_search_create(sp_error error, const char *query, const char *did_you_mean
 
   search->error = error;
   search->query = strclone(query);
-  search->did_you_mean = strclone(did_you_mean);
+
+  if (did_you_mean)
+  {
+    search->did_you_mean = strclone(did_you_mean);
+  }
 
   search->total_tracks  = total_tracks;
   search->total_artists = total_artists;
