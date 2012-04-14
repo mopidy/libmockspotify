@@ -26,6 +26,7 @@
 #define UNUSED(x) UNUSED_ ## x __attribute__((unused))
 
 void *xmalloc(size_t);
+void xfree(void *);
 char *hextoa(const char *, int);
 void atohex(char *, const byte *, int);
 char *strclone(const char *string);

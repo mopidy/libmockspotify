@@ -10,6 +10,7 @@ mocksp_artist_create(const char *name, const byte* portrait, bool is_loaded)
 
   if (portrait)
   {
+    artist->portrait = ALLOC_N(byte, 20);
     MEMCPY_N(artist->portrait, portrait, byte, 20);
   }
 
