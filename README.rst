@@ -45,8 +45,29 @@ https://github.com/mopidy/libmockspotify/contributors
 Changes
 =======
 
+v0.2 (in development)
+---------------------
+
+Supports libspotify 11.
+
+- Merged Burgestrand's work:
+
+  - Have toplistbrowse_create lookup spotify:toplist:user:<username>:<type>
+  - Add quick and dirty urlencoding/decoding to Search links
+  - Add artist top tracks to artistbrowse
+  - Add track_get_playable
+  - Add playlistcontainer unseen/seen tracks
+  - Fix playlists with no images
+  - Make it possible to have albums with no cover link at all
+  - Fix link creation from objects
+  - Allow image to be allocated with no data
+  - Make search_did_you_mean optional
+  - Fix session offline sync status getter
+
 v0.1 (2012-01-29)
 -----------------
+
+Supports libspotify 10.
 
 - Synced with pyspotify's mock of libspotify. libmockspotify is now compatible
   with libspotify 10.

@@ -7,6 +7,9 @@ mocksp_playlistcontainer_insert(sp_playlistcontainer *, int, sp_playlistcontaine
 static sp_error
 mocksp_playlistcontainer_remove(sp_playlistcontainer *pc, int index);
 
+static sp_playlistcontainer_playlist_t *
+mocksp_playlistcontainer_find_playlist(sp_playlistcontainer *, sp_playlist *);
+
 sp_playlistcontainer *
 mocksp_playlistcontainer_create(sp_user *owner, bool loaded,
                                 int num_playlists, sp_playlistcontainer_playlist_t *playlists,
@@ -220,7 +223,95 @@ sp_playlistcontainer_move_playlist(sp_playlistcontainer *pc, int from, int to, b
   return error;
 }
 
+int
+sp_playlistcontainer_get_unseen_tracks(sp_playlistcontainer *pc, sp_playlist *_playlist, sp_track **tracks, int num_tracks)
+{
+  sp_playlistcontainer_playlist_t *playlist = mocksp_playlistcontainer_find_playlist(pc, _playlist);
+  bool seen = false;
+  int unseen_count = 0, i = 0, j = 0;
+
+  if ( ! playlist)
+  {
+    return -1;
+  }
+
+  for (i = 0; i < sp_playlist_num_tracks(_playlist); ++i)
+  {
+    sp_track *track = sp_playlist_track(_playlist, i);
+    seen = false;
+
+    if ( ! track)
+    {
+      continue;
+    }
+
+    for (j = 0; j < playlist->num_seen_tracks; ++j)
+    {
+      if (playlist->seen_tracks[j] == track)
+      {
+        seen = true;
+      }
+    }
+
+    if ( ! seen)
+    {
+      if (unseen_count < num_tracks)
+      {
+        tracks[unseen_count] = track;
+      }
+
+      unseen_count += 1;
+    }
+  }
+
+  return unseen_count;
+}
+
+int
+sp_playlistcontainer_clear_unseen_tracks(sp_playlistcontainer *pc, sp_playlist *_playlist)
+{
+  sp_playlistcontainer_playlist_t *playlist = mocksp_playlistcontainer_find_playlist(pc, _playlist);
+  int i = 0;
+
+  if ( ! playlist)
+  {
+    return -1;
+  }
+
+  playlist->num_seen_tracks = 0;
+  xfree(playlist->seen_tracks);
+
+  playlist->num_seen_tracks = sp_playlist_num_tracks(_playlist);
+  playlist->seen_tracks = ALLOC_N(sp_track *, playlist->num_seen_tracks);
+
+  for (i = 0; i < playlist->num_seen_tracks; ++i)
+  {
+    playlist->seen_tracks[i] = sp_playlist_track(_playlist, i);
+  }
+
+  return 0;
+}
+
 /* UTILITY */
+static sp_playlistcontainer_playlist_t *
+mocksp_playlistcontainer_find_playlist(sp_playlistcontainer *pc, sp_playlist *_playlist)
+{
+  sp_playlistcontainer_playlist_t *playlist = NULL;
+  sp_playlist *tmp = NULL;
+  int i;
+
+  for (i = 0; i < sp_playlistcontainer_num_playlists(pc); ++i)
+  {
+    tmp = sp_playlistcontainer_playlist(pc, i);
+    if (tmp != NULL && _playlist == tmp)
+    {
+      *playlist = pc->playlists[i];
+    }
+  }
+
+  return playlist;
+}
+
 static sp_error
 mocksp_playlistcontainer_insert(sp_playlistcontainer *pc, int index, sp_playlistcontainer_playlist_t playlist)
 {
