@@ -22,4 +22,5 @@ libmockspotify_la_SOURCES = albumbrowse.c	\
 			    toplistbrowse.c	\
 			    track.c		\
 			    user.c		\
+			    urlcode.c		\
 			    util.c

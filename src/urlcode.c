@@ -1,8 +1,9 @@
-#include "urlcode.h"
-#include "libmockspotify.h"
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include "libmockspotify.h"
+#include "urlcode.h"
+#include "util.h"
 
 /*
  * Used from http://www.geekhideout.com/urlcode.shtml at 3rd of March, 2011.
