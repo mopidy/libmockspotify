@@ -45,8 +45,8 @@ https://github.com/mopidy/libmockspotify/contributors
 Changes
 =======
 
-v0.2 (in development)
----------------------
+v0.2 (2012-04-21)
+-----------------
 
 Supports libspotify 11.
 
