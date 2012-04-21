@@ -12,11 +12,11 @@ mocksp_event_playlist(event_type event, sp_playlist *p)
     sp_user *user = mocksp_user_create("foo", "", 0);
     sp_track *tracks[3] = {
         mocksp_track_create("foo", 1, &artist, album,
-                            0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0),
+                            0, 0, 0, 0, 0, 1, 0, 0, 0, 0, NULL, 0, 0),
         mocksp_track_create("bar", 1, &artist, album,
-                            0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0),
+                            0, 0, 0, 0, 0, 1, 0, 0, 0, 0, NULL, 0, 0),
         mocksp_track_create("baz", 1, &artist, album,
-                            0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0),
+                            0, 0, 0, 0, 0, 1, 0, 0, 0, 0, NULL, 0, 0),
     };
     int nums[3] = { 0, 1, 2 };
 

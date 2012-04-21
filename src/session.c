@@ -20,8 +20,13 @@ mocksp_session_create(const sp_session_config *config, sp_connectionstate connec
   session->connectionstate = connectionstate;
 
   session->offline_time_left = offline_time_left;
-  session->offline_sync_status = ALLOC(sp_offline_sync_status);
-  MEMCPY(session->offline_sync_status, sync_status, sp_offline_sync_status);
+
+  if (sync_status)
+  {
+    session->offline_sync_status = ALLOC(sp_offline_sync_status);
+    MEMCPY(session->offline_sync_status, sync_status, sp_offline_sync_status);
+  }
+
   session->offline_num_playlists = offline_num_playlists;
   session->offline_tracks_to_sync = offline_tracks_to_sync;
 
@@ -109,7 +114,7 @@ sp_session_process_events(sp_session *UNUSED(session), int *next_timeout)
 }
 
 void
-sp_session_login(sp_session *session, const char *username, const char *UNUSED(password), bool remember_me)
+sp_session_login(sp_session *session, const char *username, const char *UNUSED(password), bool remember_me, const char *UNUSED(blob))
 {
   session->user = mocksp_user_create(username, username, true);
   session->connectionstate = SP_CONNECTION_STATE_LOGGED_IN;
@@ -136,7 +141,7 @@ sp_session_relogin(sp_session *session)
     return SP_ERROR_NO_CREDENTIALS;
   }
 
-  sp_session_login(session, session->username, "", true);
+  sp_session_login(session, session->username, NULL, true, NULL);
   return SP_ERROR_OK;
 }
 
@@ -168,6 +173,12 @@ void
 sp_session_logout(sp_session *session)
 {
   session->connectionstate = SP_CONNECTION_STATE_LOGGED_OUT;
+}
+
+void
+sp_session_flush_caches(sp_session *session)
+{
+  // no op
 }
 
 sp_user *
@@ -214,8 +225,13 @@ sp_session_preferred_offline_bitrate(sp_session *UNUSED(session), sp_bitrate UNU
 bool
 sp_offline_sync_get_status(sp_session *session, sp_offline_sync_status *status)
 {
-  MEMCPY(status, session->offline_sync_status, sp_offline_sync_status);
-  return true;
+  if (session->offline_sync_status)
+  {
+    MEMCPY(status, session->offline_sync_status, sp_offline_sync_status);
+    return true;
+  }
+
+  return false;
 }
 
 int sp_offline_time_left(sp_session *x) { return x->offline_time_left; }

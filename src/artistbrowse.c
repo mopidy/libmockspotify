@@ -7,6 +7,7 @@ mocksp_artistbrowse_create(sp_error error, int request_duration, sp_artist *arti
                            int num_tracks, sp_track **tracks,
                            int num_albums, sp_album **albums,
                            int num_similar_artists, sp_artist **similar_artists,
+                           int num_tophit_tracks, sp_track **tophit_tracks,
                            const char *biography, sp_artistbrowse_type type,
                            artistbrowse_complete_cb *cb, void *userdata)
 {
@@ -37,6 +38,10 @@ mocksp_artistbrowse_create(sp_error error, int request_duration, sp_artist *arti
   artistbrowse->num_similar_artists = num_similar_artists;
   MEMCPY_N(artistbrowse->similar_artists, similar_artists, sp_artist *, num_similar_artists);
 
+  artistbrowse->tophit_tracks     = ALLOC_N(sp_track *, num_tophit_tracks);
+  artistbrowse->num_tophit_tracks = num_tophit_tracks;
+  MEMCPY_N(artistbrowse->tophit_tracks, tophit_tracks, sp_track *, num_tophit_tracks);
+
   artistbrowse->biography = strclone(biography);
   artistbrowse->type      = type;
 
@@ -58,6 +63,8 @@ DEFINE_READER(artistbrowse, num_albums, int);
 DEFINE_ARRAY_READER(artistbrowse, album, sp_album *);
 DEFINE_READER(artistbrowse, num_similar_artists, int);
 DEFINE_ARRAY_READER(artistbrowse, similar_artist, sp_artist *);
+DEFINE_READER(artistbrowse, num_tophit_tracks, int);
+DEFINE_ARRAY_READER(artistbrowse, tophit_track, sp_track *);
 DEFINE_READER(artistbrowse, biography, const char *);
 
 bool
