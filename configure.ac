@@ -1,5 +1,5 @@
 AC_INIT([libmockspotify], [0.2], [https://github.com/mopidy/libmockspotify])
-AM_INIT_AUTOMAKE([foreign -Wall -Werror])
+AM_INIT_AUTOMAKE([foreign -Wall -Werror -Wno-extra-portability])
 
 AC_PROG_CC
 AC_PROG_LIBTOOL
