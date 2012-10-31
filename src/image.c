@@ -63,6 +63,7 @@ sp_image_add_load_callback(sp_image *image, image_loaded_cb *callback, void *use
 {
   image->callback = callback;
   image->userdata = userdata;
+  return SP_ERROR_OK;
 }
 
 sp_error
@@ -70,4 +71,5 @@ sp_image_remove_load_callback(sp_image *image, image_loaded_cb *UNUSED(callback)
 {
   image->callback = NULL;
   image->userdata = NULL;
+  return SP_ERROR_OK;
 }
