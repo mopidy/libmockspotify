@@ -51,6 +51,7 @@ v0.3 (in development)
 Supports libspotify 12.
 
 - Updated signature of:
+
   - ``sp_link_create_from_album_cover()``,
   - ``sp_link_create_from_artist_portrait()``,
   - ``sp_album_cover()``, nad
