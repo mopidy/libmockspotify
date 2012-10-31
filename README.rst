@@ -45,6 +45,19 @@ https://github.com/mopidy/libmockspotify/contributors
 Changes
 =======
 
+v0.3 (in development)
+---------------------
+
+Supports libspotify 12.
+
+- Updated signature of:
+  - ``sp_link_create_from_album_cover()``,
+  - ``sp_link_create_from_artist_portrait()``,
+  - ``sp_album_cover()``, nad
+  - ``sp_artist_portrait()``.
+
+- Changed a lot of functions from returning ``void`` to returning ``sp_error``.
+
 v0.2 (2012-04-21)
 -----------------
 
