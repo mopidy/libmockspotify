@@ -28,7 +28,7 @@ DEFINE_REFCOUNTERS_FOR(album);
 DEFINE_READER(album, is_loaded, bool);
 DEFINE_READER(album, is_available, bool);
 DEFINE_READER(album, artist, sp_artist *);
-DEFINE_READER(album, cover, const byte *);
+DEFINE_IMAGE_READER(album, cover);
 DEFINE_READER(album, name, const char *);
 DEFINE_READER(album, year, int);
 DEFINE_READER(album, type, sp_albumtype);

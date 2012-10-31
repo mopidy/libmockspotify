@@ -58,16 +58,18 @@ sp_image_create(sp_session *UNUSED(session), const byte image_id[20])
   return (sp_image *)registry_find(tmp_link->data);
 }
 
-void
+sp_error
 sp_image_add_load_callback(sp_image *image, image_loaded_cb *callback, void *userdata)
 {
   image->callback = callback;
   image->userdata = userdata;
+  return SP_ERROR_OK;
 }
 
-void
+sp_error
 sp_image_remove_load_callback(sp_image *image, image_loaded_cb *UNUSED(callback), void *UNUSED(userdata))
 {
   image->callback = NULL;
   image->userdata = NULL;
+  return SP_ERROR_OK;
 }

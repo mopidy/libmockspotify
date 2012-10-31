@@ -9,7 +9,6 @@ mocksp_playlist_create(const char *name, bool is_loaded, sp_user *owner, bool is
                        sp_playlist_offline_status offline_status, int offline_download_completed,
                        int num_tracks, sp_playlist_track_t *tracks)
 {
-  int i;
   sp_playlist *playlist = ALLOC(sp_playlist);
 
   playlist->name = strclone(name);
@@ -59,7 +58,7 @@ mocksp_subscribers(int count, char **names)
   return subscribers;
 }
 
-void
+sp_error
 sp_playlist_subscribers_free(sp_subscribers *subscribers)
 {
   unsigned int i;
@@ -70,6 +69,7 @@ sp_playlist_subscribers_free(sp_subscribers *subscribers)
   }
 
   free(subscribers);
+  return SP_ERROR_OK;
 }
 
 DEFINE_REFCOUNTERS_FOR(playlist);
@@ -152,51 +152,58 @@ sp_playlist_rename(sp_playlist *playlist, const char *new_name)
   return SP_ERROR_OK;
 }
 
-void
+sp_error
 sp_playlist_set_collaborative(sp_playlist *playlist, bool collaborative)
 {
   playlist->is_collaborative = collaborative;
+  return SP_ERROR_OK;
 }
 
-void
+sp_error
 sp_playlist_set_autolink_tracks(sp_playlist *playlist, bool autolink_tracks)
 {
   playlist->autolink_tracks = autolink_tracks;
+  return SP_ERROR_OK;
 }
 
-void
+sp_error
 sp_playlist_set_in_ram(sp_session *UNUSED(session), sp_playlist *playlist, bool in_ram)
 {
   playlist->is_in_ram = in_ram;
+  return SP_ERROR_OK;
 }
 
-void
+sp_error
 sp_playlist_set_offline_mode(sp_session *UNUSED(session), sp_playlist *playlist, bool offline_mode)
 {
   playlist->get_offline_status = offline_mode ? SP_PLAYLIST_OFFLINE_STATUS_YES : SP_PLAYLIST_OFFLINE_STATUS_NO;
+  return SP_ERROR_OK;
 }
 
-void
+sp_error
 sp_playlist_add_callbacks(sp_playlist *playlist, sp_playlist_callbacks *callbacks, void *userdata)
 {
   playlist->callbacks = callbacks;
   playlist->userdata  = userdata;
+  return SP_ERROR_OK;
 }
 
-void
+sp_error
 sp_playlist_remove_callbacks(sp_playlist *playlist, sp_playlist_callbacks *UNUSED(callbacks), void *UNUSED(userdata))
 {
   playlist->callbacks = NULL;
   playlist->userdata  = NULL;
+  return SP_ERROR_OK;
 }
 
-void
+sp_error
 sp_playlist_update_subscribers(sp_session *UNUSED(session), sp_playlist *playlist)
 {
   if (playlist->callbacks && playlist->callbacks->subscribers_changed)
   {
     playlist->callbacks->subscribers_changed(playlist, playlist->userdata);
   }
+  return SP_ERROR_OK;
 }
 
 sp_error

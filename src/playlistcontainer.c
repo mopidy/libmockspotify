@@ -74,20 +74,22 @@ sp_playlistcontainer_playlist_folder_name(sp_playlistcontainer *pc, int index, c
   return SP_ERROR_OK;
 }
 
-void
+sp_error
 sp_playlistcontainer_add_callbacks(sp_playlistcontainer *pc, sp_playlistcontainer_callbacks *callbacks, void *userdata)
 {
   /* TODO: multi-callback support */
   pc->callbacks = callbacks;
   pc->userdata  = userdata;
+  return SP_ERROR_OK;
 }
 
-void
+sp_error
 sp_playlistcontainer_remove_callbacks(sp_playlistcontainer *pc, sp_playlistcontainer_callbacks *UNUSED(callbacks), void *UNUSED(userdata)) 
 {
   /* TODO: multi-callback support */
   pc->callbacks = NULL;
   pc->userdata  = NULL;
+  return SP_ERROR_OK;
 }
 
 sp_playlist *
