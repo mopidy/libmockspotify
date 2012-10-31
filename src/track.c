@@ -75,7 +75,7 @@ sp_localtrack_create(const char *artist, const char *title, const char *album, i
   return mocksp_track_create(title, 1, &partist, palbum, length, 0, 0, 0, SP_ERROR_OK, true, SP_TRACK_AVAILABILITY_AVAILABLE, SP_TRACK_OFFLINE_DONE, true, false, NULL, false, false);
 }
 
-void
+sp_error
 sp_track_set_starred(sp_session *UNUSED(session), sp_track *const *tracks, int num_tracks, bool starred)
 {
   int i;
@@ -84,6 +84,7 @@ sp_track_set_starred(sp_session *UNUSED(session), sp_track *const *tracks, int n
   {
     tracks[i]->is_starred = starred;
   }
+  return SP_ERROR_OK;
 }
 
 sp_track_offline_status

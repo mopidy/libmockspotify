@@ -94,10 +94,9 @@ sp_link_create_from_album(sp_album *album)
 }
 
 sp_link *
-sp_link_create_from_album_cover(sp_album *album)
+sp_link_create_from_album_cover(sp_album *album, sp_image_size size)
 {
-  const byte *image_id = sp_album_cover(album);
-  sp_link *link;
+  const byte *image_id = sp_album_cover(album, size);
 
   if ( ! image_id)
   {
@@ -122,10 +121,9 @@ sp_link_create_from_artist(sp_artist *artist)
 }
 
 sp_link *
-sp_link_create_from_artist_portrait(sp_artist *artist)
+sp_link_create_from_artist_portrait(sp_artist *artist, sp_image_size size)
 {
-  const byte *image_id = sp_artist_portrait(artist);
-  sp_link *link;
+  const byte *image_id = sp_artist_portrait(artist, size);
 
   if ( ! image_id)
   {
