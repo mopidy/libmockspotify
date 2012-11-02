@@ -59,6 +59,8 @@ Supports libspotify 12.
 
 - Changed a lot of functions from returning ``void`` to returning ``sp_error``.
 
+- Bumped SONAME to 2.
+
 v0.2 (2012-04-21)
 -----------------
 
@@ -77,6 +79,8 @@ Supports libspotify 11.
   - Allow image to be allocated with no data
   - Make search_did_you_mean optional
   - Fix session offline sync status getter
+
+- Bumped SONAME to 1.
 
 v0.1 (2012-01-29)
 -----------------
