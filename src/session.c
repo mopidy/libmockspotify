@@ -173,6 +173,14 @@ sp_error
 sp_session_logout(sp_session *session)
 {
   session->connectionstate = SP_CONNECTION_STATE_LOGGED_OUT;
+  // Call callbacks if they exist
+  if (session->config.callbacks != NULL)
+  {
+    if (session->config.callbacks->notify_main_thread != NULL)
+      session->config.callbacks->notify_main_thread(session);
+    if (session->config.callbacks->logged_out != NULL)
+      session->config.callbacks->logged_out(session);
+  }
   return SP_ERROR_OK;
 }
 
