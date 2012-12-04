@@ -1,0 +1,3 @@
+version=3
+
+https://github.com/mopidy/libmockspotify/tags .*/tarball/v(.*)

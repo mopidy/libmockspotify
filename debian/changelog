@@ -1,0 +1,42 @@
+libmockspotify (0.3-1) unstable; urgency=low
+
+  * New upstream release.
+  * Depend on libspotify >= 12, < 13.
+  * Bump SONAME to 2.
+
+ -- Stein Magnus Jodal <stein.magnus@jodal.no>  Fri, 02 Nov 2012 13:49:07 +0100
+
+libmockspotify (0.2-2) unstable; urgency=low
+
+  * Add Build-Depend on libspotify-dev 11.x.
+
+ -- Stein Magnus Jodal <stein.magnus@jodal.no>  Mon, 07 May 2012 22:28:54 +0200
+
+libmockspotify (0.2-1) unstable; urgency=low
+
+  * New upstream release.
+  * Depend on libspotify >= 11, < 12.
+  * Bump SONAME to 1.
+  * Bump Standards-Version to 3.9.3.
+  * Update copyrights to include 2012.
+  * Add missing license text to copyright file.
+
+ -- Stein Magnus Jodal <stein.magnus@jodal.no>  Sat, 21 Apr 2012 11:38:31 +0200
+
+libmockspotify (0.1-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Stein Magnus Jodal <stein.magnus@jodal.no>  Sun, 29 Jan 2012 21:35:52 +0100
+
+libmockspotify (0.0.1-2) unstable; urgency=low
+
+  * Make libmockspotify-dev depend on libspotify-dev 10.x.
+
+ -- Stein Magnus Jodal <stein.magnus@jodal.no>  Mon, 26 Dec 2011 12:28:07 +0100
+
+libmockspotify (0.0.1-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Stein Magnus Jodal <stein.magnus@jodal.no>  Mon, 26 Dec 2011 01:36:38 +0100
