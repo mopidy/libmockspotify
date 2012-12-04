@@ -45,6 +45,14 @@ https://github.com/mopidy/libmockspotify/contributors
 Changes
 =======
 
+v0.3.1 (2012-12-04)
+-------------------
+
+Supports libspotify 12
+
+- Call ``notify_main_thread`` callback if set.
+- Call ``logged_out`` callback if set.
+
 v0.3 (2012-11-02)
 -----------------
 
