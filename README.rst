@@ -1,3 +1,11 @@
+*******************
+DEPRECATION WARNING
+*******************
+
+As of 2013-07-03 libmockspotify is merged back into pyspotify. It will no
+longer be maintained an independent project.
+
+
 **************
 libmockspotify
 **************
